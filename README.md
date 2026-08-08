@@ -1,76 +1,30 @@
 # Football Pitch Booking Management System
 
-## Introduction
+## Overview
 
-The **Football Pitch Booking Management System** is a web-based application designed to provide a convenient platform for customers to find and reserve football pitches.
-
-The system aims to simplify the process of searching for available pitches and managing reservations, while providing football pitch operators with tools to manage their pitches, customers, and bookings.
+The **Football Pitch Booking Management System** is a web-based application that allows customers to find, check, and reserve football pitches online. It also provides tools for managing pitches, bookings, customers, and related activities.
 
 ---
 
 ## Problem Statement
 
-Football pitch reservations are often managed through phone calls, direct messages, or manual records. This can make it difficult for customers to find available pitches and time slots, while also creating challenges for pitch operators in managing bookings and customer information.
+Football pitch reservations are often managed through phone calls, direct messages, or manual records. This can make it difficult for customers to find available pitches and time slots, while making booking and customer management more difficult for pitch operators.
 
-The proposed system addresses these problems by providing a centralized online platform where customers can search for pitches, check availability, make reservations, and manage their bookings. Administrators can use the system to manage pitches, customers, bookings, and other operational information.
-
----
-
-## Project Objectives
-
-The project aims to:
-- Develop a user-friendly web application for football pitch reservations.
-- Simplify the process of finding and booking available football pitches.
-- Provide customers with an easy way to manage their reservations and view booking information.
-- Provide administrators with tools to manage pitches, customers, and bookings.
-- Improve the efficiency of football pitch management through a centralized system.
-- Explore the application of AI/ML techniques to enhance selected features of the system.
+The proposed system provides a centralized platform that simplifies the reservation process and improves the management of football pitches, bookings, and customer information.
 
 ---
 
-## Main Features
+## Features
 
-### Customer
-
-- User registration, login, and authentication.
-- Profile management and personal information updates.
-- Football pitch search and filtering.
-- View detailed information about football pitches.
-- Check pitch and time-slot availability.
-- Football pitch reservation.
-- Booking management and cancellation.
-- Booking history.
-- Payment history.
-- Pitch ratings and reviews.
-- Contact staff or administrators for support.
-### Staff
-
-- View and manage customer bookings.
-- Check football pitch availability.
-- Manage football pitch information.
-- Assist customers with booking-related issues.
-- Monitor customer reviews and feedback.
-### Administrator
-
-- User management.
-- Employee and staff management.
-- Football pitch management.
-- Booking management.
-- Pricing management.
-- Revenue monitoring.
-- Revenue statistics and data visualization.
-- Customer review and rating management.
-- System activity and history monitoring.
-- Customer support and communication.
-### System
-
-- Football pitch availability management.
-- Booking and reservation management.
-- Prevention of overlapping bookings.
-- Payment status management.
-- In-app notifications for bookings, payments, cancellations, and other system activities.
-- Booking and payment record management.
-- Role-based access control.
+* User account and profile management.
+* Football pitch search, filtering, and availability checking.
+* Online booking and booking management.
+* Booking and payment history.
+* Ratings, reviews, and customer feedback.
+* Pitch, user, employee, and pricing management.
+* Revenue monitoring and statistics.
+* Notifications and customer support.
+* Role-based access for customers, staff, and administrators.
 
 ---
 
