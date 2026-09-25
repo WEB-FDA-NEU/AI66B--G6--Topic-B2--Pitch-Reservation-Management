@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
@@ -9,93 +9,104 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pitch-detail.css">
 </head>
 <body>
   <site-header></site-header>
 
   <nav class="container breadcrumb" aria-label="Đường dẫn">
     <ol>
-      <li>Pitch Point</li>
-      <li aria-current="page">Chi tiết sân bóng</li>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page" id="crumb-current">Chi tiết sân</li>
     </ol>
   </nav>
 
-  <main class="container page" id="main-content">
-    <article id="detail" class="stack">
-      <header class="stack">
-        <p class="field__hint">Sân bóng đang hoạt động</p>
-        <h1 id="title">Tên sân bóng</h1>
-        <p id="pitch-location">Địa chỉ sân bóng</p>
-        <p id="pitch-rating" aria-label="Đánh giá của sân">Chưa có đánh giá</p>
-      </header>
+  <main class="container pitch-detail-page" id="main-content" hidden>
+    <div class="detail-layout">
+      <!-- Main Content Area -->
+      <article id="detail" class="stack">
+        <header class="detail-header stack">
+          <p class="field__hint" id="pitch-badge"></p>
+          <h1 id="title">Tên sân bóng</h1>
+          <p id="pitch-location" class="detail-location"></p>
+          <p id="pitch-rating" class="detail-rating" aria-label="Đánh giá của sân"></p>
+        </header>
 
-      <section class="card" aria-labelledby="overview-title">
-        <div class="card__body stack">
-          <h2 id="overview-title">Thông tin sân</h2>
-          <dl>
-            <div><dt>Loại sân</dt><dd id="pitch-type">Đang cập nhật</dd></div>
-            <div><dt>Giá thuê</dt><dd id="pitch-price">Đang cập nhật</dd></div>
-            <div><dt>Giờ hoạt động</dt><dd id="pitch-hours">Đang cập nhật</dd></div>
-          </dl>
-          <p id="pitch-description">Mô tả sân bóng sẽ được hiển thị tại đây.</p>
+        <!-- Image Placeholder -->
+        <div class="detail-gallery">
+          <img id="pitch-image" src="" alt="Hình ảnh sân" class="detail-main-img">
         </div>
-      </section>
 
-      <section class="card" aria-labelledby="facilities-title">
-        <div class="card__body stack">
-          <h2 id="facilities-title">Tiện ích</h2>
-          <ul id="pitch-facilities">
-            <li>Bãi đỗ xe</li>
-            <li>Phòng thay đồ</li>
-            <li>Nước uống</li>
-          </ul>
-        </div>
-      </section>
+        <section class="card" aria-labelledby="overview-title">
+          <div class="card__body stack">
+            <h2 id="overview-title">Thông tin sân</h2>
+            <dl class="detail-info-list">
+              <div><dt>Loại sân</dt><dd id="pitch-type"></dd></div>
+              <div><dt>Giá thuê</dt><dd id="pitch-price" class="price-highlight"></dd></div>
+              <div><dt>Giờ hoạt động</dt><dd id="pitch-hours">06:00 - 23:00 mỗi ngày</dd></div>
+            </dl>
+            <p id="pitch-description">Sân bóng chất lượng cao với mặt cỏ nhân tạo đạt chuẩn, hệ thống đèn chiếu sáng hiện đại, phù hợp cho các trận đấu vào buổi tối. Khu vực an ninh tốt, có chỗ để xe rộng rãi và an toàn.</p>
+          </div>
+        </section>
 
-      <section class="card" aria-labelledby="schedule-title">
-        <div class="card__body stack">
-          <h2 id="schedule-title">Chọn lịch đá</h2>
-          <form id="booking-preview-form">
-            <div class="field">
-              <label class="field__label" for="booking-date">Ngày chơi</label>
-              <input class="input" id="booking-date" name="date" type="date">
+        <section class="card" aria-labelledby="facilities-title">
+          <div class="card__body stack">
+            <h2 id="facilities-title">Tiện ích</h2>
+            <ul id="pitch-facilities" class="facilities-list">
+              <li>🅿️ Bãi đỗ xe miễn phí</li>
+              <li>👕 Phòng thay đồ & Tắm nóng lạnh</li>
+              <li>💧 Nước uống đóng bình</li>
+              <li>🎽 Cho thuê áo bíp & bóng</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="owner-title">
+          <div class="card__body stack">
+            <h2 id="owner-title">Đơn vị quản lý sân</h2>
+            <div id="pitch-owner-info" class="stack" style="gap: var(--sp-2);">
+              <p id="pitch-owner-name">Đang tải...</p>
+              <a href="#" id="pitch-owner-link" class="btn btn--outline" style="width: fit-content;">Xem hồ sơ chủ sân</a>
             </div>
-            <div class="field">
-              <label class="field__label" for="booking-time">Giờ bắt đầu</label>
-              <input class="input" id="booking-time" name="time" type="time">
-            </div>
-            <div class="field">
-              <label class="field__label" for="booking-pitch-type">Loại sân</label>
-              <select class="select" id="booking-pitch-type" name="pitchType">
-                <option value="">Chọn loại sân</option>
-                <option value="5">Sân 5 người</option>
-                <option value="7">Sân 7 người</option>
-                <option value="11">Sân 11 người</option>
-              </select>
-            </div>
-            <button class="btn btn--primary" type="button">Kiểm tra lịch trống</button>
-          </form>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section class="card" aria-labelledby="owner-title">
-        <div class="card__body stack">
-          <h2 id="owner-title">Đơn vị quản lý sân</h2>
-          <p id="pitch-owner">Thông tin đơn vị quản lý sẽ được hiển thị tại đây.</p>
-        </div>
-      </section>
+        <section class="card" aria-labelledby="reviews-title">
+          <div class="card__body stack">
+            <h2 id="reviews-title">Đánh giá từ người chơi</h2>
+            <div id="pitch-reviews">
+              <p class="empty__hint">Tính năng đánh giá sẽ hiển thị khi khách hàng hoàn thành lượt đá.</p>
+            </div>
+          </div>
+        </section>
+      </article>
 
-      <section class="card" aria-labelledby="reviews-title">
-        <div class="card__body stack">
-          <h2 id="reviews-title">Đánh giá từ người chơi</h2>
-          <div id="pitch-reviews"><p class="empty__hint">Sân chưa có đánh giá.</p></div>
-        </div>
-      </section>
-    </article>
+      <!-- Sidebar Form Area -->
+      <aside class="detail-sidebar">
+        <section class="card" aria-labelledby="schedule-title">
+          <div class="card__body stack">
+            <h2 id="schedule-title">Đặt lịch đá</h2>
+            <form id="booking-preview-form" action="booking-schedule.html" method="GET">
+              <input type="hidden" name="pitchId" id="booking-pitch-id">
+              <div class="field">
+                <label class="field__label" for="booking-date">Ngày chơi</label>
+                <input class="input" id="booking-date" name="date" type="date" required>
+              </div>
+              <div class="field">
+                <label class="field__label" for="booking-time">Giờ bắt đầu</label>
+                <input class="input" id="booking-time" name="time" type="time">
+              </div>
+              <button class="btn btn--primary" type="submit">Kiểm tra & Đặt lịch</button>
+            </form>
+          </div>
+        </section>
+      </aside>
+    </div>
   </main>
 
   <site-footer></site-footer>
 
-  <script type="module" src="js/pages/pitch_detail.js"></script>
+  <script type="module" src="js/pages/pitch-detail.js"></script>
 </body>
 </html>
