@@ -1,35 +1,54 @@
-// ============================================================
-//  MẪU CHUẨN cho trang chi tiết một bản ghi.
-//  TODO: đổi tên trường cho khớp đề tài.
-// ============================================================
-import { getItem, ApiError } from '../api.js';
-import { toast } from '../ui.js';
+﻿import { MOCK_OWNERS } from '../data/owners.js';
+import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { isLoggedIn, requireLogin } from '../auth.js';
 
-const id   = new URLSearchParams(location.search).get('id');
-const main = document.getElementById('detail');
+const pitchIdParam = new URLSearchParams(location.search).get('pitchId');
+const main = document.getElementById('main-content') || document.getElementById('detail');
+const getEl = id => document.getElementById(id);
 
-async function load() {
-  if (!id) { location.href = '404.html'; return; }
-  try {
-    const item = await getItem(id);
-    document.title = `${item.title} — TÊN-SẢN-PHẨM`;
-    document.getElementById('title').textContent = item.title;
-    // TODO: điền các trường còn lại — nhớ dùng textContent, không innerHTML
-    main.hidden = false;
-  } catch (err) {
-    if (err instanceof ApiError && err.status === 404) location.href = '404.html';
-    else toast(err.detail ?? 'Không tải được dữ liệu.', 'error');
+function loadPitch() {
+  if (!pitchIdParam) { location.href = '404.html'; return; }
+  const pitch = MOCK_PITCHES.find(p => String(p.id) === pitchIdParam);
+  if (!pitch) { location.href = '404.html'; return; }
+
+  document.title = pitch.name + ' — Pitch Point';
+  if(getEl('title')) getEl('title').textContent = pitch.name;
+  if(getEl('pitch-location')) getEl('pitch-location').textContent = pitch.location;
+  if(getEl('pitch-type')) getEl('pitch-type').textContent = pitch.typeLabel;
+  if(getEl('pitch-price')) getEl('pitch-price').textContent = formatPitchPrice(pitch.price);
+  
+  if (getEl('pitch-badge')) {
+    if (pitch.badge) {
+      getEl('pitch-badge').textContent = pitch.badge;
+    } else {
+      getEl('pitch-badge').hidden = true;
+    }
   }
+  
+  if(getEl('pitch-rating')) getEl('pitch-rating').textContent = '★ ' + pitch.rating.toFixed(1) + ' / 5.0';
+  
+  const imgElement = getEl('pitch-image');
+  if(imgElement) {
+    imgElement.src = pitch.image || 'img/placeholder.svg';
+    imgElement.alt = 'Hình ảnh sân ' + pitch.name;
+  }
+
+  const ownerLink = getEl('pitch-owner-link');
+  const ownerName = getEl('pitch-owner-name');
+  if (ownerLink) {
+    if (pitch.ownerId) {
+      ownerLink.href = 'pitch-owner-profile.html?ownerId=' + pitch.ownerId;
+      const owner = MOCK_OWNERS.find(o => o.id === pitch.ownerId);
+      if (owner && ownerName) ownerName.textContent = owner.name;
+    } else {
+      ownerLink.hidden = true;
+    }
+  }
+
+  const bookingPitchId = getEl('booking-pitch-id');
+  if (bookingPitchId) bookingPitchId.value = pitch.id;
+
+  if(main) main.hidden = false;
 }
-
-// TODO: nếu đề tài có hành động cần đăng nhập (đặt chỗ, mua, lưu, xem SĐT…)
-//       thì đây là chỗ viết "login branch" của Mốc 1:
-// document.getElementById('nut-hanh-dong').addEventListener('click', () => {
-//   if (!isLoggedIn()) return requireLogin();   // lưu trang hiện tại rồi sang Login
-//   ...
-// });
-
-load();
+loadPitch();

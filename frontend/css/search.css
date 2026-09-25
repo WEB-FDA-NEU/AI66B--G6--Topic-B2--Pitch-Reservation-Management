@@ -55,12 +55,12 @@
 .search-results__heading {
   display: flex;
   gap: var(--sp-4);
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: var(--sp-4);
 }
-.search-results__heading h2 { font-size: clamp(1.5rem, 3vw, 2.15rem); letter-spacing: -.03em; }
-.search-results__eyebrow { margin-top: 0; color: #397864; }
+.search-results__heading h1 { font-size: clamp(1.5rem, 3vw, 2.15rem); letter-spacing: -.03em; margin: 0; }
+.search-results__eyebrow { margin-top: var(--sp-1); color: #397864; }
 .search-results .filter-toggle { width: auto; margin-bottom: 0; }
 .search-pitch-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 

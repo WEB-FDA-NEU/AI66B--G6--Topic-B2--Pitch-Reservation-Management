@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quản lý danh sách sân bóng của bạn - Pitch Point">
+  <title>Sân của tôi — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/manager-pitches.css">
+</head>
+<body>
+  <site-header active="pitches"></site-header>
+
+  <main class="container manager-pitches-page" id="main-content" hidden>
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="manager-dashboard.html">Bảng điều khiển</a></li>
+        <li aria-current="page">Sân của tôi</li>
+      </ol>
+    </nav>
+
+    <header class="toolbar">
+      <div>
+        <h1>Quản lý Sân bóng</h1>
+        <p class="toolbar__count" id="pitch-count">Đang tải...</p>
+      </div>
+      <a href="add-pitch.html" class="btn btn--primary">
+        <span aria-hidden="true">➕</span> Thêm sân mới
+      </a>
+    </header>
+
+    <div class="pitch-list" id="pitch-list">
+      <!-- JS sẽ render danh sách sân vào đây -->
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <!-- Template hiển thị sân dạng danh sách ngang cho quản lý -->
+  <template id="tpl-manager-pitch">
+    <article class="manager-card">
+      <img class="manager-card__img" src="" alt="" loading="lazy">
+      
+      <div class="manager-card__body">
+        <div class="manager-card__header">
+          <div>
+            <h3 class="manager-card__title"></h3>
+            <p class="manager-card__meta"></p>
+          </div>
+          <span class="badge" id="badge-status"></span>
+        </div>
+        
+        <div class="manager-card__details">
+          <span class="detail-item type"></span>
+          <span class="detail-item price"></span>
+        </div>
+
+        <div class="manager-card__actions">
+          <a href="#" class="btn btn--outline btn-edit">Sửa thông tin</a>
+          <a href="#" class="btn btn--outline btn-availability">Giờ & Tiện ích</a>
+          <a href="#" class="btn btn--primary btn-bookings">Lịch đặt</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Template khi danh sách trống -->
+  <template id="tpl-empty-state">
+    <div class="empty">
+      <p class="empty__title">Bạn chưa có sân bóng nào</p>
+      <p class="empty__hint">Hãy tạo sân bóng đầu tiên để bắt đầu nhận lịch đặt từ khách hàng.</p>
+      <a href="add-pitch.html" class="btn btn--primary empty__action">Thêm sân mới ngay</a>
+    </div>
+  </template>
+
+  <script type="module" src="js/pages/manager-pitches.js"></script>
+</body>
+</html>

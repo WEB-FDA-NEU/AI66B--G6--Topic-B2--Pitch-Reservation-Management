@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 //  <site-header>  —  Custom Element (Web Components, chuẩn của trình duyệt)
 //
 //  Viết header MỘT LẦN ở đây. Mỗi trang chỉ cần một dòng:
@@ -31,9 +31,19 @@ const TEMPLATE = /* html */ `
       <input class="input" id="hq" name="q" type="search" placeholder="Tìm sân theo tên hoặc địa điểm...">
     </form>
 
-    <nav id="site-header-navigation" aria-label="Điều hướng chính">
-      <a class="site-header__link" href="index.html" data-nav="home">Trang chủ</a>
-      <a class="site-header__link" href="search.html" data-nav="search">Tìm Sân</a>
+        <nav id="site-header-navigation" aria-label="Điều hướng chính">
+      <!-- Dành cho Khách & Customer -->
+      <a class="site-header__link" href="index.html" data-nav="home" data-role-nav="customer">Trang chủ</a>
+      <a class="site-header__link" href="search.html" data-nav="search" data-role-nav="customer">Tìm Sân</a>
+      <a class="site-header__link" href="favorite-pitches.html" data-nav="favorites" data-role-nav="customer">Yêu thích</a>
+      
+      <!-- Dành cho Manager -->
+      <a class="site-header__link" href="manager-dashboard.html" data-nav="dashboard" data-role-nav="manager" hidden>Bảng điều khiển</a>
+      <a class="site-header__link" href="manager-pitches.html" data-nav="pitches" data-role-nav="manager" hidden>Sân của tôi</a>
+      
+      <!-- Dành cho Admin -->
+      <a class="site-header__link" href="admin-dashboard.html" data-nav="admin-dashboard" data-role-nav="admin" hidden>Quản trị hệ thống</a>
+
       <span data-auth="guest" hidden>
         <a class="btn" href="login.html">Đăng nhập</a>
         <a class="btn btn--primary" href="register.html">Đăng ký</a>
@@ -90,3 +100,6 @@ class SiteHeader extends HTMLElement {
 }
 
 customElements.define('site-header', SiteHeader);
+
+
+
