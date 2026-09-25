@@ -13,6 +13,7 @@ const resultCount = document.getElementById('resultCount');
 const modal = document.getElementById('actionModal');
 const btnClose = modal.querySelector('.admin-modal__close');
 const btnCancel = document.getElementById('btnCancel');
+const btnConfirm = document.getElementById('btnConfirm');
 
 function renderTable(data) {
   tbody.innerHTML = '';
@@ -41,9 +42,9 @@ function renderTable(data) {
       tr.addEventListener('click', () => openActionModal(rep));
 
       clone.querySelector('.td-report-id').textContent = rep.reportId;
-      clone.querySelector('.td-reporter').innerHTML = `<strong>${rep.reporterName}</strong><br><small style="color:var(--c-muted)">${rep.reporterId}</small>`;
-      clone.querySelector('.td-target').textContent = `${rep.reportedEntityType} - ${rep.reportedEntityId}`;
-      clone.querySelector('.td-type').textContent = rep.reportType;
+      clone.querySelector('.td-report-summary').textContent = rep.summary;
+      clone.querySelector('.td-report-type').textContent = rep.reportType;
+      clone.querySelector('.td-reporter').textContent = rep.reporterName;
       
       const badgePriority = clone.querySelector('.badge-priority');
       badgePriority.textContent = rep.priority;
@@ -93,7 +94,6 @@ function updatePagination(totalPages, totalItems) {
 
 function openActionModal(rep) {
   document.getElementById('modalReportId').textContent = rep.reportId;
-  document.getElementById('modalReportDate').textContent = rep.submittedAt;
   
   const statusBadge = document.getElementById('modalReportStatus');
   statusBadge.textContent = rep.reportStatus;
@@ -103,25 +103,34 @@ function openActionModal(rep) {
   priorityBadge.textContent = rep.priority;
   priorityBadge.className = `badge ${rep.priorityClass}`;
   
-  document.getElementById('modalReportType').textContent = rep.reportType;
-  document.getElementById('modalReportTarget').textContent = `${rep.reportedEntityType} - ${rep.reportedEntityId}`;
+  document.getElementById('modalReportSummary').textContent = rep.summary;
+  document.getElementById('modalReportDesc').textContent = rep.description;
   
   document.getElementById('modalReporterName').textContent = rep.reporterName;
   document.getElementById('modalReporterId').textContent = rep.reporterId;
   
-  document.getElementById('modalSummary').textContent = rep.summary;
-  document.getElementById('modalDescription').textContent = rep.description;
+  document.getElementById('modalTargetType').textContent = rep.reportedEntityType;
+  document.getElementById('modalTargetId').textContent = rep.reportedEntityId;
   
-  const notesContainer = document.getElementById('modalNotes');
+  const notesContainer = document.getElementById('modalNotesList');
   notesContainer.innerHTML = '';
   if (rep.investigationNotes && rep.investigationNotes.length > 0) {
     rep.investigationNotes.forEach(note => {
-      notesContainer.innerHTML += `<div style="font-size: 0.875rem; margin-bottom: 8px;"><strong>${note.author}</strong> (${note.date}): ${note.text}</div>`;
+      notesContainer.innerHTML += `<li style="font-size: 0.875rem; margin-bottom: 8px;"><strong>${note.author}</strong> (${note.date}): ${note.text}</li>`;
     });
   } else {
     notesContainer.innerHTML = `<span style="font-size: 0.875rem; color: var(--c-muted);">No investigation notes yet.</span>`;
   }
   
+  // reset action form
+  const adminAction = document.getElementById('adminAction');
+  const reasonGroup = document.getElementById('reasonGroup');
+  const actionReason = document.getElementById('actionReason');
+  if (adminAction) adminAction.value = '';
+  if (reasonGroup) reasonGroup.hidden = true;
+  if (actionReason) actionReason.value = '';
+  if (btnConfirm) btnConfirm.disabled = true;
+
   modal.showModal();
 }
 
@@ -129,8 +138,8 @@ function closeActionModal() {
   modal.close();
 }
 
-btnClose.addEventListener('click', closeActionModal);
-btnCancel.addEventListener('click', closeActionModal);
+if(btnClose) btnClose.addEventListener('click', closeActionModal);
+if(btnCancel) btnCancel.addEventListener('click', closeActionModal);
 modal.addEventListener('click', (e) => {
   if (e.target === modal) modal.close();
 });

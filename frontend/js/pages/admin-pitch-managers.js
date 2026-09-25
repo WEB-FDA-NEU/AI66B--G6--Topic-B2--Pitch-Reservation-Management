@@ -1,7 +1,7 @@
 import '../components/admin-sidebar.js';
-import { mockPitchManagers } from '../data/admin.js';
+import { mockManagers } from '../data/admin.js';
 
-let managersData = [...mockPitchManagers];
+let managersData = [...mockManagers];
 let currentPage = 1;
 const itemsPerPage = 6;
 
@@ -40,16 +40,17 @@ function renderManagers() {
     tr.style.cursor = 'pointer';
     tr.addEventListener('click', () => openModal(mgr));
 
-    clone.querySelector('.td-mgr-name').textContent = mgr.fullName;
-    clone.querySelector('.td-mgr-meta').textContent = `${mgr.email}  ${mgr.id}`;
+    clone.querySelector('.td-user-name').textContent = mgr.fullName;
+    clone.querySelector('.td-user-meta').textContent = `${mgr.email}  ${mgr.id}`;
     clone.querySelector('.td-pitches').textContent = mgr.managedPitches;
+    // mock some booking & balance data as the template has them
+    clone.querySelector('.td-bookings').textContent = mgr.bookingCount || Math.floor(Math.random() * 50);
+    clone.querySelector('.td-balance').textContent = mgr.balance || '$120.00';
 
     const badge = clone.querySelector('.badge');
     badge.textContent = mgr.accountStatus;
     badge.className = `badge ${mgr.statusClass}`;
 
-    clone.querySelector('.td-warnings').textContent = mgr.warningCount;
-    clone.querySelector('.td-registered').textContent = mgr.createdAt;
     clone.querySelector('.td-activity').textContent = mgr.lastActivityAt;
 
     const actionBtn = clone.querySelector('.td-action-btn');
@@ -107,8 +108,12 @@ function openModal(mgr) {
     btnConfirm.className = 'btn-admin btn-admin--danger';
   }
 
-  reasonInput.value = '';
-  btnConfirm.disabled = true;
+  if(reasonInput) {
+    reasonInput.value = '';
+  }
+  if(btnConfirm) {
+    btnConfirm.disabled = true;
+  }
   
   modal.showModal();
 }
@@ -118,30 +123,34 @@ function closeModal() {
   currentManager = null;
 }
 
-modalClose.addEventListener('click', closeModal);
-btnCancel.addEventListener('click', closeModal);
+if(modalClose) modalClose.addEventListener('click', closeModal);
+if(btnCancel) btnCancel.addEventListener('click', closeModal);
 modal.addEventListener('click', (e) => {
   if (e.target === modal) closeModal();
 });
 
-reasonInput.addEventListener('input', () => {
-  btnConfirm.disabled = reasonInput.value.trim().length === 0;
-});
+if(reasonInput) {
+  reasonInput.addEventListener('input', () => {
+    btnConfirm.disabled = reasonInput.value.trim().length === 0;
+  });
+}
 
-btnConfirm.addEventListener('click', () => {
-  if (btnConfirm.disabled) return;
-  
-  if (currentManager.accountStatus === 'Suspended') {
-    currentManager.accountStatus = 'Restored';
-    currentManager.statusClass = 'badge--info';
-  } else {
-    currentManager.accountStatus = 'Suspended';
-    currentManager.statusClass = 'badge--danger';
-  }
-  
-  closeModal();
-  renderManagers();
-});
+if(btnConfirm) {
+  btnConfirm.addEventListener('click', () => {
+    if (btnConfirm.disabled) return;
+    
+    if (currentManager.accountStatus === 'Suspended') {
+      currentManager.accountStatus = 'Restored';
+      currentManager.statusClass = 'badge--info';
+    } else {
+      currentManager.accountStatus = 'Suspended';
+      currentManager.statusClass = 'badge--danger';
+    }
+    
+    closeModal();
+    renderManagers();
+  });
+}
 
 // Search & Filter
 const searchInput = document.getElementById('mgr-search');
@@ -151,7 +160,7 @@ function applyFilters() {
   const query = searchInput.value.toLowerCase();
   const status = filterStatus.value;
 
-  managersData = mockPitchManagers.filter(m => {
+  managersData = mockManagers.filter(m => {
     const matchQ = !query || 
       m.fullName.toLowerCase().includes(query) || 
       m.email.toLowerCase().includes(query) ||
@@ -190,3 +199,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+

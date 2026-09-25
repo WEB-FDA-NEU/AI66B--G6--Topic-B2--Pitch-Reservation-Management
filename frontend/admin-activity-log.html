@@ -118,57 +118,43 @@
   </main>
 
   <!-- Activity Detail Modal -->
-  <dialog id="actionModal" class="admin-modal">
-    <div class="admin-modal__content">
-      <div class="admin-modal__header">
-        <h2 class="admin-modal__title">Activity Record</h2>
-        <button type="button" class="admin-modal__close" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="admin-modal__body">
-        
-        <div class="report-detail-card">
-          <div class="report-meta">
-            <div class="report-meta-item">
-              <span class="report-meta-label">Activity ID</span>
-              <span id="modalActivityId" class="report-meta-val">--</span>
-            </div>
-            <div class="report-meta-item">
-              <span class="report-meta-label">Date &amp; Time</span>
-              <span id="modalActivityDate" class="report-meta-val">--</span>
-            </div>
-            <div class="report-meta-item">
-              <span class="report-meta-label">Result</span>
-              <span id="modalActivityResult" class="badge">--</span>
-            </div>
-          </div>
-          
-          <h3 id="modalActivityAction" class="report-summary">--</h3>
-          <p id="modalActivityDetails" class="report-desc">--</p>
-          
-          <div class="report-entities">
-            <div class="entity-box">
-              <span class="entity-label">Actor</span>
-              <div id="modalActorName" class="entity-name">--</div>
-              <div id="modalActorRole" class="entity-id">--</div>
-            </div>
-            <div class="entity-box">
-              <span class="entity-label">Target</span>
-              <div id="modalTarget" class="entity-name">--</div>
-            </div>
-          </div>
-        </div>
+      <dialog id="actionModal" class="admin-modal admin-modal--lg">
+      <button class="admin-modal__close" aria-label="Close modal" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
 
-        <div class="admin-alert">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span class="admin-alert__text">Audit log records are immutable and cannot be edited or deleted.</span>
-        </div>
+      <div class="modal-header-user">
+        <h2 id="modalActivityAction">Action Name</h2>
+        <span id="modalActivityResult" class="badge">Result</span>
+      </div>
+      <div class="modal-subtitle" style="margin-bottom: var(--sp-5);">
+        Activity ID: <span id="modalActivityId">--</span>
+      </div>
 
+      <div class="modal-grid-info">
+        <div>
+          <span class="modal-grid-label">Date &amp; Time</span>
+          <span class="modal-grid-val" id="modalActivityDate">--</span>
+        </div>
+        <div>
+          <span class="modal-grid-label">Actor Role</span>
+          <span class="modal-grid-val" id="modalActorRole">--</span>
+        </div>
+        <div>
+          <span class="modal-grid-label">Actor Name</span>
+          <span class="modal-grid-val" id="modalActorName">--</span>
+        </div>
+        <div>
+          <span class="modal-grid-label">Target</span>
+          <span class="modal-grid-val" id="modalTarget">--</span>
+        </div>
       </div>
-      <div class="admin-modal__footer">
-        <button type="button" class="btn-admin btn-admin--primary" id="btnCancel">Close Record</button>
+
+      <div class="admin-modal-gray-box">
+        <div class="admin-modal-gray-box__title">Details</div>
+        <div class="admin-modal-gray-box__text" id="modalActivityDetails">--</div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
 
   <!-- Template -->
   <template id="tpl-activity-row">
@@ -193,4 +179,5 @@
   <script type="module" src="js/pages/admin-activity-log.js"></script>
 </body>
 </html>
+
 
