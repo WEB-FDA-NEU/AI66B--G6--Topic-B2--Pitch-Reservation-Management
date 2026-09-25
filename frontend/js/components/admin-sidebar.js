@@ -10,13 +10,18 @@ class AdminSidebar extends HTMLElement {
     this.innerHTML = `
       <aside class="admin-sidebar" aria-label="Điều hướng chính quản trị">
         <div class="admin-sidebar__brand">
-          <div class="admin-brand-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              <path d="M9 12l2 2 4-4"></path>
-            </svg>
+          <div class="admin-sidebar__brand-left">
+            <div class="admin-brand-logo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 12l2 2 4-4"></path>
+              </svg>
+            </div>
+            <span class="admin-brand-name"><strong>Pitch Point</strong> / Admin</span>
           </div>
-          <span class="admin-brand-name"><strong>Pitch Point</strong> / Admin</span>
+          <button class="admin-mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
         </div>
 
         <div class="admin-sidebar__section">
@@ -106,6 +111,31 @@ class AdminSidebar extends HTMLElement {
         link.style.cursor = 'not-allowed';
       }
     });
+
+    const toggleBtn = this.querySelector('.admin-mobile-toggle');
+    const sidebar = this.querySelector('.admin-sidebar');
+    
+    if (toggleBtn && sidebar) {
+      toggleBtn.addEventListener('click', () => {
+        const isOpen = sidebar.classList.toggle('is-open');
+        toggleBtn.setAttribute('aria-expanded', isOpen.toString());
+        
+        if (isOpen) {
+          toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        } else {
+          toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`;
+        }
+      });
+
+      // Close when clicking on the overlay (::before pseudo-element)
+      sidebar.addEventListener('click', (e) => {
+        if (e.target === sidebar && sidebar.classList.contains('is-open')) {
+          sidebar.classList.remove('is-open');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          toggleBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`;
+        }
+      });
+    }
   }
 }
 

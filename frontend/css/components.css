@@ -311,12 +311,86 @@ dialog::backdrop { background: rgba(0,0,0,.45); }
   opacity: 1;
 }
 
+.admin-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--c-text);
+  padding: 4px;
+}
+.admin-mobile-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
 @media (max-width: 900px) {
   .admin-sidebar {
     width: 100%;
     height: auto;
-    position: relative;
+    position: sticky;
+    top: 0;
     border-right: none;
     border-bottom: 1px solid var(--c-border);
+    z-index: 50;
+    overflow: visible;
+  }
+
+  .admin-sidebar__brand {
+    justify-content: space-between;
+    margin-bottom: 0;
+    border-bottom: none;
+    background: var(--c-bg);
+    position: relative;
+  }
+
+  .admin-sidebar__brand-left {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+
+  .admin-mobile-toggle {
+    display: flex;
+    position: relative;
+    z-index: 110;
+  }
+
+  /* Overlay */
+  .admin-sidebar::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .admin-sidebar.is-open::before {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* The Drawer */
+  .admin-sidebar__section {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 280px;
+    height: 100vh;
+    background: var(--c-bg);
+    z-index: 100;
+    transition: left 0.3s ease;
+    padding: var(--sp-6) var(--sp-4);
+    margin-bottom: 0;
+    overflow-y: auto;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    display: block;
+  }
+
+  .admin-sidebar.is-open .admin-sidebar__section {
+    left: 0;
   }
 }

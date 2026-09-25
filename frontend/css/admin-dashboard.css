@@ -395,7 +395,11 @@ body.admin-body {
   body.admin-body {
     flex-direction: column;
   }
+  .admin-header-hero {
+    padding: var(--sp-5) var(--sp-4) 80px;
+  }
   .admin-board {
-    margin-top: -40px;
+    margin-top: -60px;
+    padding: var(--sp-4);
   }
 }
