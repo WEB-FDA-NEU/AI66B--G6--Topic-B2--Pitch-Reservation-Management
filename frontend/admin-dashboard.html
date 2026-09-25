@@ -12,143 +12,325 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/admin-dashboard.css">
 </head>
-<body>
+<body class="admin-body">
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
 
-  <site-header></site-header>
-
-  <nav class="container breadcrumb" aria-label="Đường dẫn">
-    <ol>
-      <li><a href="index.html">Trang chủ</a></li>
-      <li aria-current="page">Tổng quan Quản trị</li>
-    </ol>
-  </nav>
-
-  <main class="container admin-dashboard-page" id="main-content">
-    <header class="screen-heading">
-      <div>
-        <p class="screen-heading__eyebrow">Administration & Enforcement</p>
-        <h1>Tổng quan Quản trị</h1>
-        <p class="screen-heading__description">Thống kê hoạt động, kiểm duyệt và quản lý nền tảng Pitch Point.</p>
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar" aria-label="Điều hướng chính quản trị">
+    <div class="admin-sidebar__brand">
+      <div class="admin-brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
       </div>
-      <div class="screen-heading__actions" aria-label="Lối tắt quản trị">
-        <a href="admin-settings.html" class="btn" type="button">Cài đặt hệ thống</a>
-        <a href="admin-activity-log.html" class="btn btn--primary" type="button">Nhật ký hoạt động</a>
+      <span class="admin-brand-name"><strong>Pitch Point</strong> / Admin</span>
+    </div>
+
+    <div class="admin-sidebar__section">
+      <p class="admin-sidebar__title">KHÔNG GIAN LÀM VIỆC</p>
+      <nav aria-label="Menu quản trị">
+        <ul class="admin-menu">
+          <li>
+            <a href="admin-dashboard.html" class="admin-menu__link active" aria-current="page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              Tổng quan
+            </a>
+          </li>
+          <li>
+            <a href="admin-users.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              Quản lý Khách hàng
+            </a>
+          </li>
+          <li>
+            <a href="admin-pitch-managers.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Quản lý Chủ sân
+            </a>
+          </li>
+          <li>
+            <a href="admin-pitch-moderation.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              Kiểm duyệt Sân bóng
+            </a>
+          </li>
+          <li>
+            <a href="admin-reports.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+              Quản lý Báo cáo
+            </a>
+          </li>
+          <li>
+            <a href="admin-finance.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Tài chính & Hoàn tiền
+            </a>
+          </li>
+          <li>
+            <a href="admin-content.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              Quản lý Nội dung
+            </a>
+          </li>
+          <li>
+            <a href="admin-activity-log.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Nhật ký Hoạt động
+            </a>
+          </li>
+          <li>
+            <a href="admin-settings.html" class="admin-menu__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Cài đặt Quản trị
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Admin Main Content -->
+  <main class="admin-main" id="main-content">
+    
+    <!-- Dark Green Header Area -->
+    <header class="admin-header-hero">
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">QUẢN TRỊ / TỔNG QUAN</p>
+        <h1 class="admin-header-hero__title">Chào mừng trở lại, Quản trị viên.</h1>
+        <p class="admin-header-hero__desc">Cái nhìn toàn cảnh về hoạt động trên hệ thống Pitch Point.</p>
+        
+        <div class="admin-header-hero__stats">
+          <div class="hero-stat">
+            <div class="hero-stat__header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+              Báo cáo chờ xử lý
+            </div>
+            <div class="hero-stat__value hero-stat__value--accent" id="hero-pending-reports">3</div>
+          </div>
+          <div class="hero-stat__divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat__header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              Hành động chờ duyệt
+            </div>
+            <div class="hero-stat__value" id="hero-pending-actions">5</div>
+          </div>
+        </div>
       </div>
     </header>
 
-    <div class="dashboard-layout">
-      <!-- Sidebar Shortcuts -->
-      <aside class="dashboard-sidebar">
-        <nav aria-label="Quản lý tính năng khác">
-          <ul class="sidebar-menu">
-            <li><a href="admin-finance.html" class="sidebar-menu__link">Tài chính & Hoàn tiền</a></li>
-            <li><a href="admin-content.html" class="sidebar-menu__link">Quản lý Nội dung (Banner)</a></li>
-            <li><a href="admin-activity-log.html" class="sidebar-menu__link">Nhật ký hoạt động (Audit)</a></li>
-            <li><a href="admin-settings.html" class="sidebar-menu__link">Cài đặt quản trị</a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <!-- Main Tabs Content -->
-      <div class="dashboard-content">
-        <!-- Tabs Nav -->
-        <nav class="tabs-nav" aria-label="Danh mục tổng quan">
-          <button class="tabs-nav__btn" data-tab="users" aria-selected="true" aria-controls="panel-users">Người dùng</button>
-          <button class="tabs-nav__btn" data-tab="pitches" aria-selected="false" aria-controls="panel-pitches">Sân bóng</button>
-          <button class="tabs-nav__btn" data-tab="reports" aria-selected="false" aria-controls="panel-reports">Báo cáo vi phạm</button>
-        </nav>
-
-        <!-- Panel: Users -->
-        <section class="screen-panel tab-panel" id="panel-users" aria-labelledby="tab-users-title">
-          <header class="screen-panel__heading">
-            <div>
-              <h2 id="tab-users-title">Quản lý Con người</h2>
-              <p>Tóm tắt thông tin tài khoản Khách hàng và Chủ sân mới cập nhật.</p>
+    <!-- Main White Board overlapping header -->
+    <div class="admin-board">
+      
+      <!-- KPI Cards Grid -->
+      <section class="admin-grid-kpi" aria-label="Các chỉ số chính">
+        
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-card__header">
+            <div class="admin-kpi-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
-            <div class="screen-heading__actions">
-              <a href="admin-users.html" class="btn">Xem danh sách Khách hàng</a>
-              <a href="admin-pitch-managers.html" class="btn">Xem danh sách Chủ sân</a>
-            </div>
-          </header>
-          
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <p class="kpi-card__label">Khách hàng mới</p>
-              <p class="kpi-card__value" id="kpi-new-users">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Chủ sân chờ duyệt</p>
-              <p class="kpi-card__value" id="kpi-pending-managers">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Tài khoản bị khóa</p>
-              <p class="kpi-card__value kpi-card__value--danger" id="kpi-suspended">--</p>
-            </div>
+            <span class="admin-kpi-card__title">Khách hàng</span>
           </div>
-        </section>
-
-        <!-- Panel: Pitches -->
-        <section class="screen-panel tab-panel hidden" id="panel-pitches" aria-labelledby="tab-pitches-title" hidden>
-          <header class="screen-panel__heading">
-            <div>
-              <h2 id="tab-pitches-title">Kiểm duyệt Sân bóng</h2>
-              <p>Trạng thái hoạt động và các sân bóng cần xử lý/đình chỉ.</p>
-            </div>
-            <div class="screen-heading__actions">
-              <a href="admin-pitch-moderation.html" class="btn btn--primary">Đến trang Kiểm duyệt Sân</a>
-            </div>
-          </header>
-          
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <p class="kpi-card__label">Sân mới (chờ duyệt)</p>
-              <p class="kpi-card__value" id="kpi-pending-pitches">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Sân đang hoạt động</p>
-              <p class="kpi-card__value" id="kpi-active-pitches">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Sân bị đình chỉ</p>
-              <p class="kpi-card__value kpi-card__value--danger" id="kpi-suspended-pitches">--</p>
-            </div>
+          <div class="admin-kpi-card__value" id="kpi-users">2,480</div>
+          <div class="admin-kpi-card__meta">
+            <span id="kpi-users-active">2342</span> đang hoạt động &middot; <span id="kpi-users-suspended">138</span> bị khóa
           </div>
-        </section>
+        </div>
 
-        <!-- Panel: Reports -->
-        <section class="screen-panel tab-panel hidden" id="panel-reports" aria-labelledby="tab-reports-title" hidden>
-          <header class="screen-panel__heading">
-            <div>
-              <h2 id="tab-reports-title">Xử lý Báo cáo</h2>
-              <p>Danh sách tố cáo, đánh giá vi phạm chưa được giải quyết.</p>
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-card__header">
+            <div class="admin-kpi-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
-            <div class="screen-heading__actions">
-              <a href="admin-reports.html" class="btn btn--primary">Quản lý Báo cáo</a>
-            </div>
-          </header>
-          
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <p class="kpi-card__label">Báo cáo mới</p>
-              <p class="kpi-card__value kpi-card__value--danger" id="kpi-new-reports">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Đang xử lý</p>
-              <p class="kpi-card__value" id="kpi-progress-reports">--</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-card__label">Đã giải quyết</p>
-              <p class="kpi-card__value" id="kpi-resolved-reports">--</p>
-            </div>
+            <span class="admin-kpi-card__title">Chủ sân</span>
           </div>
-        </section>
+          <div class="admin-kpi-card__value" id="kpi-managers">186</div>
+          <div class="admin-kpi-card__meta">
+            <span id="kpi-managers-suspended">12</span> bị khóa
+          </div>
+        </div>
 
-      </div>
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-card__header">
+            <div class="admin-kpi-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <span class="admin-kpi-card__title">Sân bóng</span>
+          </div>
+          <div class="admin-kpi-card__value" id="kpi-pitches">412</div>
+          <div class="admin-kpi-card__meta">
+            <span id="kpi-pitches-active">389</span> đang hoạt động &middot; <span id="kpi-pitches-suspended">23</span> bị đình chỉ
+          </div>
+        </div>
+
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-card__header">
+            <div class="admin-kpi-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <span class="admin-kpi-card__title">Tổng lượt đặt</span>
+          </div>
+          <div class="admin-kpi-card__value" id="kpi-bookings">8,642</div>
+          <div class="admin-kpi-card__meta">Lượt đặt tính đến hiện tại</div>
+        </div>
+
+      </section>
+
+      <!-- Recent Reports -->
+      <section class="admin-section" aria-labelledby="reports-title">
+        <header class="admin-section__header">
+          <div>
+            <h2 id="reports-title" class="admin-section__title">Báo cáo gần đây</h2>
+            <p class="admin-section__subtitle">Các trường hợp mới nhất chờ xem xét</p>
+          </div>
+          <a href="admin-reports.html" class="admin-section__link">Xem tất cả &rarr;</a>
+        </header>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Báo cáo</th>
+                <th>Người gửi</th>
+                <th>Ngày gửi</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="recent-reports-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Recent Activity -->
+      <section class="admin-section" aria-labelledby="activity-title">
+        <header class="admin-section__header">
+          <div>
+            <h2 id="activity-title" class="admin-section__title">Hoạt động gần đây</h2>
+            <p class="admin-section__subtitle">Lịch sử hành động của Ban quản trị</p>
+          </div>
+          <a href="admin-activity-log.html" class="admin-section__link">Xem nhật ký &rarr;</a>
+        </header>
+
+        <div class="admin-activity-list" id="recent-activity-list">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- Quick Navigation -->
+      <section class="admin-section" aria-labelledby="quick-nav-title">
+        <header class="admin-section__header">
+          <div>
+            <h2 id="quick-nav-title" class="admin-section__title">Điều hướng nhanh</h2>
+            <p class="admin-section__subtitle">Truy cập nhanh vào các phân hệ quản lý</p>
+          </div>
+        </header>
+
+        <div class="admin-quick-nav">
+          <a href="admin-users.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S27</span>
+              <span class="quick-nav-card__title">Quản lý Khách hàng</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+          <a href="admin-pitch-managers.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S28</span>
+              <span class="quick-nav-card__title">Quản lý Chủ sân</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+          <a href="admin-pitch-moderation.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S29</span>
+              <span class="quick-nav-card__title">Kiểm duyệt Sân bóng</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+          <a href="admin-reports.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S31</span>
+              <span class="quick-nav-card__title">Quản lý Báo cáo</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+          <a href="admin-finance.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S32</span>
+              <span class="quick-nav-card__title">Tài chính & Hoàn tiền</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+          <a href="admin-content.html" class="quick-nav-card">
+            <div class="quick-nav-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </div>
+            <div class="quick-nav-card__content">
+              <span class="quick-nav-card__eyebrow">S33</span>
+              <span class="quick-nav-card__title">Quản lý Nội dung</span>
+            </div>
+            <div class="quick-nav-card__arrow">↗</div>
+          </a>
+
+        </div>
+      </section>
+
     </div>
   </main>
 
-  <site-footer></site-footer>
+  <template id="tpl-report-row">
+    <tr>
+      <td>
+        <div class="td-report-id">RPT-0000</div>
+        <div class="td-report-meta">Lý do báo cáo</div>
+      </td>
+      <td class="td-reporter">Tên người gửi</td>
+      <td class="td-date">Ngày gửi</td>
+      <td>
+        <span class="badge badge--pending">Chờ xử lý</span>
+      </td>
+    </tr>
+  </template>
+
+  <template id="tpl-activity-item">
+    <div class="activity-item">
+      <div class="activity-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="activity-item__content">
+        <div class="activity-item__header">
+          <span class="activity-title">Hành động</span>
+          <span class="badge badge--success">Hoàn tất</span>
+        </div>
+        <div class="activity-item__desc">Người thực hiện &middot; Đối tượng bị ảnh hưởng</div>
+        <div class="activity-item__date">Thời gian</div>
+      </div>
+    </div>
+  </template>
 
   <script type="module" src="js/pages/admin-dashboard.js"></script>
 </body>
