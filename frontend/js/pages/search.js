@@ -82,7 +82,7 @@ function createPitchCard(pitch) {
   const favoriteButton = node.querySelector('.card__favorite');
   const rating = node.querySelector('.card__rating');
 
-  link.href = `pitch_detail.html?id=${pitch.id}`;
+  link.href = `pitch-detail.html?pitchId=${pitch.id}`;
   image.src = pitch.image;
   image.alt = `Hình ảnh ${pitch.name}`;
   node.querySelector('.card__title').textContent = pitch.name;

@@ -1,44 +1,6 @@
+import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
-
-const FEATURED_PITCHES = [
-  {
-    name: 'Sân bóng Bách Khoa',
-    location: 'Hai Bà Trưng, Hà Nội',
-    typeLabel: 'Sân 7 người',
-    price: 420000,
-    rating: 4.9,
-    badge: 'Đặt nhiều',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Green Field Minh Khai',
-    location: 'Bắc Từ Liêm, Hà Nội',
-    typeLabel: 'Sân 5 người',
-    price: 300000,
-    rating: 4.8,
-    badge: 'Còn giờ đẹp',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Arena Tây Hồ',
-    location: 'Tây Hồ, Hà Nội',
-    typeLabel: 'Sân 7 người',
-    price: 500000,
-    rating: 4.7,
-    badge: 'Mới',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Sân bóng Thành Công',
-    location: 'Ba Đình, Hà Nội',
-    typeLabel: 'Sân 11 người',
-    price: 900000,
-    rating: 4.8,
-    badge: 'Đánh giá cao',
-    image: 'img/placeholder.svg',
-  },
-];
 
 const elements = {
   form: document.getElementById('quick-search-form'),
@@ -73,10 +35,6 @@ function toDateValue(date) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-}
-
-function formatPitchPrice(value) {
-  return `${new Intl.NumberFormat('vi-VN').format(value)}đ / giờ`;
 }
 
 function closePickers(except = null) {
@@ -185,11 +143,14 @@ function selectTime(button) {
   elements.timeButton?.focus();
 }
 
-function renderFeaturedPitches(items) {
+function renderFeaturedPitches() {
   if (!elements.results || !elements.resultSummary) return;
   const template = document.getElementById('tpl-card');
   const emptyTemplate = document.getElementById('tpl-empty-state');
   if (!template || !emptyTemplate) return;
+
+  // Lọc ra các sân được đánh dấu featured (nổi bật) từ file data dùng chung
+  const items = MOCK_PITCHES.filter(p => p.featured);
 
   if (items.length === 0) {
     elements.results.replaceChildren(emptyTemplate.content.cloneNode(true));
@@ -205,44 +166,30 @@ function renderFeaturedPitches(items) {
     const favoriteButton = node.querySelector('.card__favorite');
     const rating = node.querySelector('.card__rating');
 
+    // Thiết lập đường dẫn sang trang S03 (Chi tiết sân) kèm tham số chuẩn pitchId (IC-02)
+    link.href = `pitch-detail.html?pitchId=${pitch.id}`;
     link.setAttribute('aria-label', `Xem chi tiết ${pitch.name}`);
+    
     image.src = pitch.image;
     image.alt = `Hình ảnh minh họa ${pitch.name}`;
+    
     node.querySelector('.card__title').textContent = pitch.name;
     node.querySelector('.card__meta').textContent = pitch.location;
     node.querySelector('.card__type').textContent = pitch.typeLabel;
     node.querySelector('.card__price').textContent = formatPitchPrice(pitch.price);
+    
     rating.textContent = `★ ${pitch.rating.toFixed(1)}`;
     rating.setAttribute('aria-label', `${pitch.rating.toFixed(1)} trên 5 sao`);
+    
     node.querySelector('.card__badge').textContent = pitch.badge;
     favoriteButton.setAttribute('aria-label', `Thêm ${pitch.name} vào danh sách yêu thích`);
+    
     return node;
   });
 
   elements.results.replaceChildren(...cards);
-  elements.resultSummary.textContent = `${items.length} sân mẫu dùng để minh họa giao diện Home.`;
+  elements.resultSummary.textContent = `${items.length} sân nổi bật được đề xuất cho bạn.`;
   elements.results.setAttribute('aria-busy', 'false');
-}
-
-function disableSharedNavigation() {
-  const header = document.querySelector('site-header');
-  const footer = document.querySelector('site-footer');
-
-  [
-    header?.querySelector('[data-nav="search"]'),
-    header?.querySelector('a[href="login.html"]'),
-    header?.querySelector('a[href="register.html"]'),
-    footer?.querySelector('a[href="search.html"]'),
-  ].filter(Boolean).forEach(link => {
-    link.removeAttribute('href');
-    link.setAttribute('aria-disabled', 'true');
-  });
-
-  const headerSearch = header?.querySelector('.site-header__search');
-  if (headerSearch) {
-    headerSearch.removeAttribute('action');
-    headerSearch.addEventListener('submit', event => event.preventDefault());
-  }
 }
 
 function protectMobileControlsFromMessageBubble() {
@@ -279,7 +226,7 @@ function bindEvents() {
     button.addEventListener('click', () => selectTime(button));
   });
 
-  elements.form?.addEventListener('submit', event => event.preventDefault());
+  // Ghi chú: Xóa e.preventDefault() ở đây để form submit tự nhiên bằng GET url params sang search.html
 
   document.addEventListener('click', event => {
     const target = event.target;
@@ -303,7 +250,6 @@ function bindEvents() {
 }
 
 renderCalendar();
-renderFeaturedPitches(FEATURED_PITCHES);
-disableSharedNavigation();
+renderFeaturedPitches();
 protectMobileControlsFromMessageBubble();
 bindEvents();
