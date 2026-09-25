@@ -245,3 +245,18 @@ export const mockManagers = [
   }
 ];
 
+
+
+export const mockBanners = [
+  { id: 'B-001', title: 'Summer Tournament Registration', description: 'Register your team for the summer tournament.', position: 'Homepage hero', status: 'Active', statusClass: 'badge--success', startDate: '01 Sept 2026', endDate: '31 Oct 2026', imageUrl: '', link: '/promos/summer' },
+  { id: 'B-002', title: 'New Pitch Launch at Riverside', description: 'Book the newly opened pitches at Riverside.', position: 'Homepage hero', status: 'Scheduled', statusClass: 'badge--primary', startDate: '01 Oct 2026', endDate: '30 Nov 2026', imageUrl: '', link: '/pitches/riverside' },
+  { id: 'B-003', title: 'Weekend Discount Promo', description: 'Get 20% off weekend bookings at select pitches.', position: 'Homepage sidebar', status: 'Active', statusClass: 'badge--success', startDate: '15 Sept 2026', endDate: '30 Sept 2026', imageUrl: '', link: '/promos/weekend' },
+  { id: 'B-004', title: 'Holiday Special Offer', description: 'Special holiday rates for all 5-a-side pitches.', position: 'Homepage sidebar', status: 'Draft', statusClass: 'badge--neutral', startDate: '01 Dec 2026', endDate: '31 Dec 2026', imageUrl: '', link: '/promos/holiday' }
+];
+
+export const mockAnnouncements = [
+  { id: 'A-001', title: 'Platform Maintenance Notice', content: 'The platform will undergo scheduled maintenance on September 28th from 2:00 AM to 4:00 AM UTC. Some features may be temporarily unavailable.', audience: 'All authenticated users', status: 'Published', statusClass: 'badge--success', publishedDate: '25 Sept 2026', expDate: '29 Sept 2026' },
+  { id: 'A-002', title: 'New Feature: Team Chat', content: 'You can now chat with your team members directly on the platform.', audience: 'Registered users', status: 'Published', statusClass: 'badge--success', publishedDate: '22 Sept 2026', expDate: '22 Oct 2026' },
+  { id: 'A-003', title: 'Payout Schedule Update', content: 'Manager payouts will now be processed every Monday.', audience: 'Pitch managers', status: 'Published', statusClass: 'badge--success', publishedDate: '20 Sept 2026', expDate: '20 Dec 2026' },
+  { id: 'A-004', title: 'Security Policy Update', content: 'Our security policy has been updated.', audience: 'All authenticated users', status: 'Scheduled', statusClass: 'badge--primary', publishedDate: '01 Oct 2026', expDate: '01 Nov 2026' }
+];

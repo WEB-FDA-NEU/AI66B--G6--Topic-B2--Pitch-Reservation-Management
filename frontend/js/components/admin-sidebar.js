@@ -89,7 +89,7 @@ class AdminSidebar extends HTMLElement {
     `;
     
     const links = this.querySelectorAll('a.admin-menu__link');
-    const integratedPages = ['admin-dashboard.html', 'admin-users.html', 'admin-pitch-managers.html', 'admin-reports.html', 'admin-activity-log.html'];
+    const integratedPages = ['admin-dashboard.html', 'admin-users.html', 'admin-pitch-managers.html', 'admin-reports.html', 'admin-activity-log.html', 'admin-content.html'];
     
     links.forEach(link => {
       const href = link.getAttribute('href');

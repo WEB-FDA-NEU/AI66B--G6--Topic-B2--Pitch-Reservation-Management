@@ -1,0 +1,85 @@
+.admin-content-page .admin-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 0;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-bg-subtle);
+  border-radius: 8px 8px 0 0;
+}
+
+.admin-content-page .admin-tab {
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9375rem;
+}
+
+.admin-content-page .admin-tab:hover {
+  color: var(--c-text);
+}
+
+.admin-content-page .admin-tab.active {
+  color: var(--c-primary);
+  border-bottom-color: var(--c-primary);
+}
+
+.admin-content-page .admin-tab span {
+  font-weight: normal;
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
+.admin-content-page .td-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--c-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.admin-content-page .td-action-btn:hover {
+  background: var(--c-bg-subtle);
+  color: var(--c-primary);
+}
+
+.admin-content-page .admin-table tr {
+  cursor: pointer;
+}
+
+.admin-content-page .admin-table tr:hover td {
+  background: var(--c-bg-subtle);
+}
+
+.admin-content-page .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-content-page .form-group label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--c-text);
+}
+
+.admin-content-page .form-control {
+  padding: 10px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9375rem;
+}
+
+.admin-content-page .form-control:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 2px rgba(10, 89, 75, 0.1);
+}
