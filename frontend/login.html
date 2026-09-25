@@ -12,10 +12,10 @@
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-  <a class="login-page__skip-link" href="#main-content">Bỏ qua điều hướng</a>
   <site-header></site-header>
 
   <main class="container login-page" id="main-content">
+    <a class="login-page__skip-link" href="#login-title">Bỏ qua nội dung điều hướng</a>
     <section class="login-card" aria-labelledby="login-title">
       <a class="login-card__brand" href="index.html" aria-label="Pitch Point — Trang chủ">
         <span class="login-card__brand-mark" aria-hidden="true">P</span>
@@ -26,8 +26,8 @@
 
       <form id="login-form" class="login-form" novalidate>
         <div class="field">
-          <label class="field__label" for="login-identifier">Email hoặc tên đăng nhập</label>
-          <input class="input" id="login-identifier" name="email" type="text" required autocomplete="username" aria-describedby="identifier-error">
+          <label class="field__label" for="login-identifier">Email</label>
+          <input class="input" id="login-identifier" name="email" type="email" required autocomplete="username" aria-describedby="identifier-error">
           <p class="field__error" id="identifier-error"></p>
         </div>
 

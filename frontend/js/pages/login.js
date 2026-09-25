@@ -83,7 +83,10 @@ form?.addEventListener('submit', async event => {
 
   let isValid = true;
   if (!identifier?.value.trim()) {
-    if (identifier) setFieldError(identifier, 'Vui lòng nhập email hoặc tên đăng nhập.');
+    if (identifier) setFieldError(identifier, 'Vui lòng nhập email.');
+    isValid = false;
+  } else if (identifier.validity.typeMismatch) {
+    setFieldError(identifier, 'Vui lòng nhập đúng định dạng email.');
     isValid = false;
   }
   if (!password?.value) {
