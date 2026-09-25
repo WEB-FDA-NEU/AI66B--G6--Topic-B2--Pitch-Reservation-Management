@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quản lý Chủ sân - Pitch Point Admin.">
+  <title>Quản lý Chủ sân - Pitch Point</title>
+  
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-pitch-managers.css">
+</head>
+<body class="admin-users-page">
+  <admin-sidebar></admin-sidebar>
+
+  <main class="admin-main">
+    <header class="admin-header-hero">
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S28</p>
+        <h1 class="admin-header-hero__title">Pitch Manager Management</h1>
+        <p class="admin-header-hero__desc">Review pitch manager accounts and manage suspensions.</p>
+        
+        <div class="admin-hero-search">
+          <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" id="manager-search" class="admin-hero-search__input" placeholder="Search by name, email, or ID..." aria-label="Search managers">
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-board">
+      <div class="admin-filters">
+        <div class="admin-filters__group">
+          <div class="filter-field">
+            <label for="filter-status">Status</label>
+            <select id="filter-status">
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="warned">Warned</option>
+              <option value="suspended">Suspended</option>
+              <option value="restored">Restored</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="filter-pitches">Pitches managed</label>
+            <select id="filter-pitches">
+              <option value="any">Any count</option>
+              <option value="1">1 pitch</option>
+              <option value="2-5">2 - 5 pitches</option>
+              <option value="5+">More than 5</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-filters__count" id="managers-count">0 managers</div>
+      </div>
+
+      <div class="admin-table-container">
+        <table class="admin-table" aria-label="Danh sách chủ sân">
+          <thead>
+            <tr>
+              <th>Manager</th>
+              <th>Pitches</th>
+              <th>Active bookings</th>
+              <th>Balance</th>
+              <th>Status</th>
+              <th>Last activity</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="managers-tbody" aria-live="polite">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-pagination">
+        <div class="admin-pagination__info">Page 1 of 2</div>
+        <div class="admin-pagination__controls">
+          <button class="admin-pagination__btn" aria-label="Previous page" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="admin-pagination__btn" aria-label="Next page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Template for Action -->
+  <dialog id="action-modal" class="admin-modal" aria-labelledby="modal-title">
+    <div class="admin-modal__header">
+      <h2 id="modal-title" class="admin-modal__title">Administrative Action</h2>
+      <button class="admin-modal__close" id="modal-close" aria-label="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="admin-modal__body">
+      <div class="admin-modal-info">
+        <div class="admin-modal-info__row">
+          <span class="admin-modal-info__label">Manager</span>
+          <span class="admin-modal-info__value" id="modal-manager-name">-</span>
+        </div>
+        <div class="admin-modal-info__row">
+          <span class="admin-modal-info__label">Current Status</span>
+          <span class="admin-modal-info__value" id="modal-manager-status">-</span>
+        </div>
+      </div>
+
+      <div class="admin-modal-warning" id="modal-warning-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <div>
+          <strong>Important:</strong> 
+          <span id="modal-warning-text">When suspended, associated pitches stop accepting new bookings. Existing bookings remain valid while under review.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="admin-reason">Reason / Note <span class="field__hint">(Required)</span></label>
+        <textarea id="admin-reason" class="textarea" rows="3" placeholder="Enter administrative note..."></textarea>
+      </div>
+    </div>
+    <div class="admin-modal__actions">
+      <button type="button" class="btn-admin btn-admin--outline" id="modal-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--danger" id="modal-confirm">Confirm Action</button>
+    </div>
+  </dialog>
+
+  <!-- Template for Manager Row -->
+  <template id="tpl-manager-row">
+    <tr>
+      <td>
+        <span class="td-user-name"></span>
+        <span class="td-user-meta"></span>
+      </td>
+      <td class="td-pitches"></td>
+      <td class="td-bookings"></td>
+      <td class="td-balance" style="font-weight: 600;"></td>
+      <td><span class="badge"></span></td>
+      <td class="td-activity"></td>
+      <td>
+        <button type="button" class="td-action-btn" aria-label="Phân tích / Xử lý">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </td>
+    </tr>
+  </template>
+
+  <script type="module" src="js/components/admin-sidebar.js"></script>
+  <script type="module" src="js/pages/admin-pitch-managers.js"></script>
+</body>
+</html>
