@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chọn ngày và khung giờ để đặt sân trên Pitch Point.">
+  <title>Đặt lịch sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
+  <link rel="stylesheet" href="css/booking-schedule.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page">Chọn lịch đá</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-schedule-page" id="main-content">
+    <header class="screen-heading">
+      <div>
+        <p class="screen-heading__eyebrow">Đặt sân</p>
+        <h1>Chọn ngày và khung giờ</h1>
+        <p class="screen-heading__description" id="pitch-summary-hint">Đang tải thông tin sân…</p>
+      </div>
+    </header>
+
+    
+
+    <div id="booking-content">
+      <!-- Tóm tắt sân đã chọn -->
+      <section class="pitch-summary-card" id="pitch-summary-card" aria-labelledby="pitch-summary-title">
+        <img class="pitch-summary-card__img" id="pitch-summary-img" src="" alt="" loading="lazy">
+        <div class="pitch-summary-card__body">
+          <h2 class="pitch-summary-card__title" id="pitch-summary-title"></h2>
+          <p class="pitch-summary-card__meta" id="pitch-summary-meta"></p>
+          <p class="pitch-summary-card__price" id="pitch-summary-price"></p>
+        </div>
+      </section>
+
+      <!-- Trạng thái giữ chỗ tạm thời -->
+      <section class="hold-banner" id="hold-banner" aria-live="polite" hidden>
+        <div>
+          <p class="hold-banner__title" id="hold-banner-title">Đang giữ chỗ khung giờ đã chọn</p>
+          <p class="hold-banner__slot" id="hold-banner-slot"></p>
+        </div>
+        <p class="hold-banner__timer" id="hold-banner-timer" aria-label="Thời gian giữ chỗ còn lại"></p>
+      </section>
+
+      <section class="hold-banner hold-banner--expired" id="hold-expired-banner" aria-live="polite" hidden>
+        <div>
+          <p class="hold-banner__title">Thời gian giữ chỗ đã hết hạn</p>
+          <p class="hold-banner__slot">Khung giờ đã được nhả lại. Vui lòng chọn lại thời gian.</p>
+        </div>
+      </section>
+
+      <section class="hold-banner hold-banner--conflict" id="conflict-banner" aria-live="polite" hidden>
+        <div>
+          <p class="hold-banner__title">Khung giờ vừa được người khác giữ</p>
+          <p class="hold-banner__slot">Vui lòng chọn một khung giờ trống khác.</p>
+        </div>
+      </section>
+
+      <!-- Chọn ngày -->
+      <section class="screen-panel" aria-labelledby="date-select-title">
+        <header class="screen-panel__heading">
+          <div>
+            <h2 id="date-select-title">Chọn ngày chơi</h2>
+            <p>Chỉ hỗ trợ đặt sân trong 7 ngày tới.</p>
+          </div>
+        </header>
+        <div class="date-chip-row" id="date-chip-row" role="tablist" aria-label="Chọn ngày"></div>
+      </section>
+
+      <!-- Chọn khung giờ -->
+      <section class="screen-panel" aria-labelledby="slot-select-title">
+        <header class="screen-panel__heading">
+          <div>
+            <h2 id="slot-select-title">Chọn khung giờ</h2>
+            <p class="slot-legend">
+              <span class="slot-legend__item"><span class="slot-dot slot-dot--available"></span>Còn trống</span>
+              <span class="slot-legend__item"><span class="slot-dot slot-dot--selected"></span>Đang chọn</span>
+              <span class="slot-legend__item"><span class="slot-dot slot-dot--booked"></span>Đã đặt</span>
+              <span class="slot-legend__item"><span class="slot-dot slot-dot--unavailable"></span>Không khả dụng</span>
+            </p>
+          </div>
+        </header>
+
+        <div class="slot-grid" id="slot-grid" aria-live="polite" aria-busy="true"></div>
+
+        <div class="empty" id="slot-empty-state" hidden>
+          <p class="empty__title">Không có khung giờ trống trong ngày này</p>
+          <p class="empty__hint">Vui lòng thử chọn một ngày khác.</p>
+        </div>
+      </section>
+
+      <div class="screen-heading__actions booking-schedule__actions">
+        <button class="btn" type="button" id="cancel-button">Hủy chọn</button>
+        <button class="btn btn--primary" type="button" id="continue-button" disabled>Tiếp tục</button>
+      </div>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/booking-schedule.js"></script>
+</body>
+</html>

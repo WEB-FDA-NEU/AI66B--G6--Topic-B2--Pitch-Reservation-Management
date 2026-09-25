@@ -1,0 +1,65 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+.booking-history-page .skip-link:focus { transform: translateY(0); }
+
+.booking-history-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.booking-history-page > * + * { margin-top: var(--sp-5); }
+
+.booking-history-page .booking-history__filters { display: grid; gap: var(--sp-4); }
+.booking-history-page .booking-history__filter-form {
+  display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: var(--sp-3); align-items: end;
+}
+.booking-history-page .booking-history__search .field__label { margin-bottom: var(--sp-1); }
+
+.booking-history-page .booking-history__list { gap: var(--sp-3); }
+
+/* ---- Dòng đặt sân, mở rộng từ .row dùng chung ---- */
+.booking-history-page .booking-row { grid-template-columns: 96px minmax(0, 1fr) auto; align-items: center; }
+.booking-history-page .booking-row__body { min-width: 0; }
+.booking-history-page .booking-row__ref { font-weight: 800; }
+.booking-history-page .booking-row__pitch { color: var(--c-text); font-weight: 600; margin-top: var(--sp-1); }
+.booking-history-page .booking-row__datetime { margin-top: var(--sp-1); }
+.booking-history-page .booking-row__aside { display: grid; justify-items: end; gap: var(--sp-2); }
+
+/* ---- Huy hiệu trạng thái — dùng nhất quán ở S11, S12 và Manager Bookings ---- */
+.booking-history-page .status-badge {
+  display: inline-flex; align-items: center; padding: .3rem .65rem;
+  border-radius: 999px; font-size: .78rem; font-weight: 800; white-space: nowrap;
+}
+.booking-history-page .status-badge--pending        { background: #fdf1da; color: var(--c-warning); }
+.booking-history-page .status-badge--confirmed       { background: #e6f6ec; color: var(--c-success); }
+.booking-history-page .status-badge--completed       { background: #e5eef5; color: var(--c-primary); }
+.booking-history-page .status-badge--cancelled       { background: #fbe9ea; color: var(--c-danger); }
+.booking-history-page .status-badge--rescheduled     { background: #f1ecfa; color: #5a3fae; }
+.booking-history-page .status-badge--payment-failed  { background: #fbe9ea; color: var(--c-danger); }
+.booking-history-page .status-badge--refund-pending  { background: #fdf1da; color: var(--c-warning); }
+.booking-history-page .status-badge--refunded        { background: #e5eef5; color: var(--c-primary); }
+
+.booking-history-page .skeleton-row {
+  height: 96px; border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--c-surface) 25%, var(--c-border) 37%, var(--c-surface) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+@keyframes shimmer { from { background-position: 100% 0 } to { background-position: 0 0 } }
+@media (prefers-reduced-motion: reduce) { .booking-history-page .skeleton-row { animation: none } }
+
+@media (max-width: 760px) {
+  .booking-history-page .booking-history__filter-form { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .booking-history-page .booking-row { grid-template-columns: 72px 1fr; }
+  .booking-history-page .booking-row__aside { grid-column: 1 / -1; justify-items: start; flex-direction: row; align-items: center; gap: var(--sp-3); }
+  .booking-history-page .tabs { overflow-x: auto; flex-wrap: nowrap; }
+}

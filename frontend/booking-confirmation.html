@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Xác nhận thông tin đặt sân trên Pitch Point.">
+  <title>Xác nhận đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
+  <link rel="stylesheet" href="css/booking-confirmation.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page">Xác nhận đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-confirmation-page" id="main-content">
+    <header class="screen-heading">
+      <div>
+        <p class="screen-heading__eyebrow">Đặt sân</p>
+        <h1>Xác nhận thông tin đặt sân</h1>
+        <p class="screen-heading__description">Kiểm tra kỹ thông tin trước khi chuyển sang bước thanh toán.</p>
+      </div>
+    </header>
+
+    
+
+    
+
+    <div id="confirmation-content">
+      <section class="hold-banner" id="hold-banner" aria-live="polite">
+        <div>
+          <p class="hold-banner__title">Giữ chỗ còn hiệu lực trong</p>
+        </div>
+        <p class="hold-banner__timer" id="hold-banner-timer" aria-label="Thời gian giữ chỗ còn lại"></p>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="pitch-info-title">
+        <header class="screen-panel__heading">
+          <div><h2 id="pitch-info-title">Thông tin sân và lịch đá</h2></div>
+        </header>
+        <dl class="summary-list">
+          <div class="summary-list__row"><dt>Sân bóng</dt><dd id="summary-pitch-name"></dd></div>
+          <div class="summary-list__row"><dt>Địa điểm</dt><dd id="summary-pitch-location"></dd></div>
+          <div class="summary-list__row"><dt>Loại sân</dt><dd id="summary-pitch-type"></dd></div>
+          <div class="summary-list__row"><dt>Ngày chơi</dt><dd id="summary-date"></dd></div>
+          <div class="summary-list__row"><dt>Khung giờ</dt><dd id="summary-time"></dd></div>
+        </dl>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="customer-info-title">
+        <header class="screen-panel__heading">
+          <div><h2 id="customer-info-title">Thông tin khách đặt sân</h2></div>
+        </header>
+        <dl class="summary-list">
+          <div class="summary-list__row"><dt>Khách hàng</dt><dd id="summary-customer-name"></dd></div>
+          <div class="summary-list__row"><dt>Số điện thoại</dt><dd id="summary-customer-phone"></dd></div>
+        </dl>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="price-breakdown-title">
+        <header class="screen-panel__heading">
+          <div><h2 id="price-breakdown-title">Chi tiết giá</h2></div>
+        </header>
+        <dl class="price-breakdown">
+          <div class="price-breakdown__row"><dt>Giá thuê sân</dt><dd id="price-base"></dd></div>
+          <div class="price-breakdown__row"><dt>Phí dịch vụ</dt><dd id="price-fee"></dd></div>
+          <div class="price-breakdown__row price-breakdown__row--total"><dt>Tổng cộng</dt><dd id="price-total"></dd></div>
+        </dl>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="terms-title">
+        <header class="screen-panel__heading">
+          <div><h2 id="terms-title">Điều khoản đặt sân</h2></div>
+        </header>
+        <ul class="terms-list">
+          <li>Có thể huỷ và được hoàn tiền mô phỏng đầy đủ nếu huỷ trước giờ đá ít nhất 2 giờ.</li>
+          <li>Mỗi lượt đặt sân chỉ được đổi lịch một lần.</li>
+          <li>Thanh toán được thực hiện bằng số dư mô phỏng trong hệ thống Pitch Point.</li>
+        </ul>
+      </section>
+
+      <div class="screen-heading__actions booking-confirmation__actions">
+        <button class="btn" type="button" id="back-button">Quay lại</button>
+        <button class="btn btn--primary" type="button" id="proceed-button" aria-disabled="true">
+          Tiến hành thanh toán
+        </button>
+      </div>
+      
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/booking-confirmation.js"></script>
+</body>
+</html>
