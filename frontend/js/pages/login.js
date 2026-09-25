@@ -1,31 +1,98 @@
+import '../components/site-header.js';
+import '../components/site-footer.js';
 import { login, ApiError } from '../api.js';
 import { saveSession, returnAfterLogin } from '../auth.js';
-import { setFieldError, clearFieldErrors, toast } from '../ui.js';
+import { clearFieldErrors, setFieldError } from '../ui.js';
 
 const form = document.getElementById('login-form');
+const identifier = document.getElementById('login-identifier');
+const password = document.getElementById('login-password');
+const passwordToggle = document.getElementById('password-toggle');
+const submitButton = form?.querySelector('[type="submit"]');
+const submitLabel = form?.querySelector('[data-submit-label]');
+const spinner = form?.querySelector('.login-form__spinner');
+const errorMessage = document.getElementById('login-error');
+const statusMessage = document.getElementById('login-status');
+const originalSubmitLabel = submitLabel?.textContent ?? 'Đăng nhập';
 
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  clearFieldErrors(form);
+function setLoading(isLoading) {
+  if (submitButton) submitButton.disabled = isLoading;
+  if (submitLabel) submitLabel.textContent = isLoading ? 'Đang đăng nhập…' : originalSubmitLabel;
+  if (spinner) spinner.hidden = !isLoading;
+  form?.setAttribute('aria-busy', String(isLoading));
+}
 
-  // 1. Validate phía trình duyệt — để phản hồi nhanh
-  let ok = true;
-  if (!form.email.validity.valid)      { setFieldError(form.email, 'Email không hợp lệ.'); ok = false; }
-  if (form.password.value.length < 8)  { setFieldError(form.password, 'Mật khẩu tối thiểu 8 ký tự.'); ok = false; }
-  if (!ok) return;
+function getSafeReturnTo() {
+  const value = new URLSearchParams(window.location.search).get('returnTo');
+  if (!value) return null;
 
-  // 2. Server mới là thẩm quyền — validate lần hai ở backend
-  const btn = form.querySelector('button[type=submit]');
-  btn.disabled = true;
   try {
-    const session = await login(form.email.value, form.password.value);
+    const destination = new URL(value, window.location.href);
+    if (destination.origin !== window.location.origin) return null;
+    if (destination.pathname.endsWith('/login.html') || destination.pathname.endsWith('/register.html')) return null;
+    return `${destination.pathname}${destination.search}${destination.hash}`;
+  } catch {
+    return null;
+  }
+}
+
+function showAuthenticationError(message) {
+  if (!errorMessage) return;
+  errorMessage.textContent = message;
+  errorMessage.hidden = false;
+}
+
+passwordToggle?.addEventListener('click', () => {
+  if (!password) return;
+  const reveal = password.type === 'password';
+  password.type = reveal ? 'text' : 'password';
+  passwordToggle.textContent = reveal ? 'Ẩn' : 'Hiện';
+  passwordToggle.setAttribute('aria-pressed', String(reveal));
+});
+
+form?.addEventListener('submit', async event => {
+  event.preventDefault();
+  clearFieldErrors(form);
+  if (errorMessage) {
+    errorMessage.textContent = '';
+    errorMessage.hidden = true;
+  }
+  if (statusMessage) {
+    statusMessage.textContent = '';
+    statusMessage.hidden = true;
+  }
+
+  let isValid = true;
+  if (!identifier?.value.trim()) {
+    if (identifier) setFieldError(identifier, 'Vui lòng nhập email hoặc tên đăng nhập.');
+    isValid = false;
+  }
+  if (!password?.value) {
+    if (password) setFieldError(password, 'Vui lòng nhập mật khẩu.');
+    isValid = false;
+  } else if (password.value.length < 8) {
+    setFieldError(password, 'Mật khẩu cần có ít nhất 8 ký tự.');
+    isValid = false;
+  }
+  if (!isValid) return;
+
+  setLoading(true);
+  try {
+    const session = await login(identifier.value.trim(), password.value);
     saveSession(session);
-    returnAfterLogin();                       // quay lại trang trước khi bị chặn
-  } catch (err) {
-    if (err instanceof ApiError && err.status === 401)
-      setFieldError(form.password, err.detail);
-    else
-      toast(err.detail ?? 'Đăng nhập thất bại.', 'error');
-    btn.disabled = false;
+    const returnTo = getSafeReturnTo();
+    if (returnTo) sessionStorage.setItem('app_return_to', returnTo);
+    if (statusMessage) {
+      statusMessage.textContent = 'Đăng nhập thành công. Đang chuyển trang…';
+      statusMessage.hidden = false;
+    }
+    window.setTimeout(returnAfterLogin, 180);
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 401) {
+      setFieldError(password, error.detail || 'Email/tên đăng nhập hoặc mật khẩu không đúng.');
+    } else {
+      showAuthenticationError(error?.detail || 'Không thể đăng nhập lúc này. Vui lòng thử lại.');
+    }
+    setLoading(false);
   }
 });

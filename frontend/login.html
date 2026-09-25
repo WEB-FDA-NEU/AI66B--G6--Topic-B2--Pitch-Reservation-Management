@@ -1,35 +1,58 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Đăng nhập — TÊN-SẢN-PHẨM</title>
-<link rel="stylesheet" href="css/reset.css">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Đăng nhập Pitch Point để tiếp tục sử dụng dịch vụ.">
+  <title>Đăng nhập — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-<main class="container page" style="max-width:380px">
-  <h1>Đăng nhập</h1>
+  <a class="login-page__skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
 
-  <!-- novalidate: tự kiểm tra bằng JS để hiện thông báo tiếng Việt,
-       thay vì để trình duyệt hiện bong bóng mặc định. -->
-  <form id="login-form" class="stack" novalidate>
-    <div class="field">
-      <label class="field__label" for="email">Email</label>
-      <input class="input" id="email" name="email" type="email" required autocomplete="email">
-      <p class="field__error"></p>
-    </div>
-    <div class="field">
-      <label class="field__label" for="password">Mật khẩu</label>
-      <input class="input" id="password" name="password" type="password" required minlength="8" autocomplete="current-password">
-      <p class="field__error"></p>
-    </div>
-    <button class="btn btn--primary" type="submit">Đăng nhập</button>
-    <p class="field__hint">Chưa có tài khoản? <a href="register.html">Đăng ký</a></p>
-  </form>
-</main>
-<script type="module" src="js/pages/login.js"></script>
+  <main class="container login-page" id="main-content">
+    <section class="login-card" aria-labelledby="login-title">
+      <a class="login-card__brand" href="index.html" aria-label="Pitch Point — Trang chủ">
+        <span class="login-card__brand-mark" aria-hidden="true">P</span>
+        <span>Pitch Point</span>
+      </a>
+      <p class="login-card__eyebrow">Chào mừng trở lại</p>
+      <h1 id="login-title">Đăng nhập</h1>
+
+      <form id="login-form" class="login-form" novalidate>
+        <div class="field">
+          <label class="field__label" for="login-identifier">Email hoặc tên đăng nhập</label>
+          <input class="input" id="login-identifier" name="email" type="text" required autocomplete="username" aria-describedby="identifier-error">
+          <p class="field__error" id="identifier-error"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="login-password">Mật khẩu</label>
+          <div class="login-password">
+            <input class="input" id="login-password" name="password" type="password" required autocomplete="current-password" aria-describedby="password-error">
+            <button class="login-password__toggle" id="password-toggle" type="button" aria-controls="login-password" aria-pressed="false">Hiện</button>
+          </div>
+          <p class="field__error" id="password-error"></p>
+        </div>
+
+        <p class="login-form__error" id="login-error" role="alert" hidden></p>
+        <p class="login-form__status" id="login-status" role="status" aria-live="polite" hidden></p>
+        <button class="btn btn--primary login-form__submit" type="submit">
+          <span data-submit-label>Đăng nhập</span>
+          <span class="login-form__spinner" aria-hidden="true" hidden></span>
+        </button>
+      </form>
+
+      <p class="login-card__register">Chưa có tài khoản? <a href="register.html">Đăng ký</a></p>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/login.js"></script>
 </body>
 </html>
