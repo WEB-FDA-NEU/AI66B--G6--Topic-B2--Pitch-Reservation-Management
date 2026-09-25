@@ -1,0 +1,132 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+.booking-schedule-page .skip-link:focus { transform: translateY(0); }
+
+.booking-schedule-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.booking-schedule-page > * + * { margin-top: var(--sp-5); }
+
+/* ---- Tóm tắt sân ---- */
+.booking-schedule-page .pitch-summary-card {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-bg);
+  box-shadow: var(--shadow);
+}
+.booking-schedule-page .pitch-summary-card__img {
+  width: 140px; height: 100px; object-fit: cover; border-radius: var(--radius-s);
+  background: var(--c-surface);
+}
+.booking-schedule-page .pitch-summary-card__title { font-size: 1.15rem; }
+.booking-schedule-page .pitch-summary-card__meta { margin-top: var(--sp-1); color: var(--c-muted); font-size: .9rem; }
+.booking-schedule-page .pitch-summary-card__price { margin-top: var(--sp-2); color: var(--c-primary); font-weight: 800; }
+
+/* ---- Băng thông báo giữ chỗ ---- */
+.booking-schedule-page .hold-banner {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; justify-content: space-between;
+  padding: var(--sp-4);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--radius-s);
+  background: color-mix(in srgb, var(--c-primary) 8%, white);
+}
+.booking-schedule-page .hold-banner__title { font-weight: 700; }
+.booking-schedule-page .hold-banner__slot { margin-top: var(--sp-1); color: var(--c-muted); font-size: .9rem; }
+.booking-schedule-page .hold-banner__timer {
+  font-size: 1.4rem; font-weight: 800; color: var(--c-primary); font-variant-numeric: tabular-nums;
+}
+.booking-schedule-page .hold-banner--expired,
+.booking-schedule-page .hold-banner--conflict {
+  border-color: var(--c-danger);
+  background: color-mix(in srgb, var(--c-danger) 8%, white);
+}
+.booking-schedule-page .hold-banner--expired .hold-banner__title,
+.booking-schedule-page .hold-banner--conflict .hold-banner__title { color: var(--c-danger); }
+
+/* ---- Chọn ngày ---- */
+.booking-schedule-page .date-chip-row {
+  display: flex; gap: var(--sp-2); overflow-x: auto; padding-bottom: var(--sp-1);
+}
+.booking-schedule-page .date-chip {
+  flex: 0 0 auto;
+  min-width: 88px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-bg);
+  text-align: center;
+  cursor: pointer;
+}
+.booking-schedule-page .date-chip__weekday { display: block; font-size: .72rem; color: var(--c-muted); text-transform: uppercase; }
+.booking-schedule-page .date-chip__day { display: block; font-size: 1.1rem; font-weight: 800; margin-top: .15rem; }
+.booking-schedule-page .date-chip.is-selected {
+  border-color: var(--c-primary); background: var(--c-primary); color: #fff;
+}
+.booking-schedule-page .date-chip.is-selected .date-chip__weekday { color: rgba(255,255,255,.75); }
+
+/* ---- Chú giải trạng thái ---- */
+.booking-schedule-page .slot-legend { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-2); font-size: .82rem; color: var(--c-muted); }
+.booking-schedule-page .slot-legend__item { display: inline-flex; align-items: center; gap: var(--sp-1); }
+.booking-schedule-page .slot-dot { width: .65rem; height: .65rem; border-radius: 50%; display: inline-block; }
+.booking-schedule-page .slot-dot--available { background: var(--c-success); }
+.booking-schedule-page .slot-dot--selected { background: var(--c-primary); }
+.booking-schedule-page .slot-dot--booked { background: var(--c-muted); }
+.booking-schedule-page .slot-dot--unavailable { background: var(--c-border); border: 1px solid var(--c-muted); }
+
+/* ---- Lưới khung giờ ---- */
+.booking-schedule-page .slot-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); margin-top: var(--sp-4);
+}
+.booking-schedule-page .slot-button {
+  padding: .75rem .5rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-bg);
+  cursor: pointer;
+  text-align: center;
+}
+.booking-schedule-page .slot-button__time { display: block; font-weight: 700; }
+.booking-schedule-page .slot-button__status { display: block; margin-top: .2rem; font-size: .74rem; color: var(--c-muted); }
+.booking-schedule-page .slot-button:hover:not(:disabled) { border-color: var(--c-primary); }
+.booking-schedule-page .slot-button.is-selected {
+  border-color: var(--c-primary); background: var(--c-primary); color: #fff;
+}
+.booking-schedule-page .slot-button.is-selected .slot-button__status { color: rgba(255,255,255,.75); }
+.booking-schedule-page .slot-button:disabled { cursor: not-allowed; opacity: .55; background: var(--c-surface); }
+.booking-schedule-page .slot-button.is-booked .slot-button__status { color: var(--c-muted); }
+
+.booking-schedule-page .skeleton-slot {
+  aspect-ratio: 3 / 2; border-radius: var(--radius-s);
+  background: linear-gradient(90deg, var(--c-surface) 25%, var(--c-border) 37%, var(--c-surface) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+@keyframes shimmer { from { background-position: 100% 0 } to { background-position: 0 0 } }
+@media (prefers-reduced-motion: reduce) { .booking-schedule-page .skeleton-slot { animation: none } }
+
+.booking-schedule-page__actions,
+.booking-schedule-page .booking-schedule__actions { justify-content: flex-end; }
+
+@media (max-width: 760px) {
+  .booking-schedule-page .pitch-summary-card { grid-template-columns: 1fr; }
+  .booking-schedule-page .pitch-summary-card__img { width: 100%; height: 150px; }
+  .booking-schedule-page .slot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .booking-schedule-page .hold-banner { flex-direction: column; align-items: flex-start; }
+  .booking-schedule-page .booking-schedule__actions { flex-direction: column-reverse; }
+  .booking-schedule-page .booking-schedule__actions .btn { width: 100%; }
+}

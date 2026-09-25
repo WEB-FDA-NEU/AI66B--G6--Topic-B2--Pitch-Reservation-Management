@@ -1,0 +1,83 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+.booking-result-page .skip-link:focus { transform: translateY(0); }
+
+.booking-result-page {
+  display: grid; place-items: center;
+  min-height: 65vh; padding-block: var(--sp-7);
+}
+
+.booking-result-page .result-card {
+  width: min(100%, 560px);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-bg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.booking-result-page .result-card__icon {
+  display: grid; place-items: center;
+  width: 3rem; height: 3rem; margin-inline: auto;
+  border-radius: 50%;
+  font-size: 1.4rem; font-weight: 800;
+  background: var(--c-surface); color: var(--c-primary);
+}
+.booking-result-page .result-card--success .result-card__icon { background: #e6f6ec; color: var(--c-success); }
+.booking-result-page .result-card--failed .result-card__icon,
+.booking-result-page .result-card--expired .result-card__icon { background: #fbe9ea; color: var(--c-danger); }
+.booking-result-page .result-card--missing .result-card__icon { background: var(--c-surface); color: var(--c-muted); }
+
+.booking-result-page .result-card__eyebrow {
+  margin-top: var(--sp-3);
+  color: var(--c-muted);
+  font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+}
+.booking-result-page .result-card__title { margin-top: var(--sp-2); font-size: 1.4rem; }
+.booking-result-page .result-card__hint { margin-top: var(--sp-3); color: var(--c-muted); }
+
+.booking-result-page .result-summary {
+  margin-top: var(--sp-5);
+  display: grid; gap: var(--sp-2);
+  text-align: left;
+}
+.booking-result-page .result-summary__row {
+  display: flex; justify-content: space-between; gap: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px dashed var(--c-border);
+}
+.booking-result-page .result-summary__row dt { color: var(--c-muted); }
+.booking-result-page .result-summary__row dd { font-weight: 700; text-align: right; }
+
+/* components.css chưa có .badge dùng chung; định nghĩa cục bộ cho màn hình này
+   (không ghi đè selector toàn cục nào) cho đến khi có phiên bản dùng chung. */
+.booking-result-page .badge {
+  display: inline-flex; align-items: center; padding: .3rem .65rem;
+  border-radius: 999px; font-size: .8rem; font-weight: 800;
+}
+.booking-result-page .badge--success { background: #e6f6ec; color: var(--c-success); }
+
+.booking-result-page .result-card__actions {
+  display: flex; gap: var(--sp-2); justify-content: center; flex-wrap: wrap;
+  margin-top: var(--sp-6);
+}
+.booking-result-page .result-card__actions [aria-disabled="true"] { opacity: .6; cursor: not-allowed; }
+.booking-result-page #result-links-hint { margin-top: var(--sp-3); color: var(--c-muted); font-size: .82rem; }
+
+@media (max-width: 560px) {
+  .booking-result-page .result-summary__row { flex-direction: column; gap: var(--sp-1); }
+  .booking-result-page .result-summary__row dd { text-align: left; }
+  .booking-result-page .result-card__actions { flex-direction: column; }
+  .booking-result-page .result-card__actions .btn { width: 100%; }
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kết quả đặt sân trên Pitch Point.">
+  <title>Kết quả đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-result.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header></site-header>
+
+  <main class="container booking-result-page" id="main-content">
+    <h1 class="visually-hidden">Kết quả đặt sân</h1>
+
+    <!-- Thành công -->
+    <section class="result-card result-card--success" id="success-state" hidden aria-live="polite">
+      <p class="result-card__icon" aria-hidden="true">✓</p>
+      <p class="result-card__eyebrow">Đặt sân thành công</p>
+      <h2 class="result-card__title">Sân của bạn đã được xác nhận</h2>
+
+      <dl class="result-summary">
+        <div class="result-summary__row"><dt>Mã đặt sân</dt><dd id="result-booking-id"></dd></div>
+        <div class="result-summary__row"><dt>Sân bóng</dt><dd id="result-pitch-name"></dd></div>
+        <div class="result-summary__row"><dt>Ngày và giờ chơi</dt><dd id="result-datetime"></dd></div>
+        <div class="result-summary__row"><dt>Số tiền đã thanh toán</dt><dd id="result-amount"></dd></div>
+        <div class="result-summary__row"><dt>Trạng thái</dt><dd><span class="badge badge--success" id="result-status"></span></dd></div>
+        <div class="result-summary__row" id="result-transaction-row"><dt>Mã giao dịch</dt><dd id="result-transaction-id"></dd></div>
+      </dl>
+
+      <div class="result-card__actions">
+        <button class="btn btn--primary" type="button" id="link-booking-details" aria-disabled="true">
+          Xem chi tiết đặt sân
+        </button>
+        <button class="btn" type="button" id="link-booking-history" aria-disabled="true">
+          Lịch sử đặt sân
+        </button>
+      </div>
+      <p class="field__hint" id="result-links-hint">
+        Chi tiết đặt sân (S12) và Lịch sử đặt sân (S11) sẽ hoạt động sau khi hai màn hình đó được tích hợp.
+      </p>
+    </section>
+
+    <!-- Thất bại -->
+    <section class="result-card result-card--failed" id="failed-state" hidden aria-live="polite">
+      <p class="result-card__icon" aria-hidden="true">✕</p>
+      <p class="result-card__eyebrow">Thanh toán không thành công</p>
+      <h2 class="result-card__title">Chưa thể hoàn tất đặt sân</h2>
+      <p class="result-card__hint">
+        Thanh toán mô phỏng thất bại nên booking chưa được xác nhận. Số dư của bạn chưa bị trừ.
+      </p>
+      <div class="result-card__actions">
+        <a class="btn btn--primary" id="link-retry-booking" href="booking-schedule.html">Đặt lại lịch đá</a>
+        <a class="btn" href="search.html">Về trang tìm sân</a>
+      </div>
+    </section>
+
+    <!-- Hết hạn giữ chỗ -->
+    <section class="result-card result-card--expired" id="expired-state" hidden aria-live="polite">
+      <p class="result-card__icon" aria-hidden="true">⏱</p>
+      <p class="result-card__eyebrow">Phiên đặt sân đã hết hạn</p>
+      <h2 class="result-card__title">Khung giờ giữ chỗ đã được nhả lại</h2>
+      <p class="result-card__hint">Vui lòng chọn lại lịch đá; khung giờ trước đó có thể đã có người khác đặt.</p>
+      <div class="result-card__actions">
+        <a class="btn btn--primary" href="booking-schedule.html">Chọn lại lịch đá</a>
+        <a class="btn" href="search.html">Về trang tìm sân</a>
+      </div>
+    </section>
+
+    <!-- Thiếu thông tin kết quả -->
+    <section class="result-card result-card--missing" id="missing-state" aria-live="polite">
+      <p class="result-card__icon" aria-hidden="true">?</p>
+      <p class="result-card__eyebrow">Không có thông tin kết quả</p>
+      <h2 class="result-card__title">Không tìm thấy kết quả đặt sân</h2>
+      <p class="result-card__hint">
+        Liên kết này không đi kèm thông tin đặt sân hợp lệ. Vui lòng thực hiện lại việc đặt sân.
+      </p>
+      <div class="result-card__actions">
+        <a class="btn btn--primary" href="search.html">Về trang tìm sân</a>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/booking-result.js"></script>
+</body>
+</html>
