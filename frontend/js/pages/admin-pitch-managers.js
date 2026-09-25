@@ -86,94 +86,146 @@ function updatePagination(totalPages, totalItems) {
 
 let currentManager = null;
 
-function openModal(mgr) {
-  currentManager = mgr;
-  document.getElementById('modal-manager-name').textContent = mgr.fullName;
-  document.getElementById('modal-manager-status').textContent = mgr.accountStatus;
+
+  // Modal Elements - View State
+  const viewState = document.getElementById('modal-view-state');
+  const actionState = document.getElementById('modal-action-state');
   
-  const warningBox = document.getElementById('modal-warning-box');
-  const warningText = document.getElementById('modal-warning-text');
+  // Buttons
+  const btnGotoWarn = document.getElementById('btn-goto-warn');
+  const btnGotoSuspend = document.getElementById('btn-goto-suspend');
+  const btnGotoNote = document.getElementById('btn-goto-note');
+  const btnActionCancel = document.getElementById('modal-action-cancel');
+  const btnActionConfirm = document.getElementById('modal-action-confirm');
   
-  if (mgr.accountStatus === 'Suspended') {
-    warningBox.style.background = '#e0f2fe';
-    warningBox.style.color = '#0369a1';
-    warningText.textContent = 'Restoring this manager will allow them to manage their assigned pitches again.';
-    btnConfirm.textContent = 'Restore Manager';
-    btnConfirm.className = 'btn-admin btn-admin--blue';
-  } else {
-    warningBox.style.background = '#ffebee';
-    warningBox.style.color = '#c62828';
-    warningText.textContent = 'Suspending this manager will revoke their access to modify pitches or respond to reports.';
-    btnConfirm.textContent = 'Suspend Manager';
-    btnConfirm.className = 'btn-admin btn-admin--danger';
+  let currentActionType = '';
+
+  function openModal(mgr) {
+    currentManager = mgr;
+    
+    // View state
+    document.getElementById('modal-view-name').textContent = mgr.fullName || mgr.name;
+    const badge = document.getElementById('modal-view-badge');
+    badge.textContent = mgr.accountStatus;
+    badge.className = 'badge ' + (mgr.accountStatus === 'Active' ? 'badge--success' : (mgr.accountStatus === 'Warned' ? 'badge--warning' : 'badge--danger'));
+    
+    document.getElementById('modal-view-subtitle').textContent = mgr.email + ' · ' + mgr.id;
+    
+    document.getElementById('modal-view-pitches').textContent = mgr.managedPitches || 0;
+    document.getElementById('modal-view-bookings').textContent = mgr.activeBookings || 0;
+    document.getElementById('modal-view-warnings').textContent = mgr.warnings || 0;
+    document.getElementById('modal-view-balance').textContent = mgr.balance || '$0';
+
+    // Show view state, hide action state
+    viewState.hidden = false;
+    actionState.hidden = true;
+    
+    modal.showModal();
   }
 
-  if(reasonInput) {
+  function closeModal() {
+    modal.close();
+    currentManager = null;
     reasonInput.value = '';
+    btnActionConfirm.disabled = true;
   }
-  if(btnConfirm) {
-    btnConfirm.disabled = true;
+
+  const modalClose = document.getElementById('modal-close');
+  if(modalClose) modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+
+  function switchToActionState(action, title, effectsHtml, btnClass) {
+    currentActionType = action;
+    
+    // Action State details
+    document.getElementById('modal-action-title').textContent = title;
+    
+    document.getElementById('modal-action-name').textContent = currentManager.fullName || currentManager.name;
+    const badge = document.getElementById('modal-action-badge');
+    badge.textContent = currentManager.accountStatus;
+    badge.className = 'badge ' + (currentManager.accountStatus === 'Active' ? 'badge--success' : (currentManager.accountStatus === 'Warned' ? 'badge--warning' : 'badge--danger'));
+    
+    document.getElementById('modal-action-subtitle').textContent = currentManager.email + ' · ' + currentManager.id;
+    
+    document.getElementById('modal-action-effects').innerHTML = effectsHtml;
+    
+    btnActionConfirm.textContent = title;
+    btnActionConfirm.className = 'btn-admin ' + btnClass;
+    
+    reasonInput.value = '';
+    btnActionConfirm.disabled = true;
+
+    viewState.hidden = true;
+    actionState.hidden = false;
+  }
+
+  // Event Listeners for switching states
+  if (btnGotoWarn) {
+    btnGotoWarn.addEventListener('click', () => {
+      switchToActionState('warning', 'Issue warning', 'A warning will be recorded on this manager account. The manager will be notified.', 'btn-admin--warning');
+      btnActionConfirm.style.background = '#f59e0b';
+      btnActionConfirm.style.color = 'white';
+      btnActionConfirm.style.border = 'none';
+    });
   }
   
-  modal.showModal();
-}
+  if (btnGotoSuspend) {
+    btnGotoSuspend.addEventListener('click', () => {
+      switchToActionState('suspend', 'Suspend manager', 'When a manager is suspended:<br>• Management access is restricted<br>• Associated pitches stop accepting new bookings<br>• Existing confirmed bookings remain valid while under review<br>• Bookings that cannot be fulfilled may require Admin cancellation and refund processing<br>• Existing simulated balance and historical financial records remain preserved<br>• Eligible managers may later be restored', 'btn-admin--danger');
+      btnActionConfirm.style.background = ''; // reset to danger class defaults
+      btnActionConfirm.style.color = '';
+    });
+  }
 
-function closeModal() {
-  modal.close();
-  currentManager = null;
-}
+  if (btnGotoNote) {
+    btnGotoNote.addEventListener('click', () => {
+      switchToActionState('note', 'Add note', 'An internal administrative note will be added to this profile. The manager will not be notified.', 'btn-admin--primary');
+      btnActionConfirm.style.background = '';
+      btnActionConfirm.style.color = '';
+    });
+  }
 
-if(modalClose) modalClose.addEventListener('click', closeModal);
-if(btnCancel) btnCancel.addEventListener('click', closeModal);
-modal.addEventListener('click', (e) => {
-  if (e.target === modal) closeModal();
-});
+  if (btnActionCancel) {
+    btnActionCancel.addEventListener('click', () => {
+      // Go back to view state
+      viewState.hidden = false;
+      actionState.hidden = true;
+    });
+  }
 
-if(reasonInput) {
-  reasonInput.addEventListener('input', () => {
-    btnConfirm.disabled = reasonInput.value.trim().length === 0;
-  });
-}
+  if (reasonInput) {
+    reasonInput.addEventListener('input', () => {
+      btnActionConfirm.disabled = reasonInput.value.trim().length === 0;
+    });
+  }
 
-if(btnConfirm) {
-  btnConfirm.addEventListener('click', () => {
-    if (btnConfirm.disabled) return;
-    
-    if (currentManager.accountStatus === 'Suspended') {
-      currentManager.accountStatus = 'Restored';
-      currentManager.statusClass = 'badge--info';
-    } else {
-      currentManager.accountStatus = 'Suspended';
-      currentManager.statusClass = 'badge--danger';
-    }
-    
-    closeModal();
-    renderManagers();
-  });
-}
+  if (btnActionConfirm) {
+    btnActionConfirm.addEventListener('click', () => {
+      if (btnActionConfirm.disabled) return;
+      
+      // Execute mock action
+      if (currentActionType === 'suspend') {
+        currentManager.accountStatus = 'Suspended';
+      } else if (currentActionType === 'warning') {
+        currentManager.accountStatus = 'Warned';
+        currentManager.warnings = (currentManager.warnings || 0) + 1;
+      }
+      
+      // Fake API delay
+      const originalText = btnActionConfirm.textContent;
+      btnActionConfirm.textContent = 'Processing...';
+      setTimeout(() => {
+        btnActionConfirm.textContent = originalText;
+        closeModal();
+        renderManagers();
+      }, 600);
+    });
+  }
 
-// Search & Filter
-const searchInput = document.getElementById('mgr-search');
-const filterStatus = document.getElementById('filter-status');
-
-function applyFilters() {
-  const query = searchInput.value.toLowerCase();
-  const status = filterStatus.value;
-
-  managersData = mockManagers.filter(m => {
-    const matchQ = !query || 
-      m.fullName.toLowerCase().includes(query) || 
-      m.email.toLowerCase().includes(query) ||
-      m.id.toLowerCase().includes(query);
-    const matchS = status === 'all' || m.accountStatus.toLowerCase() === status;
-    return matchQ && matchS;
-  });
-  
-  currentPage = 1;
-  renderManagers();
-}
-
-if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
 if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
 document.addEventListener('DOMContentLoaded', () => {
