@@ -39,11 +39,11 @@ function renderTable(data) {
       
       const badgePriority = clone.querySelector('.badge-priority');
       badgePriority.textContent = report.priority;
-      badgePriority.className = \adge \ badge-priority\;
+      badgePriority.className = `badge ${report.priorityClass} badge-priority`;
       
       const badgeStatus = clone.querySelector('.badge-status');
       badgeStatus.textContent = report.reportStatus;
-      badgeStatus.className = \adge \ badge-status\;
+      badgeStatus.className = `badge ${report.statusClass} badge-status`;
       
       clone.querySelector('.td-date').textContent = report.submittedAt;
       
@@ -54,7 +54,7 @@ function renderTable(data) {
     });
   }
   
-  resultCount.textContent = \\ report\\;
+  resultCount.textContent = `${data.length} report${data.length !== 1 ? 's' : ''}`;
 }
 
 function openActionModal(report) {
@@ -64,11 +64,11 @@ function openActionModal(report) {
   document.getElementById('modalReportId').textContent = report.reportId;
   const statusBadge = document.getElementById('modalReportStatus');
   statusBadge.textContent = report.reportStatus;
-  statusBadge.className = \adge \\;
+  statusBadge.className = `badge ${report.statusClass}`;
   
   const priorityBadge = document.getElementById('modalReportPriority');
   priorityBadge.textContent = report.priority;
-  priorityBadge.className = \adge \\;
+  priorityBadge.className = `badge ${report.priorityClass}`;
   
   document.getElementById('modalReportSummary').textContent = report.summary;
   document.getElementById('modalReportDesc').textContent = report.description;
@@ -159,11 +159,11 @@ btnConfirm.addEventListener('click', () => {
     } else if (action === 'resolve') {
       selectedReport.reportStatus = 'Resolved';
       selectedReport.statusClass = 'badge--success';
-      selectedReport.investigationNotes.push(\Resolution: \\);
+      selectedReport.investigationNotes.push(`Resolution: ${reason}`);
     } else if (action === 'dismiss') {
       selectedReport.reportStatus = 'Dismissed';
       selectedReport.statusClass = 'badge--muted';
-      selectedReport.investigationNotes.push(\Dismissed: \\);
+      selectedReport.investigationNotes.push(`Dismissed: ${reason}`);
     }
     
     // Refresh table

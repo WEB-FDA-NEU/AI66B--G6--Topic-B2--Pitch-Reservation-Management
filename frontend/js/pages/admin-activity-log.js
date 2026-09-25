@@ -33,7 +33,7 @@ function renderTable(data) {
       
       const badgeResult = clone.querySelector('.badge-result');
       badgeResult.textContent = act.result;
-      badgeResult.className = \adge \ badge-result\;
+      badgeResult.className = `badge ${act.resultClass} badge-result`;
       
       clone.querySelector('.td-date').textContent = act.createdAt;
       
@@ -44,7 +44,7 @@ function renderTable(data) {
     });
   }
   
-  resultCount.textContent = \\ activit\\;
+  resultCount.textContent = `${data.length} activit${data.length !== 1 ? 'ies' : 'y'}`;
 }
 
 function openActionModal(act) {
@@ -53,7 +53,7 @@ function openActionModal(act) {
   
   const resultBadge = document.getElementById('modalActivityResult');
   resultBadge.textContent = act.result;
-  resultBadge.className = \adge \\;
+  resultBadge.className = `badge ${act.resultClass}`;
   
   document.getElementById('modalActivityAction').textContent = act.actionType;
   document.getElementById('modalActivityDetails').textContent = act.details || 'No additional details provided.';
