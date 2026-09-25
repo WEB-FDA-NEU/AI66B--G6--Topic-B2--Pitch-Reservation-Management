@@ -1,0 +1,26 @@
+/* Design tokens — sửa màu/khoảng cách ở ĐÂY, không sửa rải rác trong components.
+   Đây là lý do 5 người code 5 màn hình mà giao diện vẫn giống nhau. */
+:root {
+  --c-bg:        #ffffff;
+  --c-surface:   #f3f7f4;
+  --c-border:    #dce5df;
+  --c-text:      #0c1b2a;
+  --c-muted:     #60706b;
+  --c-primary:   #173f43;
+  --c-primary-d: #102b3f;
+  --c-accent:    #b8f23b;
+  --c-accent-d:  #91c927;
+  --c-danger:    #c83f48;
+  --c-success:   #197149;
+  --c-warning:   #9a6814;
+
+  --sp-1: .25rem; --sp-2: .5rem;  --sp-3: .75rem;
+  --sp-4: 1rem;   --sp-5: 1.5rem; --sp-6: 2rem;   --sp-7: 3rem;
+
+  --radius:   16px;
+  --radius-s: 8px;
+  --shadow:   0 16px 40px rgba(12,27,42,.10);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --container: 1120px;
+}

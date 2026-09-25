@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Pitch Point - Nền tảng tìm kiếm và đặt sân bóng trực tuyến.">
+  <link rel="icon" href="data:,">
+  <title>Trang chủ — Pitch Point</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header active="home"></site-header>
+
+  <main class="home-page" id="main-content">
+    <section class="home-hero" aria-labelledby="home-hero-title">
+      <div class="container home-hero__content">
+        <div class="home-hero__copy">
+          <p class="home-hero__eyebrow">Đặt sân trực tuyến tại Hà Nội</p>
+          <h1 id="home-hero-title">Sân đẹp, giờ chuẩn,<br><span>vào trận thôi.</span></h1>
+          <p class="home-hero__description">
+            So sánh sân, kiểm tra lịch trống và giữ khung giờ phù hợp chỉ trong vài bước.
+          </p>
+          <div class="home-hero__actions">
+            <button class="btn btn--accent" type="button">Tìm sân ngay</button>
+            <button class="home-hero__text-link" type="button">
+              Khám phá tất cả sân <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="home-hero__spotlight" aria-label="Thông tin nổi bật của Pitch Point">
+          <p class="home-hero__spotlight-label">Sẵn sàng ra sân</p>
+          <strong>120+</strong>
+          <span>khung giờ đang mở hôm nay</span>
+          <ul>
+            <li>Giá rõ ràng</li>
+            <li>Lịch trống cập nhật</li>
+            <li>Xác nhận nhanh</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="container home-section" id="quick-search" aria-labelledby="quick-search-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">Bắt đầu trận đấu</p>
+          <h2 id="quick-search-title">Bạn muốn đá ở đâu?</h2>
+        </div>
+        <button type="button">Tìm kiếm nâng cao</button>
+      </div>
+
+      <form class="quick-search" id="quick-search-form">
+        <div class="field quick-search__location">
+          <label class="field__label" for="search-location">Khu vực hoặc tên sân</label>
+          <input
+            class="input"
+            id="search-location"
+            name="q"
+            type="search"
+            placeholder="Ví dụ: Hai Bà Trưng, sân Bách Khoa"
+          >
+        </div>
+
+        <div class="field date-picker">
+          <span class="field__label" id="search-date-label">Ngày chơi</span>
+          <button
+            class="input picker-trigger"
+            id="date-picker-button"
+            type="button"
+            aria-labelledby="search-date-label date-picker-value"
+            aria-controls="date-picker-panel"
+            aria-expanded="false"
+          >
+            <span id="date-picker-value">Chọn ngày</span>
+          </button>
+          <input id="search-date" name="date" type="hidden">
+
+          <div class="picker-panel calendar" id="date-picker-panel" hidden>
+            <div class="calendar__header">
+              <button class="btn btn--icon" type="button" data-calendar-action="previous" aria-label="Tháng trước">‹</button>
+              <p class="calendar__month" id="calendar-month">Đang tải lịch…</p>
+              <button class="btn btn--icon" type="button" data-calendar-action="next" aria-label="Tháng sau">›</button>
+            </div>
+
+            <div class="calendar__weekdays" aria-hidden="true">
+              <span>T2</span>
+              <span>T3</span>
+              <span>T4</span>
+              <span>T5</span>
+              <span>T6</span>
+              <span>T7</span>
+              <span>CN</span>
+            </div>
+
+            <div class="calendar__days" id="calendar-days" role="grid" aria-label="Chọn ngày chơi"></div>
+          </div>
+        </div>
+
+        <div class="field time-picker">
+          <span class="field__label" id="search-time-label">Khung giờ</span>
+          <button
+            class="input picker-trigger"
+            id="time-picker-button"
+            type="button"
+            aria-labelledby="search-time-label time-picker-value"
+            aria-controls="time-picker-panel"
+            aria-expanded="false"
+          >
+            <span id="time-picker-value">Chọn giờ</span>
+          </button>
+          <input id="search-time" name="time" type="hidden">
+
+          <div class="picker-panel time-slots" id="time-picker-panel" hidden>
+            <p class="time-slots__title">Chọn khung giờ bắt đầu</p>
+            <div class="time-slots__grid">
+              <button type="button" data-time="06:00">06:00</button>
+              <button type="button" data-time="08:00">08:00</button>
+              <button type="button" data-time="10:00">10:00</button>
+              <button type="button" data-time="14:00">14:00</button>
+              <button type="button" data-time="16:00">16:00</button>
+              <button type="button" data-time="18:00">18:00</button>
+              <button type="button" data-time="20:00">20:00</button>
+              <button type="button" data-time="22:00">22:00</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="search-pitch-type">Loại sân</label>
+          <select class="select" id="search-pitch-type" name="pitchType">
+            <option value="">Tất cả loại sân</option>
+            <option value="5-a-side">Sân 5 người</option>
+            <option value="7-a-side">Sân 7 người</option>
+            <option value="11-a-side">Sân 11 người</option>
+          </select>
+        </div>
+
+        <button class="btn btn--primary quick-search__submit" type="button">
+          <span aria-hidden="true">⌕</span>
+          Tìm sân trống
+        </button>
+      </form>
+    </section>
+
+    <section class="container home-section" id="upcoming-booking" aria-labelledby="upcoming-booking-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">Lịch của bạn</p>
+          <h2 id="upcoming-booking-title">Trận đấu sắp tới</h2>
+        </div>
+        <button type="button">Xem tất cả lịch đặt</button>
+      </div>
+
+      <article class="booking-summary" id="upcoming-booking-card">
+        <div class="booking-summary__date" aria-label="Ngày 26 tháng 9">
+          <span>Tháng 9</span>
+          <strong>26</strong>
+        </div>
+        <div class="booking-summary__content">
+          <h3>Sân bóng Bách Khoa</h3>
+          <p>18:00 – 19:30 · Sân 7 người</p>
+          <p>Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
+        </div>
+        <span class="badge badge--success">Đã xác nhận</span>
+        <button class="btn" type="button">Xem chi tiết</button>
+      </article>
+    </section>
+
+    <section class="container home-section" aria-labelledby="featured-pitches-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">Gợi ý cho bạn</p>
+          <h2 id="featured-pitches-title">Sân bóng nổi bật</h2>
+        </div>
+        <button type="button">Xem tất cả sân</button>
+      </div>
+
+      <p class="field__hint" id="result-summary" aria-live="polite">Đang tải sân nổi bật…</p>
+      <div class="grid pitch-grid" id="results" aria-live="polite" aria-busy="true"></div>
+    </section>
+
+    <section class="home-section home-steps" aria-labelledby="booking-steps-title">
+      <div class="container">
+        <div class="section-heading section-heading--center">
+          <div>
+            <p class="section-heading__eyebrow">Nhanh chóng và đơn giản</p>
+            <h2 id="booking-steps-title">Đặt sân trong 3 bước</h2>
+          </div>
+        </div>
+
+        <ol class="steps-list">
+          <li class="step-card">
+            <span class="step-card__number">1</span>
+            <h3>Tìm sân</h3>
+            <p>Chọn khu vực, ngày chơi và loại sân phù hợp.</p>
+          </li>
+          <li class="step-card">
+            <span class="step-card__number">2</span>
+            <h3>Chọn khung giờ</h3>
+            <p>Kiểm tra lịch trống và chọn thời gian bạn muốn.</p>
+          </li>
+          <li class="step-card">
+            <span class="step-card__number">3</span>
+            <h3>Xác nhận đặt sân</h3>
+            <p>Kiểm tra thông tin và hoàn thành yêu cầu đặt sân.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+
+  <button class="message-bubble" type="button" aria-label="Tin nhắn">
+    <span class="message-bubble__icon" aria-hidden="true">💬</span>
+    <span class="message-bubble__count" aria-label="2 tin nhắn chưa đọc">2</span>
+  </button>
+
+  <template id="tpl-card">
+    <article class="card pitch-card">
+      <button class="card__favorite" type="button">
+        <span aria-hidden="true">♡</span>
+      </button>
+
+      <button class="card__link" type="button">
+        <img class="card__img" src="" alt="" loading="lazy">
+        <div class="card__body">
+          <div class="card__heading">
+            <h3 class="card__title"></h3>
+            <p class="card__rating" aria-label="Điểm đánh giá"></p>
+          </div>
+          <p class="card__meta"></p>
+          <p class="card__type"></p>
+          <p class="card__price"></p>
+          <span class="card__action">Xem chi tiết</span>
+        </div>
+      </button>
+
+      <span class="card__badge"></span>
+    </article>
+  </template>
+
+  <template id="tpl-empty-state">
+    <div class="empty">
+      <p class="empty__title">Chưa có sân phù hợp</p>
+      <p class="empty__hint">Hãy thử thay đổi khu vực, ngày chơi hoặc khung giờ.</p>
+      <button class="btn empty__action" type="button">Tìm kiếm lại</button>
+    </div>
+  </template>
+
+  <script type="module" src="js/pages/home.js"></script>
+</body>
+</html>

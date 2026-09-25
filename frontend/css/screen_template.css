@@ -1,0 +1,99 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+.screen-page {
+  min-height: 65vh;
+  padding-block: var(--sp-6) var(--sp-7);
+}
+
+.screen-heading {
+  display: flex;
+  gap: var(--sp-5);
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: var(--sp-6);
+}
+
+.screen-heading__eyebrow {
+  margin-bottom: var(--sp-2);
+  color: var(--c-primary);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.screen-heading h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+
+.screen-heading__description,
+.screen-panel__heading p,
+.screen-item__meta {
+  margin-top: var(--sp-2);
+  color: var(--c-muted);
+}
+
+.screen-heading__actions,
+.screen-item__actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.screen-panel {
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-bg);
+  box-shadow: 0 10px 30px rgba(12, 27, 42, .06);
+}
+
+.screen-panel__heading {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+}
+
+.screen-list { display: grid; gap: var(--sp-3); }
+
+.screen-item {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-surface);
+}
+
+.screen-item__title { font-size: 1rem; }
+
+@media (max-width: 640px) {
+  .screen-heading,
+  .screen-panel__heading,
+  .screen-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .screen-heading__actions .btn,
+  .screen-item__actions .btn { flex: 1; }
+}

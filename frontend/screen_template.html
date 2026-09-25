@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mô tả ngắn cho màn hình Pitch Point.">
+  <title>Tên màn hình — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screen_template.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li aria-current="page">Tên màn hình</li>
+    </ol>
+  </nav>
+
+  <main class="container screen-page" id="main-content">
+    <header class="screen-heading">
+      <div>
+        <p class="screen-heading__eyebrow">Tên nhóm chức năng</p>
+        <h1>Tên màn hình</h1>
+        <p class="screen-heading__description">Mô tả ngắn mục đích của màn hình.</p>
+      </div>
+      <div class="screen-heading__actions" aria-label="Thao tác của màn hình">
+        <button class="btn" type="button">Thao tác phụ</button>
+        <button class="btn btn--primary" type="button">Thao tác chính</button>
+      </div>
+    </header>
+
+    <!-- Thay phần này bằng nội dung riêng của màn hình. -->
+    <section class="screen-panel" aria-labelledby="screen-content-title">
+      <header class="screen-panel__heading">
+        <div>
+          <h2 id="screen-content-title">Nội dung màn hình</h2>
+          <p>Mô tả ngắn cho nhóm nội dung này.</p>
+        </div>
+      </header>
+
+      <div class="screen-list" id="screen-list"></div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-screen-item">
+    <article class="screen-item">
+      <div>
+        <h2 class="screen-item__title"></h2>
+        <p class="screen-item__meta"></p>
+      </div>
+      <div class="screen-item__actions"></div>
+    </article>
+  </template>
+
+  <template id="tpl-empty-state">
+    <div class="empty">
+      <p class="empty__title">Chưa có dữ liệu</p>
+      <p class="empty__hint">Dữ liệu của màn hình sẽ xuất hiện tại đây.</p>
+    </div>
+  </template>
+
+  <script type="module" src="js/pages/screen_template.js"></script>
+</body>
+</html>
