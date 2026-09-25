@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 //  <site-header>  —  Custom Element (Web Components, chuẩn của trình duyệt)
 //
 //  Viết header MỘT LẦN ở đây. Mỗi trang chỉ cần một dòng:
@@ -34,6 +34,7 @@ const TEMPLATE = /* html */ `
     <nav id="site-header-navigation" aria-label="Điều hướng chính">
       <a class="site-header__link" href="index.html" data-nav="home">Trang chủ</a>
       <a class="site-header__link" href="search.html" data-nav="search">Tìm Sân</a>
+      <a class="site-header__link" href="favorite-pitches.html" data-nav="favorites">Yêu thích</a>
       <span data-auth="guest" hidden>
         <a class="btn" href="login.html">Đăng nhập</a>
         <a class="btn btn--primary" href="register.html">Đăng ký</a>
@@ -90,3 +91,5 @@ class SiteHeader extends HTMLElement {
 }
 
 customElements.define('site-header', SiteHeader);
+
+

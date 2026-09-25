@@ -1,4 +1,4 @@
-/* ============ Nút ============ */
+﻿/* ============ Nút ============ */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
   padding: .55rem 1rem; border-radius: var(--radius-s);
@@ -213,3 +213,7 @@ dialog::backdrop { background: rgba(0,0,0,.45); }
   background: var(--c-border);
   font-size: .68rem;
 }
+
+/* Thêm màu đỏ cho nút thả tim */
+.card__favorite.is-active { color: var(--c-danger); }
+

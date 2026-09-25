@@ -58,7 +58,7 @@
         <button type="button">Tìm kiếm nâng cao</button>
       </div>
 
-      <form class="quick-search" id="quick-search-form">
+      <form class="quick-search" id="quick-search-form" action="search.html" method="GET">
         <div class="field quick-search__location">
           <label class="field__label" for="search-location">Khu vực hoặc tên sân</label>
           <input
@@ -144,7 +144,7 @@
           </select>
         </div>
 
-        <button class="btn btn--primary quick-search__submit" type="button">
+        <button class="btn btn--primary quick-search__submit" type="submit">
           <span aria-hidden="true">⌕</span>
           Tìm sân trống
         </button>
@@ -231,7 +231,7 @@
         <span aria-hidden="true">♡</span>
       </button>
 
-      <button class="card__link" type="button">
+      <a class="card__link">
         <img class="card__img" src="" alt="" loading="lazy">
         <div class="card__body">
           <div class="card__heading">
@@ -243,7 +243,7 @@
           <p class="card__price"></p>
           <span class="card__action">Xem chi tiết</span>
         </div>
-      </button>
+      </a>
 
       <span class="card__badge"></span>
     </article>

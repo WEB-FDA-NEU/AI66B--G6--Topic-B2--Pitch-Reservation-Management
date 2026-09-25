@@ -1,0 +1,100 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Thông tin chủ sân bóng trên Pitch Point.">
+  <title>Hồ sơ chủ sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pitch-owner-profile.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <main class="container owner-profile-page" id="main-content" hidden>
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="index.html">Trang chủ</a></li>
+        <li aria-current="page">Hồ sơ chủ sân</li>
+      </ol>
+    </nav>
+
+    <div class="owner-layout">
+      <aside class="owner-sidebar stack">
+        <section class="card" aria-labelledby="owner-name">
+          <div class="card__body stack">
+            <div class="owner-header">
+              <div class="owner-avatar" aria-hidden="true">🏢</div>
+              <div>
+                <h1 id="owner-name">Tên Chủ Sân</h1>
+                <p class="owner-rating" id="owner-rating">★ 0.0</p>
+              </div>
+            </div>
+            
+            <p id="owner-description" class="owner-desc">Mô tả về chủ sân...</p>
+
+            <dl class="owner-details">
+              <div><dt>Đại diện</dt><dd id="owner-manager">Nguyễn Văn A</dd></div>
+              <div><dt>Tham gia từ</dt><dd id="owner-joined">2023</dd></div>
+              <div><dt>Trạng thái</dt><dd class="badge badge--success" id="owner-verified">Đã xác thực</dd></div>
+            </dl>
+
+            <a href="user-messages.html" class="btn btn--primary" id="btn-contact-manager">
+              💬 Nhắn tin cho Chủ sân
+            </a>
+          </div>
+        </section>
+      </aside>
+
+      <section class="owner-main" aria-labelledby="owner-pitches-title">
+        <header class="toolbar">
+          <div>
+            <h2 id="owner-pitches-title">Sân bóng trực thuộc</h2>
+            <p class="toolbar__count" id="pitch-count">0 sân bóng</p>
+          </div>
+        </header>
+
+        <div class="grid search-pitch-grid" id="owner-pitches">
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-card">
+    <article class="card search-pitch-card">
+      <button class="card__favorite" type="button">
+        <span aria-hidden="true">♡</span>
+      </button>
+
+      <a class="card__link">
+        <img class="card__img" src="" alt="" loading="lazy">
+        <div class="card__body">
+          <div class="card__heading">
+            <h3 class="card__title"></h3>
+            <p class="card__rating" aria-label="Điểm đánh giá"></p>
+          </div>
+          <p class="card__meta"></p>
+          <p class="card__type"></p>
+          <p class="card__price"></p>
+          <span class="card__action">Xem chi tiết</span>
+        </div>
+      </a>
+      <span class="card__badge"></span>
+    </article>
+  </template>
+
+  <template id="tpl-empty-state">
+    <div class="empty">
+      <p class="empty__title">Chưa có sân bóng nào</p>
+      <p class="empty__hint">Chủ sân này chưa cập nhật thông tin sân bóng.</p>
+    </div>
+  </template>
+
+  <script type="module" src="js/pages/pitch-owner-profile.js"></script>
+</body>
+</html>
