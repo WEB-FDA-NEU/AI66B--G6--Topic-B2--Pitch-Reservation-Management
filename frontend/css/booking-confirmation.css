@@ -10,7 +10,7 @@
   font-weight: 800;
   transform: translateY(-180%);
 }
-.booking-confirmation-page .skip-link:focus { transform: translateY(0); }
+.skip-link:focus { transform: translateY(0); }
 
 .booking-confirmation-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); max-width: 760px; }
 .booking-confirmation-page > * + * { margin-top: var(--sp-5); }

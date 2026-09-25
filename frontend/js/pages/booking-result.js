@@ -1,122 +1,126 @@
 // ============================================================
 //  S10 — Booking Result
-//  Đọc bookingId, transactionId, paymentStatus (từ S09 — chưa triển khai
-//  ở Sub-issue này). Vì chưa có backend/S09 thật, dữ liệu hiển thị cho
-//  trạng thái "thành công" được suy ra mô phỏng, ổn định theo bookingId,
-//  chỉ để minh hoạ giao diện Mốc 2 — không phải dữ liệu đã lưu trữ thật.
+//  Nhận bookingId và hiển thị trạng thái tương ứng.
+//  Xác thực booking từ shared module / localStorage thay vì URL.
 // ============================================================
-import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
 import { formatVND } from '../render.js';
+import { requireLogin, isLoggedIn } from '../auth.js';
+import { findBooking, pitchForBooking, STATUS_META } from '../data/bookings.js';
+import { getCompletedBooking } from '../services/booking-service.js';
+import { showPopup } from '../services/popup.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
 
-const states = {
-  success: document.getElementById('success-state'),
-  failed: document.getElementById('failed-state'),
-  expired: document.getElementById('expired-state'),
-  missing: document.getElementById('missing-state'),
-};
-
 const elements = {
-  bookingId: document.getElementById('result-booking-id'),
-  pitchName: document.getElementById('result-pitch-name'),
-  datetime: document.getElementById('result-datetime'),
-  amount: document.getElementById('result-amount'),
-  status: document.getElementById('result-status'),
-  transactionRow: document.getElementById('result-transaction-row'),
-  transactionId: document.getElementById('result-transaction-id'),
-  retryLink: document.getElementById('link-retry-booking'),
+  successState: document.getElementById('success-state'),
+  failedState: document.getElementById('failed-state'),
+  expiredState: document.getElementById('expired-state'),
+  
+  // Thành công
+  resultBookingId: document.getElementById('result-booking-id'),
+  resultPitchName: document.getElementById('result-pitch-name'),
+  resultDatetime: document.getElementById('result-datetime'),
+  resultAmount: document.getElementById('result-amount'),
+  resultStatus: document.getElementById('result-status'),
+  resultTransactionRow: document.getElementById('result-transaction-row'),
+  resultTransactionId: document.getElementById('result-transaction-id'),
+  linkDetails: document.getElementById('link-booking-details'),
+  linkHistory: document.getElementById('link-booking-history'),
+
+  // Thất bại
+  linkRetryBooking: document.getElementById('link-retry-booking'),
 };
 
-const STATUS_LABEL = {
-  paid: 'Đã xác nhận',
-  confirmed: 'Đã xác nhận',
-};
-
-function showOnly(name) {
-  Object.entries(states).forEach(([key, section]) => {
-    if (section) section.hidden = key !== name;
+function showOnly(sectionId) {
+  ['success-state', 'failed-state', 'expired-state'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.hidden = (id !== sectionId);
   });
 }
 
-/** Suy ra một bản ghi đặt sân mô phỏng ổn định từ bookingId, chỉ để
- *  minh hoạ giao diện khi chưa có S09/backend thật cung cấp dữ liệu. */
-function deriveMockBooking(bookingId) {
-  let hash = 0;
-  for (const char of bookingId) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-
-  const pitch = MOCK_PITCHES[hash % MOCK_PITCHES.length];
-  const daysAhead = 1 + (hash % 7);
-  const hours = [6, 8, 10, 14, 16, 18, 20];
-  const hour = hours[hash % hours.length];
-
-  const date = new Date();
-  date.setDate(date.getDate() + daysAhead);
-  date.setHours(hour, 0, 0, 0);
-
-  const dateLabel = new Intl.DateTimeFormat('vi-VN', {
-    weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric',
-  }).format(date);
-
-  return {
-    pitch,
-    datetimeLabel: `${String(hour).padStart(2, '0')}:00 · ${dateLabel}`,
-    amount: pitch.price + 20000,
-  };
+function showMissingPopup() {
+  showPopup({
+    type: 'error',
+    title: 'Không tìm thấy kết quả đặt sân',
+    message: 'Liên kết này không đi kèm thông tin đặt sân hợp lệ. Vui lòng thực hiện lại.',
+    actions: [{ text: 'Về trang tìm sân', href: 'search.html', primary: true }]
+  });
 }
 
-function renderSuccess(bookingId, transactionId, paymentStatus) {
-  const booking = deriveMockBooking(bookingId);
-
-  elements.bookingId.textContent = bookingId;
-  elements.pitchName.textContent = booking.pitch.name;
-  elements.datetime.textContent = booking.datetimeLabel;
-  elements.amount.textContent = formatVND(booking.amount);
-  elements.status.textContent = STATUS_LABEL[paymentStatus] ?? 'Đã xác nhận';
-
-  if (transactionId) {
-    elements.transactionId.textContent = transactionId;
-    elements.transactionRow.hidden = false;
-  } else {
-    elements.transactionRow.hidden = true;
+function renderSuccess(booking, pitch) {
+  elements.resultBookingId.textContent = booking.id;
+  elements.resultPitchName.textContent = pitch ? pitch.name : '—';
+  
+  if (booking.date && booking.time) {
+    const [year, month, day] = booking.date.split('-');
+    elements.resultDatetime.textContent = `${booking.time} · ${day}/${month}/${year}`;
+  } else if (booking.slotId) { // From new drafts
+    const [dateStr, timeStr] = booking.slotId.split('T');
+    const [year, month, day] = dateStr.split('-');
+    elements.resultDatetime.textContent = `${timeStr} · ${day}/${month}/${year}`;
   }
 
-  showOnly('success');
+  elements.resultAmount.textContent = formatVND(booking.amount);
+  
+  const meta = STATUS_META[booking.status] ?? { label: booking.status };
+  elements.resultStatus.textContent = meta.label;
+  
+  if (booking.transactionId) {
+    elements.resultTransactionRow.hidden = false;
+    elements.resultTransactionId.textContent = booking.transactionId;
+  } else {
+    elements.resultTransactionRow.hidden = true;
+  }
+
+  // Bật nút điều hướng
+  elements.linkDetails.removeAttribute('aria-disabled');
+  elements.linkDetails.addEventListener('click', () => {
+    location.href = `booking-detail.html?bookingId=${booking.id}`;
+  });
+  
+  elements.linkHistory.removeAttribute('aria-disabled');
+  elements.linkHistory.addEventListener('click', () => {
+    location.href = 'booking-history.html';
+  });
+
+  showOnly('success-state');
 }
 
 function init() {
+  if (!isLoggedIn()) return requireLogin();
+
   const params = new URLSearchParams(location.search);
   const bookingId = params.get('bookingId');
-  const transactionId = params.get('transactionId');
-  const paymentStatus = params.get('paymentStatus');
-
+  const paymentStatus = params.get('paymentStatus'); // paid, failed, expired
+  
   if (!bookingId) {
-    showOnly('missing');
+    showMissingPopup();
     return;
   }
 
-  if (paymentStatus === 'expired') {
-    showOnly('expired');
+  // Hỗ trợ cả booking tĩnh (MOCK_BOOKINGS) và booking vừa tạo (localStorage)
+  const booking = findBooking(bookingId) || getCompletedBooking(bookingId);
+  if (!booking) {
+    showMissingPopup();
     return;
   }
+  
+  // Dùng pitch từ service nếu có, không thì import từ data
+  const pitch = pitchForBooking(booking) || { name: 'Sân bóng' }; 
 
-  if (paymentStatus === 'failed') {
-    elements.retryLink.href = 'booking-schedule.html';
-    showOnly('failed');
-    return;
+  // Kiểm tra trạng thái thanh toán từ hệ thống (lấy từ param tạm thời để test các luồng thất bại)
+  // Thực tế backend sẽ trả về status nằm trong booking record.
+  const actualPaymentStatus = paymentStatus || booking.paymentStatus;
+
+  if (actualPaymentStatus === 'paid') {
+    renderSuccess(booking, pitch);
+  } else if (actualPaymentStatus === 'expired') {
+    showOnly('expired-state');
+  } else {
+    // Trạng thái thất bại (failed) - Sửa link retry
+    elements.linkRetryBooking.href = `booking-schedule.html?pitchId=${booking.pitchId}`;
+    showOnly('failed-state');
   }
-
-  if (paymentStatus === 'paid' || paymentStatus === 'confirmed') {
-    renderSuccess(bookingId, transactionId, paymentStatus);
-    return;
-  }
-
-  // paymentStatus thiếu hoặc không nhận diện được cùng bookingId hợp lệ.
-  showOnly('missing');
 }
-
-// Các nút "Xem chi tiết đặt sân" (S12) và "Lịch sử đặt sân" (S11) giữ nguyên
-// trạng thái bất hoạt: hai màn hình đó thuộc Sub-issue khác, chưa được duyệt
-// tích hợp trong PR này (AGENTS.md §10.1).
 
 init();

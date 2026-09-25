@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
   <link rel="stylesheet" href="css/booking-confirmation.css">
 </head>
 <body>
@@ -33,25 +35,11 @@
       </div>
     </header>
 
-    <!-- Trạng thái thiếu / sai tham số -->
-    <section class="screen-panel" id="invalid-state" hidden>
-      <div class="empty">
-        <p class="empty__title">Không thể xác nhận đặt sân</p>
-        <p class="empty__hint" id="invalid-state-hint">Thông tin đặt sân không hợp lệ hoặc đã thiếu.</p>
-        <a class="btn btn--primary empty__action" href="search.html">Quay lại tìm sân</a>
-      </div>
-    </section>
+    
 
-    <!-- Trạng thái hết hạn giữ chỗ -->
-    <section class="screen-panel" id="expired-state" hidden>
-      <div class="empty">
-        <p class="empty__title">Thời gian giữ chỗ đã hết hạn</p>
-        <p class="empty__hint">Khung giờ đã được nhả lại cho người khác. Vui lòng chọn lại lịch đá.</p>
-        <a class="btn btn--primary empty__action" id="expired-retry-link" href="booking-schedule.html">Chọn lại lịch đá</a>
-      </div>
-    </section>
+    
 
-    <div id="confirmation-content" hidden>
+    <div id="confirmation-content">
       <section class="hold-banner" id="hold-banner" aria-live="polite">
         <div>
           <p class="hold-banner__title">Giữ chỗ còn hiệu lực trong</p>
@@ -110,9 +98,7 @@
           Tiến hành thanh toán
         </button>
       </div>
-      <p class="field__hint" id="proceed-hint">
-        Bước thanh toán mô phỏng (S09) sẽ được tích hợp sau khi màn hình đó được duyệt.
-      </p>
+      
     </div>
   </main>
 

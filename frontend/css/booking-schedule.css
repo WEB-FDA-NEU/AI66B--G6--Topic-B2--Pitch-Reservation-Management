@@ -10,7 +10,7 @@
   font-weight: 800;
   transform: translateY(-180%);
 }
-.booking-schedule-page .skip-link:focus { transform: translateY(0); }
+.skip-link:focus { transform: translateY(0); }
 
 .booking-schedule-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
 .booking-schedule-page > * + * { margin-top: var(--sp-5); }

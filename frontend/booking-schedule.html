@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
   <link rel="stylesheet" href="css/booking-schedule.css">
 </head>
 <body>
@@ -33,16 +35,9 @@
       </div>
     </header>
 
-    <!-- Trạng thái pitchId không hợp lệ / không tìm thấy sân -->
-    <section class="screen-panel" id="invalid-pitch-state" hidden>
-      <div class="empty">
-        <p class="empty__title">Không tìm thấy sân bóng</p>
-        <p class="empty__hint">Liên kết đặt sân không hợp lệ hoặc sân đã ngừng hoạt động.</p>
-        <a class="btn btn--primary empty__action" href="search.html">Quay lại tìm sân</a>
-      </div>
-    </section>
+    
 
-    <div id="booking-content" hidden>
+    <div id="booking-content">
       <!-- Tóm tắt sân đã chọn -->
       <section class="pitch-summary-card" id="pitch-summary-card" aria-labelledby="pitch-summary-title">
         <img class="pitch-summary-card__img" id="pitch-summary-img" src="" alt="" loading="lazy">

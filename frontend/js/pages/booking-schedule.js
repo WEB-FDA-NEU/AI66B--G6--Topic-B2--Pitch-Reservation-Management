@@ -1,28 +1,27 @@
 // ============================================================
 //  S07 — Booking Schedule
-//  Đọc pitchId, cho chọn ngày (trong 7 ngày tới) và khung giờ,
-//  mô phỏng giữ chỗ tạm thời 10 phút (BR-14, BR-18, BR-26, BR-27).
-//  Không xử lý thanh toán, không xác nhận đặt sân cuối cùng (chỉ S08/S09).
+//  Cho phép người dùng chọn ngày và một khung giờ trống.
+//  Khi chọn, sẽ giữ chỗ (hold) 10 phút qua localStorage (để
+//  không bị mất nếu tải lại trang).
 // ============================================================
 import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
+import { requireLogin, isLoggedIn } from '../auth.js';
+import { createDraft, getDraftForPitch, removeDraft, isHoldValid, HOLD_DURATION_MS } from '../services/booking-service.js';
+import { showPopup } from '../services/popup.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
 
-const HOLD_DURATION_MS = 10 * 60 * 1000; // 10 phút — yêu cầu hiện tại của nhóm
-const DAY_COUNT = 7; // BR-14: chỉ đặt trong 7 ngày tới
-const SLOT_TIMES = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
+const DAY_COUNT = 7;
+const SLOT_TIMES = ['06:00', '08:00', '10:00', '14:00', '16:00', '18:00', '20:00'];
 const WEEKDAY_LABELS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 
 const elements = {
-  hint: document.getElementById('pitch-summary-hint'),
-  invalidState: document.getElementById('invalid-pitch-state'),
   content: document.getElementById('booking-content'),
-  summaryCard: document.getElementById('pitch-summary-card'),
-  summaryImg: document.getElementById('pitch-summary-img'),
-  summaryTitle: document.getElementById('pitch-summary-title'),
-  summaryMeta: document.getElementById('pitch-summary-meta'),
-  summaryPrice: document.getElementById('pitch-summary-price'),
-  dateRow: document.getElementById('date-chip-row'),
+  pitchSummaryImg: document.getElementById('pitch-summary-img'),
+  pitchSummaryTitle: document.getElementById('pitch-summary-title'),
+  pitchSummaryMeta: document.getElementById('pitch-summary-meta'),
+  pitchSummaryPrice: document.getElementById('pitch-summary-price'),
+  dateChipRow: document.getElementById('date-chip-row'),
   slotGrid: document.getElementById('slot-grid'),
   slotEmptyState: document.getElementById('slot-empty-state'),
   holdBanner: document.getElementById('hold-banner'),
@@ -37,150 +36,139 @@ const elements = {
 const state = {
   pitch: null,
   dates: [],
-  selectedDateIndex: 0,
-  selectedSlot: null, // { time, dateStr }
-  holdExpiresAt: null,
+  selectedDate: startOfDay(new Date()), // Ngày đang xem
+  selectedSlot: null,                   // Khung giờ đã chọn (giữ chỗ)
+  holdExpiresAt: null,                  // Thời hạn giữ chỗ
   holdTimerId: null,
+  draftId: null,                        // ID bản nháp đặt sân
 };
 
 function startOfDay(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
-function toDateValue(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+function toDateValue(dateObj) {
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const d = String(dateObj.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
-/** Chấp nhận cả dạng số (khớp mock hiện có) lẫn dạng "P001". */
-function findPitch(pitchIdParam) {
-  if (!pitchIdParam) return null;
-  const direct = MOCK_PITCHES.find(p => String(p.id) === pitchIdParam);
-  if (direct) return direct;
-  const numeric = Number(pitchIdParam.replace(/\D/g, ''));
-  return MOCK_PITCHES.find(p => p.id === numeric) ?? null;
+function findPitch(idStr) {
+  if (!idStr) return null;
+  const numId = idStr.startsWith('P') ? parseInt(idStr.substring(1), 10) : parseInt(idStr, 10);
+  return MOCK_PITCHES.find(p => p.id === numId) ?? null;
 }
 
-/** Sinh trạng thái khung giờ mô phỏng, cố định theo sân + ngày (không dùng random
- *  để có thể kiểm thử lại được nhiều lần trên cùng một ngày). */
-function generateSlots(pitch, dateObj, dateIndex) {
-  const dateStr = toDateValue(dateObj);
-  const isToday = toDateValue(dateObj) === toDateValue(startOfDay(new Date()));
+/** Tạo mốc dữ liệu ngẫu nhiên có tính ổn định cao. */
+function generateSlots(dateStr) {
+  const seed = state.pitch.id * 31 + parseInt(dateStr.replace(/-/g, ''), 10);
   const now = new Date();
-  const seed = pitch.id * 31 + dateObj.getDate();
+  const isToday = dateStr === toDateValue(now);
 
-  const slots = SLOT_TIMES.map((time, index) => {
-    let status = 'available';
-    if ((seed + index) % 5 === 0) status = 'booked';
-    else if ((seed + index) % 7 === 0) status = 'unavailable';
+  return SLOT_TIMES.map((time, idx) => {
+    const slotId = `${dateStr}T${time}`;
+    const [h, m] = time.split(':').map(Number);
+    const slotDate = new Date(dateStr);
+    slotDate.setHours(h, m, 0, 0);
 
-    if (isToday) {
-      const [hour] = time.split(':').map(Number);
-      const slotMoment = new Date(dateObj);
-      slotMoment.setHours(hour, 0, 0, 0);
-      if (slotMoment <= now) status = 'unavailable'; // BR-11: không đặt giờ đã qua
+    // BR-11: Chặn khung giờ đã qua
+    if (isToday && slotDate < now) {
+      return { id: slotId, time, status: 'unavailable' };
     }
 
-    return { time, dateStr, status, conflict: false };
+    const random = Math.sin(seed + idx) * 10000;
+    const value = random - Math.floor(random);
+
+    // Sân đầu tiên (Bách Khoa) có nhiều lịch trống hơn
+    const bookChance = state.pitch.id === 1 ? 0.3 : 0.6;
+    const status = value > bookChance ? 'available' : 'booked';
+    return { id: slotId, time, status };
   });
-
-  // Mô phỏng một xung đột giữ chỗ (BR-18) có thể tái hiện được: ngày thứ 2
-  // trong danh sách, khung giờ trống đầu tiên vừa bị người khác giữ.
-  if (dateIndex === 1) {
-    const firstAvailable = slots.find(slot => slot.status === 'available');
-    if (firstAvailable) firstAvailable.conflict = true;
-  }
-
-  return slots;
 }
 
-function buildDates() {
+function renderPitchSummary() {
+  const p = state.pitch;
+  elements.pitchSummaryImg.src = p.image;
+  elements.pitchSummaryImg.alt = `Hình ảnh ${p.name}`;
+  elements.pitchSummaryTitle.textContent = p.name;
+  elements.pitchSummaryMeta.textContent = `${p.location} · ${p.typeLabel}`;
+  elements.pitchSummaryPrice.textContent = formatPitchPrice(p.price);
+  
+  // Update screen title hint
+  document.getElementById('pitch-summary-hint').textContent = `${p.name} · ${p.location}`;
+}
+
+function generateDates() {
   const today = startOfDay(new Date());
-  return Array.from({ length: DAY_COUNT }, (_, offset) => {
-    const date = new Date(today);
-    date.setDate(today.getDate() + offset);
-    return date;
+  state.dates = Array.from({ length: DAY_COUNT }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    return d;
   });
-}
-
-function renderPitchSummary(pitch) {
-  elements.summaryImg.src = pitch.image;
-  elements.summaryImg.alt = `Hình ảnh ${pitch.name}`;
-  elements.summaryTitle.textContent = pitch.name;
-  elements.summaryMeta.textContent = `${pitch.location} · ${pitch.typeLabel}`;
-  elements.summaryPrice.textContent = formatPitchPrice(pitch.price);
-  elements.hint.textContent = `Chọn ngày và khung giờ bạn muốn chơi tại ${pitch.name}.`;
 }
 
 function renderDateChips() {
   const fragment = document.createDocumentFragment();
-  state.dates.forEach((date, index) => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = 'date-chip';
-    chip.setAttribute('role', 'tab');
-    chip.setAttribute('aria-selected', String(index === state.selectedDateIndex));
-    if (index === state.selectedDateIndex) chip.classList.add('is-selected');
+  const selectedVal = toDateValue(state.selectedDate);
+
+  state.dates.forEach(d => {
+    const val = toDateValue(d);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `date-chip ${val === selectedVal ? 'is-selected' : ''}`;
+    btn.setAttribute('role', 'tab');
+    btn.setAttribute('aria-selected', String(val === selectedVal));
+    btn.addEventListener('click', () => {
+      if (val !== selectedVal) {
+        state.selectedDate = d;
+        renderDateChips();
+        loadSlotsWithSkeleton();
+      }
+    });
 
     const weekday = document.createElement('span');
     weekday.className = 'date-chip__weekday';
-    weekday.textContent = index === 0 ? 'Hôm nay' : WEEKDAY_LABELS[date.getDay()];
+    weekday.textContent = WEEKDAY_LABELS[d.getDay()];
 
     const day = document.createElement('span');
     day.className = 'date-chip__day';
-    day.textContent = `${date.getDate()}/${date.getMonth() + 1}`;
+    day.textContent = String(d.getDate()).padStart(2, '0');
 
-    chip.append(weekday, day);
-    chip.addEventListener('click', () => selectDate(index));
-    fragment.append(chip);
+    btn.append(weekday, day);
+    fragment.append(btn);
   });
-  elements.dateRow.replaceChildren(fragment);
+
+  elements.dateChipRow.replaceChildren(fragment);
 }
 
-function selectDate(index) {
-  if (index === state.selectedDateIndex) return;
-  releaseHold();
-  state.selectedDateIndex = index;
-  renderDateChips();
-  loadSlotsForSelectedDate();
-}
-
-function loadSlotsForSelectedDate() {
-  elements.slotGrid.setAttribute('aria-busy', 'true');
-  elements.slotEmptyState.hidden = true;
-  elements.conflictBanner.hidden = true;
-  showSkeleton();
-
-  // Mô phỏng độ trễ kiểm tra lịch trống.
-  window.setTimeout(() => {
-    const date = state.dates[state.selectedDateIndex];
-    const slots = generateSlots(state.pitch, date, state.selectedDateIndex);
-    renderSlots(slots);
-    elements.slotGrid.setAttribute('aria-busy', 'false');
-  }, 350);
-}
-
-function showSkeleton() {
+function showSkeletonSlots() {
   const fragment = document.createDocumentFragment();
-  for (let i = 0; i < SLOT_TIMES.length; i += 1) {
-    const cell = document.createElement('div');
-    cell.className = 'skeleton-slot';
-    fragment.append(cell);
+  for (let i = 0; i < 6; i++) {
+    const div = document.createElement('div');
+    div.className = 'skeleton-slot';
+    fragment.append(div);
   }
   elements.slotGrid.replaceChildren(fragment);
+  elements.slotEmptyState.hidden = true;
 }
 
-const STATUS_LABEL = {
-  available: 'Còn trống',
-  booked: 'Đã đặt',
-  unavailable: 'Không khả dụng',
-};
+function loadSlotsWithSkeleton() {
+  elements.slotGrid.setAttribute('aria-busy', 'true');
+  showSkeletonSlots();
+  window.setTimeout(() => {
+    renderSlots();
+    elements.slotGrid.setAttribute('aria-busy', 'false');
+  }, 400);
+}
 
-function renderSlots(slots) {
-  const availableCount = slots.filter(slot => slot.status === 'available').length;
-  if (availableCount === 0) {
+function renderSlots() {
+  const dateStr = toDateValue(state.selectedDate);
+  const slots = generateSlots(dateStr);
+
+  if (slots.length === 0) {
     elements.slotGrid.replaceChildren();
     elements.slotEmptyState.hidden = false;
     return;
@@ -189,94 +177,112 @@ function renderSlots(slots) {
 
   const fragment = document.createDocumentFragment();
   slots.forEach(slot => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'slot-button';
-    button.disabled = slot.status !== 'available';
-    if (slot.status === 'booked') button.classList.add('is-booked');
+    const isSelected = slot.id === state.selectedSlot;
+    const isAvailable = slot.status === 'available' || isSelected;
 
-    const isSelected = state.selectedSlot
-      && state.selectedSlot.dateStr === slot.dateStr
-      && state.selectedSlot.time === slot.time;
-    if (isSelected) button.classList.add('is-selected');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `slot-button ${isSelected ? 'is-selected' : ''} ${slot.status === 'booked' ? 'is-booked' : ''}`;
+    btn.disabled = !isAvailable;
+    btn.setAttribute('aria-pressed', String(isSelected));
+    btn.addEventListener('click', () => {
+      if (isSelected) releaseHold();
+      else startHold(slot);
+    });
 
-    const timeEl = document.createElement('span');
-    timeEl.className = 'slot-button__time';
-    timeEl.textContent = slot.time;
+    const time = document.createElement('span');
+    time.className = 'slot-button__time';
+    time.textContent = slot.time;
 
-    const statusEl = document.createElement('span');
-    statusEl.className = 'slot-button__status';
-    statusEl.textContent = isSelected ? 'Đang giữ chỗ' : STATUS_LABEL[slot.status];
+    const status = document.createElement('span');
+    status.className = 'slot-button__status';
+    if (isSelected) status.textContent = 'Đang chọn';
+    else if (slot.status === 'available') status.textContent = 'Trống';
+    else if (slot.status === 'booked') status.textContent = 'Đã đặt';
+    else status.textContent = 'Đã qua';
 
-    button.append(timeEl, statusEl);
-    button.addEventListener('click', () => handleSlotClick(slot, statusEl));
-    fragment.append(button);
+    btn.append(time, status);
+    fragment.append(btn);
   });
+
   elements.slotGrid.replaceChildren(fragment);
 }
 
-function handleSlotClick(slot, statusEl) {
-  if (slot.status !== 'available') return;
-
-  if (slot.conflict) {
-    slot.status = 'booked';
-    slot.conflict = false;
-    statusEl.textContent = STATUS_LABEL.booked;
+/** BR-26: Bắt đầu giữ chỗ */
+function startHold(slot) {
+  // BR-18: Phát hiện xung đột (chỉ làm mô phỏng 20% khả năng)
+  if (Math.random() < 0.2) {
     elements.conflictBanner.hidden = false;
+    elements.holdBanner.hidden = true;
     elements.holdExpiredBanner.hidden = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => { elements.conflictBanner.hidden = true; }, 5000);
     return;
   }
 
   elements.conflictBanner.hidden = true;
-  startHold(slot);
-  loadSlotsForSelectedDate(); // vẽ lại lưới để phản ánh khung giờ vừa chọn
+  elements.holdExpiredBanner.hidden = true;
+
+  // Xoá hold cũ nếu có
+  if (state.draftId) {
+    removeDraft(state.draftId);
+  }
+
+  const draft = createDraft(state.pitch.id, slot.id, state.pitch.price);
+  state.selectedSlot = slot.id;
+  state.holdExpiresAt = draft.holdExpiresAt;
+  state.draftId = draft.id;
+  
+  startHoldTimer();
+  renderSlots();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function startHold(slot) {
-  clearHoldTimer();
-  state.selectedSlot = { time: slot.time, dateStr: slot.dateStr };
-  state.holdExpiresAt = Date.now() + HOLD_DURATION_MS;
-  elements.holdExpiredBanner.hidden = true;
+function startHoldTimer() {
+  elements.holdBannerSlot.textContent = `Ngày ${state.selectedDate instanceof Date ? toDateValue(state.selectedDate) : state.selectedDate} · Lúc ${state.selectedSlot.split('T')[1]}`;
   elements.holdBanner.hidden = false;
   elements.continueButton.disabled = false;
-
-  const [year, month, day] = slot.dateStr.split('-');
-  elements.holdBannerSlot.textContent = `${slot.time} · ${day}/${month}/${year}`;
+  elements.cancelButton.disabled = false;
 
   updateHoldTimerText();
-  state.holdTimerId = window.setInterval(() => {
-    if (Date.now() >= state.holdExpiresAt) {
-      expireHold();
-      return;
-    }
-    updateHoldTimerText();
-  }, 1000);
+  clearHoldTimer();
+  state.holdTimerId = window.setInterval(updateHoldTimerText, 1000);
 }
 
 function updateHoldTimerText() {
-  const remainingMs = Math.max(0, state.holdExpiresAt - Date.now());
-  const minutes = Math.floor(remainingMs / 60000);
-  const seconds = Math.floor((remainingMs % 60000) / 1000);
-  elements.holdBannerTimer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const ms = state.holdExpiresAt - Date.now();
+  if (ms <= 0) {
+    expireHold();
+    return;
+  }
+  const mins = Math.floor(ms / 60000);
+  const secs = Math.floor((ms % 60000) / 1000);
+  elements.holdBannerTimer.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
 function expireHold() {
   clearHoldTimer();
+  if (state.draftId) removeDraft(state.draftId);
   state.selectedSlot = null;
   state.holdExpiresAt = null;
+  state.draftId = null;
+
   elements.holdBanner.hidden = true;
   elements.holdExpiredBanner.hidden = false;
   elements.continueButton.disabled = true;
-  loadSlotsForSelectedDate();
+  renderSlots();
 }
 
 function releaseHold() {
   clearHoldTimer();
+  if (state.draftId) removeDraft(state.draftId);
   state.selectedSlot = null;
   state.holdExpiresAt = null;
+  state.draftId = null;
+
   elements.holdBanner.hidden = true;
-  elements.holdExpiredBanner.hidden = true;
   elements.continueButton.disabled = true;
+  renderSlots();
 }
 
 function clearHoldTimer() {
@@ -287,42 +293,57 @@ function clearHoldTimer() {
 }
 
 function handleContinue() {
-  if (!state.selectedSlot || !state.holdExpiresAt || Date.now() >= state.holdExpiresAt) return;
+  if (!state.selectedSlot || !state.holdExpiresAt || !state.draftId) return;
+  const ms = state.holdExpiresAt - Date.now();
+  if (ms <= 0) { expireHold(); return; }
+
+  // Truyền id của bản nháp qua URL (bảo mật, không lo bị chỉnh sửa expiresAt)
   const params = new URLSearchParams({
     pitchId: String(state.pitch.id),
-    slotId: `${state.selectedSlot.dateStr}T${state.selectedSlot.time}`,
-    holdExpiresAt: String(state.holdExpiresAt),
+    bookingDraftId: state.draftId
   });
   location.href = `booking-confirmation.html?${params.toString()}`;
 }
 
 function handleCancel() {
-  releaseHold();
-  loadSlotsForSelectedDate();
+  if (state.selectedSlot) releaseHold();
+  else location.href = `pitch-detail.html?id=${state.pitch.id}`;
 }
 
 function init() {
+  if (!isLoggedIn()) return requireLogin();
+
   const pitchId = new URLSearchParams(location.search).get('pitchId');
   const pitch = findPitch(pitchId);
 
   if (!pitch) {
-    elements.invalidState.hidden = false;
-    elements.content.hidden = true;
-    elements.hint.textContent = 'Không tìm thấy sân bóng phù hợp.';
+    showPopup({
+      type: 'error',
+      title: 'Không tìm thấy sân bóng',
+      message: 'Liên kết đặt sân không hợp lệ hoặc sân đã ngừng hoạt động.',
+      actions: [{ text: 'Quay lại tìm sân', href: 'search.html', primary: true }]
+    });
     return;
   }
 
   state.pitch = pitch;
-  state.dates = buildDates();
-  elements.invalidState.hidden = true;
-  elements.content.hidden = false;
+  renderPitchSummary();
+  generateDates();
 
-  renderPitchSummary(pitch);
+  const existingDraft = getDraftForPitch(pitch.id);
+  if (existingDraft) {
+    state.selectedDate = new Date(existingDraft.slotId.split('T')[0]);
+    state.selectedSlot = existingDraft.slotId;
+    state.holdExpiresAt = existingDraft.holdExpiresAt;
+    state.draftId = existingDraft.id;
+    startHoldTimer();
+  }
+
   renderDateChips();
-  loadSlotsForSelectedDate();
-
-  elements.continueButton.addEventListener('click', handleContinue);
-  elements.cancelButton.addEventListener('click', handleCancel);
+  renderSlots();
 }
+
+elements.continueButton.addEventListener('click', handleContinue);
+elements.cancelButton.addEventListener('click', handleCancel);
 
 init();
