@@ -94,7 +94,7 @@ class AdminSidebar extends HTMLElement {
     // However, the rule says "if the target is not ready, keep the control inert and silent".
     // I will replace href with javascript:void(0) and add a cursor-not-allowed style if not the current page, except for dashboard.
     const links = this.querySelectorAll('a.admin-menu__link');
-    const integratedPages = ['admin-dashboard.html', 'admin-users.html', 'admin-pitch-managers.html'];
+    const integratedPages = ['admin-dashboard.html', 'admin-users.html', 'admin-pitch-managers.html', 'admin-reports.html', 'admin-activity-log.html'];
     
     links.forEach(link => {
       const href = link.getAttribute('href');
