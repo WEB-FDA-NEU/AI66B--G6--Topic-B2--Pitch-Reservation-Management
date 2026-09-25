@@ -369,3 +369,28 @@
   color: #fff;
 }
 .btn-admin--primary:hover { background: var(--c-primary-d); }
+
+@media (max-width: 900px) {
+  .admin-users-page {
+    flex-direction: column;
+  }
+  .admin-header-hero {
+    padding: var(--sp-5) var(--sp-4) 80px;
+  }
+  .admin-board {
+    margin-top: -60px;
+    padding: var(--sp-4);
+  }
+  .admin-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-filters__group {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-field select, .filter-field input {
+    width: 100%;
+  }
+}
