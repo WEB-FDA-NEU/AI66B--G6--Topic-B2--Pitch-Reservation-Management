@@ -1,59 +1,6 @@
-// admin-dashboard.js
-// Mock Data (to be replaced by Admin Service in the future)
-
-const mockReports = [
-  {
-    id: 'RPT-1048',
-    reason: 'Pitch condition',
-    reporter: 'Alex Morgan',
-    date: '25 Sept 2026',
-    statusText: 'Pending',
-    statusClass: 'badge--pending'
-  },
-  {
-    id: 'RPT-1047',
-    reason: 'Booking dispute',
-    reporter: 'Jamie Lee',
-    date: '24 Sept 2026',
-    statusText: 'In review',
-    statusClass: 'badge--review'
-  },
-  {
-    id: 'RPT-1046',
-    reason: 'Manager conduct',
-    reporter: 'Taylor Reed',
-    date: '24 Sept 2026',
-    statusText: 'Pending',
-    statusClass: 'badge--pending'
-  }
-];
-
-const mockActivities = [
-  {
-    action: 'User warning',
-    adminName: 'Morgan Chen',
-    target: 'Alex Morgan',
-    date: '25 Sept 2026, 10:12 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
-  },
-  {
-    action: 'Pitch suspension',
-    adminName: 'Jordan Park',
-    target: 'Hillcrest Pitch 2',
-    date: '25 Sept 2026, 08:35 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
-  },
-  {
-    action: 'Report resolution',
-    adminName: 'Morgan Chen',
-    target: 'RPT-1044',
-    date: '24 Sept 2026, 16:48 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
-  }
-];
+// js/pages/admin-dashboard.js
+import '../components/admin-sidebar.js';
+import { mockReports, mockActivities } from '../data/admin.js';
 
 function renderMockData() {
   // Render Reports
@@ -99,7 +46,60 @@ function renderMockData() {
   }
 }
 
+function handleTabNavigation() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let activeTabId = urlParams.get('tab') || 'users';
+
+  // Fallback to 'users' if tab is invalid
+  const validTabs = ['users', 'pitches', 'reports'];
+  if (!validTabs.includes(activeTabId)) {
+    activeTabId = 'users';
+  }
+
+  // Activate the initial tab
+  activateTab(activeTabId);
+
+  // Bind click events to tab buttons (if they existed in the initial design, 
+  // currently we removed tabs in favor of the dashboard cards, but let's safely handle it if they exist)
+  const tabButtons = document.querySelectorAll('.tabs-nav__btn');
+  if (tabButtons.length > 0) {
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tabId = e.target.dataset.tab;
+        if (tabId) {
+          activateTab(tabId);
+          // Update URL without reloading
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set('tab', tabId);
+          window.history.pushState({ tab: tabId }, '', newUrl);
+        }
+      });
+    });
+  }
+}
+
+function activateTab(tabId) {
+  // Update buttons (if any)
+  document.querySelectorAll('.tabs-nav__btn').forEach(btn => {
+    const isSelected = btn.dataset.tab === tabId;
+    btn.setAttribute('aria-selected', isSelected.toString());
+  });
+
+  // Update panels (if any)
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    const isSelected = panel.id === `panel-${tabId}`;
+    if (isSelected) {
+      panel.removeAttribute('hidden');
+      panel.classList.remove('hidden');
+    } else {
+      panel.setAttribute('hidden', '');
+      panel.classList.add('hidden');
+    }
+  });
+}
+
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
   renderMockData();
+  handleTabNavigation();
 });
