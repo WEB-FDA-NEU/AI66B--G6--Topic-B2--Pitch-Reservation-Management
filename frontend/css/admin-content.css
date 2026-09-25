@@ -1,3 +1,122 @@
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background: var(--c-surface);
+  margin: 0;
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--c-surface);
+  padding: 0;
+}
+
+.admin-header {
+  background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%);
+  color: #fff;
+  padding: 48px 32px 120px;
+}
+.admin-header__breadcrumbs {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.admin-header__title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.admin-header__desc {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+.admin-card {
+  background: var(--c-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin: -64px 32px 32px;
+  padding: 0;
+  position: relative;
+  z-index: 10;
+  border: 1px solid var(--c-border);
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.admin-table th {
+  padding: 16px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--c-muted);
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-bg-subtle);
+  white-space: nowrap;
+}
+.admin-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: middle;
+}
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--c-border);
+}
+.admin-pagination__info {
+  font-size: 0.875rem;
+  color: var(--c-muted);
+}
+.admin-pagination__controls {
+  display: flex;
+  gap: 8px;
+}
+.admin-pagination__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--c-border);
+  background: var(--c-bg);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--c-text);
+  transition: all 0.2s;
+}
+.admin-pagination__btn:hover:not(:disabled) {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.admin-pagination__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--c-bg-subtle);
+}
+.admin-pagination__btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .admin-content-page .admin-tabs {
   display: flex;
   gap: 8px;
