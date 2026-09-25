@@ -1,161 +1,192 @@
 import '../components/admin-sidebar.js';
-import { mockManagers } from '../data/admin.js';
+import { mockPitchManagers } from '../data/admin.js';
 
-let managersData = [...mockManagers];
+let managersData = [...mockPitchManagers];
+let currentPage = 1;
+const itemsPerPage = 6;
+
+const tbody = document.getElementById('managers-tbody');
+const tpl = document.getElementById('tpl-manager-row');
+const modal = document.getElementById('action-modal');
+const modalClose = document.getElementById('modal-close');
+const btnCancel = document.getElementById('modal-cancel');
+const btnConfirm = document.getElementById('modal-confirm');
+const reasonInput = document.getElementById('admin-reason');
 
 function renderManagers() {
-  const tbody = document.getElementById('managers-tbody');
-  const template = document.getElementById('tpl-manager-row');
-  const countLabel = document.getElementById('managers-count');
-
-  if (!tbody || !template) return;
-
   tbody.innerHTML = '';
-  countLabel.textContent = `${managersData.length} managers`;
+  document.getElementById('managers-count').textContent = `${managersData.length} manager${managersData.length !== 1 ? 's' : ''}`;
 
   if (managersData.length === 0) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="7" class="empty">
-      <div class="empty__title">No managers found</div>
-      <div class="empty__hint">Try adjusting your filters or search query.</div>
-    </td>`;
-    tbody.appendChild(tr);
+    const emptyRow = document.createElement('tr');
+    emptyRow.innerHTML = `<td colspan="7" style="text-align:center; padding: 2rem; color: var(--c-muted);">No managers found.</td>`;
+    tbody.appendChild(emptyRow);
+    updatePagination(0, managersData.length);
     return;
   }
+  
+  const totalPages = Math.ceil(managersData.length / itemsPerPage);
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+  
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const pageData = managersData.slice(startIndex, endIndex);
 
-  managersData.forEach(manager => {
-    const clone = template.content.cloneNode(true);
+  pageData.forEach(mgr => {
+    const clone = tpl.content.cloneNode(true);
     
-    clone.querySelector('.td-user-name').textContent = manager.fullName;
-    clone.querySelector('.td-user-meta').textContent = `${manager.email} · ${manager.id}`;
-    clone.querySelector('.td-pitches').textContent = manager.managedPitchCount;
-    
-    // Check if there's affected booking text
-    if (manager.activeBookingCount.includes('affected')) {
-      const parts = manager.activeBookingCount.split('(');
-      clone.querySelector('.td-bookings').innerHTML = `${parts[0].trim()} <span style="color: #c62828; font-size: 0.8rem;">(${parts[1]}</span>`;
-    } else {
-      clone.querySelector('.td-bookings').textContent = manager.activeBookingCount;
-    }
-    
-    clone.querySelector('.td-balance').textContent = manager.simulatedBalance;
-    clone.querySelector('.td-activity').textContent = manager.lastActivityAt;
-    
+    const tr = clone.querySelector('tr');
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', () => openModal(mgr));
+
+    clone.querySelector('.td-mgr-name').textContent = mgr.fullName;
+    clone.querySelector('.td-mgr-meta').textContent = `${mgr.email}  ${mgr.id}`;
+    clone.querySelector('.td-pitches').textContent = mgr.managedPitches;
+
     const badge = clone.querySelector('.badge');
-    badge.textContent = manager.accountStatus;
-    badge.className = `badge ${manager.statusClass}`;
+    badge.textContent = mgr.accountStatus;
+    badge.className = `badge ${mgr.statusClass}`;
+
+    clone.querySelector('.td-warnings').textContent = mgr.warningCount;
+    clone.querySelector('.td-registered').textContent = mgr.createdAt;
+    clone.querySelector('.td-activity').textContent = mgr.lastActivityAt;
 
     const actionBtn = clone.querySelector('.td-action-btn');
-    actionBtn.addEventListener('click', () => openActionModal(manager));
+    actionBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openModal(mgr);
+    });
 
     tbody.appendChild(clone);
   });
-}
-
-function handleSearchAndFilter() {
-  const searchInput = document.getElementById('manager-search');
-  const statusFilter = document.getElementById('filter-status');
-  const pitchFilter = document.getElementById('filter-pitches');
-
-  const filterData = () => {
-    const term = searchInput.value.toLowerCase();
-    const status = statusFilter.value.toLowerCase();
-    const pitches = pitchFilter.value;
-
-    managersData = mockManagers.filter(manager => {
-      const matchSearch = manager.fullName.toLowerCase().includes(term) ||
-                          manager.email.toLowerCase().includes(term) ||
-                          manager.id.toLowerCase().includes(term);
-      const matchStatus = status === 'all' || manager.accountStatus.toLowerCase() === status;
-      
-      let matchPitches = true;
-      if (pitches === '1') matchPitches = manager.managedPitchCount === 1;
-      else if (pitches === '2-5') matchPitches = manager.managedPitchCount >= 2 && manager.managedPitchCount <= 5;
-      else if (pitches === '5+') matchPitches = manager.managedPitchCount > 5;
-
-      return matchSearch && matchStatus && matchPitches;
-    });
-
-    renderManagers();
-  };
-
-  if (searchInput) searchInput.addEventListener('input', filterData);
-  if (statusFilter) statusFilter.addEventListener('change', filterData);
-  if (pitchFilter) pitchFilter.addEventListener('change', filterData);
-}
-
-// Modal Logic
-let currentManagerForAction = null;
-
-function openActionModal(manager) {
-  currentManagerForAction = manager;
-  const modal = document.getElementById('action-modal');
-  document.getElementById('modal-manager-name').textContent = `${manager.fullName} (${manager.id})`;
-  document.getElementById('modal-manager-status').textContent = manager.accountStatus;
   
-  const warningText = document.getElementById('modal-warning-text');
-  
-  if (manager.accountStatus === 'Suspended') {
-    warningText.textContent = 'Restoring this manager will allow their associated pitches to accept new bookings again.';
-    document.getElementById('modal-confirm').textContent = 'Restore Manager';
-    document.getElementById('modal-confirm').className = 'btn-admin btn-admin--primary';
-  } else {
-    warningText.textContent = 'When suspended, associated pitches stop accepting new bookings. Existing bookings remain valid while under review.';
-    document.getElementById('modal-confirm').textContent = 'Suspend Manager';
-    document.getElementById('modal-confirm').className = 'btn-admin btn-admin--danger';
-  }
-
-  document.getElementById('admin-reason').value = '';
-  modal.showModal();
+  updatePagination(totalPages, managersData.length);
 }
 
-function closeActionModal() {
-  const modal = document.getElementById('action-modal');
-  modal.close();
-  currentManagerForAction = null;
-}
+function updatePagination(totalPages, totalItems) {
+  const info = document.querySelector('.admin-pagination__info');
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
 
-function confirmAction() {
-  const reason = document.getElementById('admin-reason').value.trim();
-  if (!reason) {
-    alert('Please enter an administrative reason.');
+  if (!info || !btnPrev || !btnNext) return;
+
+  if (totalPages === 0) {
+    info.textContent = `Page 0 of 0`;
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
     return;
   }
 
-  if (currentManagerForAction) {
-    if (currentManagerForAction.accountStatus === 'Suspended') {
-      currentManagerForAction.accountStatus = 'Restored';
-      currentManagerForAction.statusClass = 'badge--review';
-      currentManagerForAction.activeBookingCount = currentManagerForAction.activeBookingCount.split(' ')[0]; // Strip " (affected)"
-    } else {
-      currentManagerForAction.accountStatus = 'Suspended';
-      currentManagerForAction.statusClass = 'badge--danger';
-      if (parseInt(currentManagerForAction.activeBookingCount) > 0 && !currentManagerForAction.activeBookingCount.includes('affected')) {
-        currentManagerForAction.activeBookingCount = `0 (${currentManagerForAction.activeBookingCount} affected)`;
-      }
-    }
-    
-    // Simulate API delay
-    const btn = document.getElementById('modal-confirm');
-    const originalText = btn.textContent;
-    btn.textContent = 'Processing...';
-    btn.disabled = true;
-
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.disabled = false;
-      closeActionModal();
-      renderManagers();
-      alert(`Action completed successfully for ${currentManagerForAction.fullName}.`);
-    }, 600);
-  }
+  info.textContent = `Page ${currentPage} of ${totalPages}`;
+  btnPrev.disabled = currentPage === 1;
+  btnNext.disabled = currentPage === totalPages;
 }
+
+let currentManager = null;
+
+function openModal(mgr) {
+  currentManager = mgr;
+  document.getElementById('modal-mgr-name').textContent = mgr.fullName;
+  document.getElementById('modal-mgr-status').textContent = mgr.accountStatus;
+  
+  const warningBox = document.getElementById('modal-warning-box');
+  const warningText = document.getElementById('modal-warning-text');
+  
+  if (mgr.accountStatus === 'Suspended') {
+    warningBox.style.background = '#e0f2fe';
+    warningBox.style.color = '#0369a1';
+    warningText.textContent = 'Restoring this manager will allow them to manage their assigned pitches again.';
+    btnConfirm.textContent = 'Restore Manager';
+    btnConfirm.className = 'btn-admin btn-admin--blue';
+  } else {
+    warningBox.style.background = '#ffebee';
+    warningBox.style.color = '#c62828';
+    warningText.textContent = 'Suspending this manager will revoke their access to modify pitches or respond to reports.';
+    btnConfirm.textContent = 'Suspend Manager';
+    btnConfirm.className = 'btn-admin btn-admin--danger';
+  }
+
+  reasonInput.value = '';
+  btnConfirm.disabled = true;
+  
+  modal.showModal();
+}
+
+function closeModal() {
+  modal.close();
+  currentManager = null;
+}
+
+modalClose.addEventListener('click', closeModal);
+btnCancel.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+reasonInput.addEventListener('input', () => {
+  btnConfirm.disabled = reasonInput.value.trim().length === 0;
+});
+
+btnConfirm.addEventListener('click', () => {
+  if (btnConfirm.disabled) return;
+  
+  if (currentManager.accountStatus === 'Suspended') {
+    currentManager.accountStatus = 'Restored';
+    currentManager.statusClass = 'badge--info';
+  } else {
+    currentManager.accountStatus = 'Suspended';
+    currentManager.statusClass = 'badge--danger';
+  }
+  
+  closeModal();
+  renderManagers();
+});
+
+// Search & Filter
+const searchInput = document.getElementById('mgr-search');
+const filterStatus = document.getElementById('filter-status');
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase();
+  const status = filterStatus.value;
+
+  managersData = mockPitchManagers.filter(m => {
+    const matchQ = !query || 
+      m.fullName.toLowerCase().includes(query) || 
+      m.email.toLowerCase().includes(query) ||
+      m.id.toLowerCase().includes(query);
+    const matchS = status === 'all' || m.accountStatus.toLowerCase() === status;
+    return matchQ && matchS;
+  });
+  
+  currentPage = 1;
+  renderManagers();
+}
+
+if (searchInput) searchInput.addEventListener('input', applyFilters);
+if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
 document.addEventListener('DOMContentLoaded', () => {
   renderManagers();
-  handleSearchAndFilter();
-
-  document.getElementById('modal-close')?.addEventListener('click', closeActionModal);
-  document.getElementById('modal-cancel')?.addEventListener('click', closeActionModal);
-  document.getElementById('modal-confirm')?.addEventListener('click', confirmAction);
+  
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderManagers();
+      }
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(managersData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderManagers();
+      }
+    });
+  }
 });

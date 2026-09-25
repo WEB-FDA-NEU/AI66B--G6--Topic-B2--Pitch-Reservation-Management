@@ -2,13 +2,14 @@ import '../components/admin-sidebar.js';
 import { mockActivities } from '../data/admin.js';
 
 let currentData = [...mockActivities];
+let currentPage = 1;
+const itemsPerPage = 6;
 
 const tbody = document.getElementById('tableBody');
 const tpl = document.getElementById('tpl-activity-row');
 const emptyState = document.getElementById('emptyState');
 const resultCount = document.getElementById('resultCount');
 
-// Modal Elements
 const modal = document.getElementById('actionModal');
 const btnClose = modal.querySelector('.admin-modal__close');
 const btnCancel = document.getElementById('btnCancel');
@@ -19,12 +20,26 @@ function renderTable(data) {
   if (data.length === 0) {
     emptyState.removeAttribute('hidden');
     tbody.closest('table').setAttribute('hidden', '');
+    updatePagination(0, data.length);
   } else {
     emptyState.setAttribute('hidden', '');
     tbody.closest('table').removeAttribute('hidden');
     
-    data.forEach(act => {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = data.slice(startIndex, endIndex);
+
+    pageData.forEach(act => {
       const clone = tpl.content.cloneNode(true);
+      
+      const tr = clone.querySelector('tr');
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', () => openActionModal(act));
+
       clone.querySelector('.td-activity-id').textContent = act.activityId;
       clone.querySelector('.td-actor-role').textContent = act.actorRole;
       clone.querySelector('.td-actor-name').textContent = act.actorName;
@@ -38,13 +53,39 @@ function renderTable(data) {
       clone.querySelector('.td-date').textContent = act.createdAt;
       
       const actionBtn = clone.querySelector('.td-action-btn');
-      actionBtn.addEventListener('click', () => openActionModal(act));
+      actionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openActionModal(act);
+      });
       
       tbody.appendChild(clone);
     });
+    
+    updatePagination(totalPages, data.length);
   }
+}
+
+function updatePagination(totalPages, totalItems) {
+  const info = document.querySelector('.admin-pagination__info');
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
   
-  resultCount.textContent = `${data.length} activit${data.length !== 1 ? 'ies' : 'y'}`;
+  if (resultCount) {
+    resultCount.textContent = `${totalItems} activit${totalItems !== 1 ? 'ies' : 'y'}`;
+  }
+
+  if (!info || !btnPrev || !btnNext) return;
+
+  if (totalPages === 0) {
+    info.textContent = `Page 0 of 0`;
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
+    return;
+  }
+
+  info.textContent = `Page ${currentPage} of ${totalPages}`;
+  btnPrev.disabled = currentPage === 1;
+  btnNext.disabled = currentPage === totalPages;
 }
 
 function openActionModal(act) {
@@ -70,11 +111,12 @@ function closeActionModal() {
   modal.close();
 }
 
-// Bind Events
 btnClose.addEventListener('click', closeActionModal);
 btnCancel.addEventListener('click', closeActionModal);
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.close();
+});
 
-// Simple filtering logic
 const inputs = ['searchInput', 'filterRole', 'filterAction', 'filterResult'];
 inputs.forEach(id => {
   const el = document.getElementById(id);
@@ -102,9 +144,30 @@ function applyFilters() {
     return matchQ && matchRole && matchAction && matchResult;
   });
   
+  currentPage = 1;
   renderTable(currentData);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   renderTable(currentData);
+  
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable(currentData);
+      }
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(currentData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable(currentData);
+      }
+    });
+  }
 });

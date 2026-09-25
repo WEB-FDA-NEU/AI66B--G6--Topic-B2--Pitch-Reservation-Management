@@ -2,6 +2,8 @@ import '../components/admin-sidebar.js';
 import { mockUsers } from '../data/admin.js';
 
 let usersData = [...mockUsers];
+let currentPage = 1;
+const itemsPerPage = 6;
 
 function renderUsers() {
   const tbody = document.getElementById('users-tbody');
@@ -15,25 +17,25 @@ function renderUsers() {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `<td colspan="8" style="text-align:center; padding: 2rem; color: var(--c-muted);">No users found.</td>`;
     tbody.appendChild(emptyRow);
+    updatePagination(0);
     return;
   }
 
-  usersData.forEach(user => {
+  const totalPages = Math.ceil(usersData.length / itemsPerPage);
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const pageData = usersData.slice(startIndex, endIndex);
+
+  pageData.forEach(user => {
     const clone = template.content.cloneNode(true);
-    
-    // The TR element
     const tr = clone.querySelector('tr');
-    tr.addEventListener('click', (e) => {
-      // Don't trigger if they clicked a button specifically (though we'll let it pass for the eye button)
-      openViewModal(user);
-    });
+    tr.addEventListener('click', () => openViewModal(user));
 
-    const tdName = clone.querySelector('.td-user-name');
-    tdName.textContent = user.fullName;
-
-    const tdMeta = clone.querySelector('.td-user-meta');
-    tdMeta.textContent = `${user.email}  ${user.id}`;
-
+    clone.querySelector('.td-user-name').textContent = user.fullName;
+    clone.querySelector('.td-user-meta').textContent = `${user.email}  ${user.id}`;
     clone.querySelector('.td-role').textContent = user.role;
 
     const badge = clone.querySelector('.badge');
@@ -47,17 +49,35 @@ function renderUsers() {
 
     tbody.appendChild(clone);
   });
+
+  updatePagination(totalPages);
+}
+
+function updatePagination(totalPages) {
+  const info = document.querySelector('.admin-pagination__info');
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
+
+  if (!info || !btnPrev || !btnNext) return;
+
+  if (totalPages === 0) {
+    info.textContent = `Page 0 of 0`;
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
+    return;
+  }
+
+  info.textContent = `Page ${currentPage} of ${totalPages}`;
+  btnPrev.disabled = currentPage === 1;
+  btnNext.disabled = currentPage === totalPages;
 }
 
 // ----------------- MODAL LOGIC ----------------- //
 const modal = document.getElementById('action-modal');
 const modalClose = document.getElementById('modal-close');
-
-// View state elements
 const viewState = document.getElementById('modal-view-state');
 const actionState = document.getElementById('modal-action-state');
 
-// Action buttons
 const btnWarn = document.getElementById('btn-show-warn');
 const btnSuspend = document.getElementById('btn-show-suspend');
 const btnRestore = document.getElementById('btn-show-restore');
@@ -68,7 +88,7 @@ const btnConfirmAction = document.getElementById('btn-confirm-action');
 const actionReason = document.getElementById('admin-reason');
 
 let currentUser = null;
-let currentAction = null; // 'warn', 'suspend', 'restore', 'note'
+let currentAction = null; 
 
 function openViewModal(user) {
   currentUser = user;
@@ -76,9 +96,7 @@ function openViewModal(user) {
   viewState.removeAttribute('hidden');
   actionState.setAttribute('hidden', '');
 
-  // Populate view state
   document.getElementById('modal-view-name').textContent = user.fullName;
-  
   const badge = document.getElementById('modal-view-badge');
   badge.textContent = user.accountStatus;
   badge.className = `badge ${user.statusClass}`;
@@ -91,7 +109,6 @@ function openViewModal(user) {
   document.getElementById('modal-view-activity').textContent = user.lastActivityAt;
   document.getElementById('modal-view-processed').textContent = user.processedBy || '--';
 
-  // Restoration box
   const restoBox = document.getElementById('modal-view-restoration-box');
   if (user.accountStatus === 'Restored' && user.restoredAt) {
     restoBox.removeAttribute('hidden');
@@ -100,7 +117,6 @@ function openViewModal(user) {
     restoBox.setAttribute('hidden', '');
   }
 
-  // Admin note
   const adminNoteBox = document.getElementById('modal-view-admin-note');
   if (user.adminNote) {
     adminNoteBox.removeAttribute('hidden');
@@ -109,7 +125,6 @@ function openViewModal(user) {
     adminNoteBox.setAttribute('hidden', '');
   }
 
-  // Related reports
   const reportsList = document.getElementById('modal-view-reports');
   reportsList.innerHTML = '';
   if (user.relatedReports && user.relatedReports.length > 0) {
@@ -120,7 +135,6 @@ function openViewModal(user) {
     reportsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">No related reports.</span>`;
   }
 
-  // Recent bookings
   const bookingsList = document.getElementById('modal-view-bookings-list');
   bookingsList.innerHTML = '';
   if (user.recentBookings && user.recentBookings.length > 0) {
@@ -131,7 +145,6 @@ function openViewModal(user) {
     bookingsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">No recent bookings.</span>`;
   }
 
-  // Toggle buttons based on status
   if (user.accountStatus === 'Suspended') {
     btnWarn.setAttribute('hidden', '');
     btnSuspend.setAttribute('hidden', '');
@@ -150,11 +163,9 @@ function openActionState(actionType) {
   
   viewState.setAttribute('hidden', '');
   actionState.removeAttribute('hidden');
-  
   actionReason.value = '';
   btnConfirmAction.disabled = true;
 
-  // Populate action header
   document.getElementById('modal-action-name').textContent = currentUser.fullName;
   const badge = document.getElementById('modal-action-badge');
   badge.textContent = currentUser.accountStatus;
@@ -164,7 +175,6 @@ function openActionState(actionType) {
   const titleEl = document.getElementById('modal-action-title');
   const effectsEl = document.getElementById('modal-action-effects');
   
-  // Reset button classes
   btnConfirmAction.className = 'btn-admin';
 
   if (actionType === 'warn') {
@@ -172,20 +182,17 @@ function openActionState(actionType) {
     effectsEl.innerHTML = `Effects of this action<br>A warning will be recorded on this account. The user will be notified of the warning.`;
     btnConfirmAction.classList.add('btn-admin--warning');
     btnConfirmAction.textContent = 'Issue warning';
-  } 
-  else if (actionType === 'suspend') {
+  } else if (actionType === 'suspend') {
     titleEl.textContent = 'Suspend account';
     effectsEl.innerHTML = `Effects of this action<br>Once suspended, this user:<ul><li>Cannot create new bookings</li><li>Cannot reschedule existing bookings</li><li>Cannot perform restricted actions that create new commitments</li><li>May retain access to booking history</li><li>Keeps existing confirmed bookings unless separately cancelled under an applicable policy</li></ul>`;
     btnConfirmAction.classList.add('btn-admin--danger');
     btnConfirmAction.textContent = 'Suspend account';
-  }
-  else if (actionType === 'restore') {
+  } else if (actionType === 'restore') {
     titleEl.textContent = 'Restore account';
     effectsEl.innerHTML = `Effects of this action<br>The user's account will be reactivated. They will regain the ability to create and manage bookings.`;
     btnConfirmAction.classList.add('btn-admin--blue');
     btnConfirmAction.textContent = 'Restore account';
-  }
-  else if (actionType === 'note') {
+  } else if (actionType === 'note') {
     titleEl.textContent = 'Add note';
     effectsEl.innerHTML = `Effects of this action<br>An internal administrative note will be added to this user's profile.`;
     btnConfirmAction.classList.add('btn-admin--blue');
@@ -193,31 +200,23 @@ function openActionState(actionType) {
   }
 }
 
-// Action Button Listeners
 btnWarn.addEventListener('click', () => openActionState('warn'));
 btnSuspend.addEventListener('click', () => openActionState('suspend'));
 btnRestore.addEventListener('click', () => openActionState('restore'));
 btnNote.addEventListener('click', () => openActionState('note'));
-
 btnCancelAction.addEventListener('click', () => {
-  // Go back to view state
   viewState.removeAttribute('hidden');
   actionState.setAttribute('hidden', '');
 });
 
 actionReason.addEventListener('input', () => {
-  if (actionReason.value.trim().length > 0) {
-    btnConfirmAction.disabled = false;
-  } else {
-    btnConfirmAction.disabled = true;
-  }
+  btnConfirmAction.disabled = actionReason.value.trim().length === 0;
 });
 
 btnConfirmAction.addEventListener('click', () => {
   if (btnConfirmAction.disabled) return;
   const reason = actionReason.value.trim();
   
-  // Simulate API logic
   currentUser.adminNote = reason;
   currentUser.processedBy = 'Admin (You)';
   
@@ -230,12 +229,11 @@ btnConfirmAction.addEventListener('click', () => {
     currentUser.statusClass = 'badge--danger';
   } else if (currentAction === 'restore') {
     currentUser.accountStatus = 'Restored';
-    currentUser.statusClass = 'badge--primary'; // assuming blue badge
+    currentUser.statusClass = 'badge--info';
     const today = new Date();
     currentUser.restoredAt = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + today.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
-  // Refresh Table & Modal
   renderUsers();
   openViewModal(currentUser); 
 });
@@ -246,8 +244,13 @@ modal.addEventListener('close', () => {
   currentAction = null;
 });
 
+// Modal Backdrop Click
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.close();
+  }
+});
 
-// Search & Filters
 const searchInput = document.getElementById('user-search');
 const filterStatus = document.getElementById('filter-status');
 const filterRole = document.getElementById('filter-role');
@@ -266,6 +269,8 @@ function applyFilters() {
     const matchesRole = role === 'all' || u.role.toLowerCase() === role;
     return matchesQuery && matchesStatus && matchesRole;
   });
+  
+  currentPage = 1;
   renderUsers();
 }
 
@@ -275,4 +280,24 @@ if (filterRole) filterRole.addEventListener('change', applyFilters);
 
 document.addEventListener('DOMContentLoaded', () => {
   renderUsers();
+
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderUsers();
+      }
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(usersData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderUsers();
+      }
+    });
+  }
 });

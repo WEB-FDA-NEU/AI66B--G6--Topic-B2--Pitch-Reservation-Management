@@ -2,23 +2,17 @@ import '../components/admin-sidebar.js';
 import { mockReports } from '../data/admin.js';
 
 let currentData = [...mockReports];
+let currentPage = 1;
+const itemsPerPage = 6;
 
 const tbody = document.getElementById('tableBody');
 const tpl = document.getElementById('tpl-report-row');
 const emptyState = document.getElementById('emptyState');
 const resultCount = document.getElementById('resultCount');
 
-// Modal Elements
 const modal = document.getElementById('actionModal');
 const btnClose = modal.querySelector('.admin-modal__close');
 const btnCancel = document.getElementById('btnCancel');
-const btnConfirm = document.getElementById('btnConfirm');
-const adminActionSelect = document.getElementById('adminAction');
-const reasonGroup = document.getElementById('reasonGroup');
-const actionReasonInput = document.getElementById('actionReason');
-const modalAlert = document.getElementById('modalAlert');
-
-let selectedReport = null;
 
 function renderTable(data) {
   tbody.innerHTML = '';
@@ -26,164 +20,121 @@ function renderTable(data) {
   if (data.length === 0) {
     emptyState.removeAttribute('hidden');
     tbody.closest('table').setAttribute('hidden', '');
+    updatePagination(0, data.length);
   } else {
     emptyState.setAttribute('hidden', '');
     tbody.closest('table').removeAttribute('hidden');
     
-    data.forEach(report => {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = data.slice(startIndex, endIndex);
+
+    pageData.forEach(rep => {
       const clone = tpl.content.cloneNode(true);
-      clone.querySelector('.td-report-id').textContent = report.reportId;
-      clone.querySelector('.td-report-summary').textContent = report.summary;
-      clone.querySelector('.td-report-type').textContent = report.reportType;
-      clone.querySelector('.td-reporter').textContent = report.reporterName;
+      
+      const tr = clone.querySelector('tr');
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', () => openActionModal(rep));
+
+      clone.querySelector('.td-report-id').textContent = rep.reportId;
+      clone.querySelector('.td-reporter').innerHTML = `<strong>${rep.reporterName}</strong><br><small style="color:var(--c-muted)">${rep.reporterId}</small>`;
+      clone.querySelector('.td-target').textContent = `${rep.reportedEntityType} - ${rep.reportedEntityId}`;
+      clone.querySelector('.td-type').textContent = rep.reportType;
       
       const badgePriority = clone.querySelector('.badge-priority');
-      badgePriority.textContent = report.priority;
-      badgePriority.className = `badge ${report.priorityClass} badge-priority`;
+      badgePriority.textContent = rep.priority;
+      badgePriority.className = `badge ${rep.priorityClass} badge-priority`;
       
       const badgeStatus = clone.querySelector('.badge-status');
-      badgeStatus.textContent = report.reportStatus;
-      badgeStatus.className = `badge ${report.statusClass} badge-status`;
+      badgeStatus.textContent = rep.reportStatus;
+      badgeStatus.className = `badge ${rep.statusClass} badge-status`;
       
-      clone.querySelector('.td-date').textContent = report.submittedAt;
+      clone.querySelector('.td-date').textContent = rep.submittedAt;
       
       const actionBtn = clone.querySelector('.td-action-btn');
-      actionBtn.addEventListener('click', () => openActionModal(report));
+      actionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openActionModal(rep);
+      });
       
       tbody.appendChild(clone);
     });
+    
+    updatePagination(totalPages, data.length);
   }
-  
-  resultCount.textContent = `${data.length} report${data.length !== 1 ? 's' : ''}`;
 }
 
-function openActionModal(report) {
-  selectedReport = report;
+function updatePagination(totalPages, totalItems) {
+  const info = document.querySelector('.admin-pagination__info');
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
   
-  // Populate UI
-  document.getElementById('modalReportId').textContent = report.reportId;
+  if (resultCount) {
+    resultCount.textContent = `${totalItems} report${totalItems !== 1 ? 's' : ''}`;
+  }
+
+  if (!info || !btnPrev || !btnNext) return;
+
+  if (totalPages === 0) {
+    info.textContent = `Page 0 of 0`;
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
+    return;
+  }
+
+  info.textContent = `Page ${currentPage} of ${totalPages}`;
+  btnPrev.disabled = currentPage === 1;
+  btnNext.disabled = currentPage === totalPages;
+}
+
+function openActionModal(rep) {
+  document.getElementById('modalReportId').textContent = rep.reportId;
+  document.getElementById('modalReportDate').textContent = rep.submittedAt;
+  
   const statusBadge = document.getElementById('modalReportStatus');
-  statusBadge.textContent = report.reportStatus;
-  statusBadge.className = `badge ${report.statusClass}`;
+  statusBadge.textContent = rep.reportStatus;
+  statusBadge.className = `badge ${rep.statusClass}`;
   
   const priorityBadge = document.getElementById('modalReportPriority');
-  priorityBadge.textContent = report.priority;
-  priorityBadge.className = `badge ${report.priorityClass}`;
+  priorityBadge.textContent = rep.priority;
+  priorityBadge.className = `badge ${rep.priorityClass}`;
   
-  document.getElementById('modalReportSummary').textContent = report.summary;
-  document.getElementById('modalReportDesc').textContent = report.description;
+  document.getElementById('modalReportType').textContent = rep.reportType;
+  document.getElementById('modalReportTarget').textContent = `${rep.reportedEntityType} - ${rep.reportedEntityId}`;
   
-  document.getElementById('modalReporterName').textContent = report.reporterName;
-  document.getElementById('modalReporterId').textContent = report.reporterId;
+  document.getElementById('modalReporterName').textContent = rep.reporterName;
+  document.getElementById('modalReporterId').textContent = rep.reporterId;
   
-  document.getElementById('modalTargetType').textContent = report.reportedEntityType;
-  document.getElementById('modalTargetId').textContent = report.reportedEntityId;
+  document.getElementById('modalSummary').textContent = rep.summary;
+  document.getElementById('modalDescription').textContent = rep.description;
   
-  const notesList = document.getElementById('modalNotesList');
-  notesList.innerHTML = '';
-  if (report.investigationNotes && report.investigationNotes.length > 0) {
-    report.investigationNotes.forEach(note => {
-      const li = document.createElement('li');
-      li.textContent = note;
-      notesList.appendChild(li);
+  const notesContainer = document.getElementById('modalNotes');
+  notesContainer.innerHTML = '';
+  if (rep.investigationNotes && rep.investigationNotes.length > 0) {
+    rep.investigationNotes.forEach(note => {
+      notesContainer.innerHTML += `<div style="font-size: 0.875rem; margin-bottom: 8px;"><strong>${note.author}</strong> (${note.date}): ${note.text}</div>`;
     });
   } else {
-    notesList.innerHTML = '<li>No investigation notes yet.</li>';
+    notesContainer.innerHTML = `<span style="font-size: 0.875rem; color: var(--c-muted);">No investigation notes yet.</span>`;
   }
-  
-  // Reset Form
-  adminActionSelect.value = '';
-  actionReasonInput.value = '';
-  reasonGroup.setAttribute('hidden', '');
-  btnConfirm.disabled = true;
-  btnConfirm.textContent = 'Apply Action';
-  modalAlert.setAttribute('hidden', '');
-  modalAlert.className = 'admin-alert';
   
   modal.showModal();
 }
 
 function closeActionModal() {
   modal.close();
-  selectedReport = null;
 }
 
-// Bind Events
 btnClose.addEventListener('click', closeActionModal);
 btnCancel.addEventListener('click', closeActionModal);
-
-adminActionSelect.addEventListener('change', (e) => {
-  const val = e.target.value;
-  if (val) {
-    reasonGroup.removeAttribute('hidden');
-    checkFormValidity();
-  } else {
-    reasonGroup.setAttribute('hidden', '');
-    btnConfirm.disabled = true;
-  }
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.close();
 });
 
-actionReasonInput.addEventListener('input', checkFormValidity);
-
-function checkFormValidity() {
-  const action = adminActionSelect.value;
-  const reason = actionReasonInput.value.trim();
-  if (action && reason.length > 0) {
-    btnConfirm.disabled = false;
-  } else {
-    btnConfirm.disabled = true;
-  }
-}
-
-btnConfirm.addEventListener('click', () => {
-  if (btnConfirm.disabled) return;
-  
-  btnConfirm.disabled = true;
-  btnConfirm.textContent = 'Processing...';
-  adminActionSelect.disabled = true;
-  actionReasonInput.disabled = true;
-  
-  // Simulate API Call
-  setTimeout(() => {
-    const action = adminActionSelect.value;
-    const reason = actionReasonInput.value.trim();
-    
-    // Update local state mock
-    if (action === 'note' || action === 'investigate') {
-      if (!selectedReport.investigationNotes) selectedReport.investigationNotes = [];
-      selectedReport.investigationNotes.push(reason);
-      if (action === 'investigate' && selectedReport.reportStatus === 'Submitted') {
-        selectedReport.reportStatus = 'Under review';
-        selectedReport.statusClass = 'badge--review';
-      }
-    } else if (action === 'resolve') {
-      selectedReport.reportStatus = 'Resolved';
-      selectedReport.statusClass = 'badge--success';
-      selectedReport.investigationNotes.push(`Resolution: ${reason}`);
-    } else if (action === 'dismiss') {
-      selectedReport.reportStatus = 'Dismissed';
-      selectedReport.statusClass = 'badge--muted';
-      selectedReport.investigationNotes.push(`Dismissed: ${reason}`);
-    }
-    
-    // Refresh table
-    renderTable(currentData);
-    
-    // Show success
-    modalAlert.removeAttribute('hidden');
-    modalAlert.className = 'admin-alert admin-alert--success';
-    modalAlert.querySelector('.admin-alert__text').textContent = 'Action applied successfully.';
-    
-    setTimeout(() => {
-      closeActionModal();
-      adminActionSelect.disabled = false;
-      actionReasonInput.disabled = false;
-    }, 1500);
-    
-  }, 800);
-});
-
-// Simple filtering logic
 const inputs = ['searchInput', 'filterType', 'filterStatus', 'filterPriority'];
 inputs.forEach(id => {
   const el = document.getElementById(id);
@@ -199,17 +150,41 @@ function applyFilters() {
   const status = document.getElementById('filterStatus').value;
   const priority = document.getElementById('filterPriority').value;
   
-  currentData = mockReports.filter(report => {
-    const matchQ = !q || report.reportId.toLowerCase().includes(q) || report.summary.toLowerCase().includes(q) || report.reporterName.toLowerCase().includes(q);
-    const matchType = type === 'all' || report.reportType === type;
-    const matchStatus = status === 'all' || report.reportStatus === status;
-    const matchPriority = priority === 'all' || report.priority === priority;
+  currentData = mockReports.filter(rep => {
+    const matchQ = !q || 
+      rep.reportId.toLowerCase().includes(q) || 
+      rep.reporterName.toLowerCase().includes(q) || 
+      rep.summary.toLowerCase().includes(q);
+    const matchType = type === 'all' || rep.reportType === type;
+    const matchStatus = status === 'all' || rep.reportStatus === status;
+    const matchPriority = priority === 'all' || rep.priority === priority;
     return matchQ && matchType && matchStatus && matchPriority;
   });
   
+  currentPage = 1;
   renderTable(currentData);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   renderTable(currentData);
+  
+  const btnPrev = document.querySelector('.btn-prev');
+  const btnNext = document.querySelector('.btn-next');
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable(currentData);
+      }
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(currentData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable(currentData);
+      }
+    });
+  }
 });
