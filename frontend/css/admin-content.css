@@ -15,39 +15,6 @@ body {
   padding: 0;
 }
 
-.admin-header {
-  background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%);
-  color: #fff;
-  padding: 48px 32px 120px;
-}
-.admin-header__breadcrumbs {
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  opacity: 0.8;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.admin-header__title {
-  font-size: 2.25rem;
-  font-weight: 700;
-  margin: 0 0 8px;
-}
-.admin-header__desc {
-  font-size: 1rem;
-  opacity: 0.9;
-  margin: 0;
-}
-.admin-card {
-  background: var(--c-bg);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  margin: -64px 32px 32px;
-  padding: 0;
-  position: relative;
-  z-index: 10;
-  border: 1px solid var(--c-border);
-}
 
 .admin-table-wrapper {
   overflow-x: auto;
@@ -202,3 +169,190 @@ body {
   border-color: var(--c-primary);
   box-shadow: 0 0 0 2px rgba(10, 89, 75, 0.1);
 }
+
+
+/* Copied from common admin styles */
+
+
+/* Extracted */
+.admin-header-hero {
+  background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%);
+  color: #fff;
+  padding: var(--sp-7) var(--sp-6) 120px;
+}
+
+.admin-header-hero__content {
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.admin-header-hero__eyebrow {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: var(--sp-2);
+  font-weight: 600;
+}
+
+.admin-header-hero__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: var(--sp-2);
+  letter-spacing: -0.02em;
+}
+
+.admin-header-hero__desc {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: var(--sp-6);
+}
+
+.admin-board {
+  max-width: 95%;
+  margin: -80px auto 40px;
+  background: var(--c-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--sp-6);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.admin-modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.admin-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-5);
+}
+
+.admin-modal__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.admin-modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--c-muted);
+}
+
+.admin-modal__body {
+  margin-bottom: var(--sp-5);
+}
+
+.admin-modal-info {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.admin-modal-info__row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+
+.admin-modal-info__row:last-child {
+  margin-bottom: 0;
+}
+
+.admin-modal-info__label {
+  color: var(--c-muted);
+  font-size: 0.875rem;
+}
+
+.admin-modal-info__value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.admin-modal-warning {
+  background: #ffebee;
+  color: #c62828;
+  padding: var(--sp-3);
+  border-radius: var(--radius-s);
+  font-size: 0.875rem;
+  margin-bottom: var(--sp-4);
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.admin-modal-warning svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.admin-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+.admin-modal-blue-box {
+  background: #eff6ff;
+  border-radius: var(--radius-s);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  border-left: 4px solid #3b82f6;
+}
+
+.admin-modal-blue-box__title {
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 4px;
+  font-size: 0.875rem;
+}
+
+.admin-modal-blue-box__text {
+  color: #1e40af;
+  font-size: 0.875rem;
+}
+
+.admin-modal-gray-box {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.admin-modal-gray-box__title {
+  font-size: 0.75rem;
+  color: var(--c-muted);
+  margin-bottom: 4px;
+}
+
+.admin-modal-gray-box__text {
+  font-size: 0.875rem;
+  color: var(--c-text);
+}
+
+.admin-modal__actions--left {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--sp-3);
+  border-top: 1px solid var(--c-border);
+  padding-top: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+
+.admin-modal__actions--right {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
