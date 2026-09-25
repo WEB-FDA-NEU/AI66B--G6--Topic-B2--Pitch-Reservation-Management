@@ -394,3 +394,16 @@
     width: 100%;
   }
 }
+.admin-table th, .admin-table td {
+  white-space: nowrap;
+}
+.td-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+.td-action-btn svg {
+  flex-shrink: 0;
+}
