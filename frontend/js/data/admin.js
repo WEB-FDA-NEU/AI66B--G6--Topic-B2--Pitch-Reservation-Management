@@ -111,7 +111,10 @@ export const mockUsers = [
     warningCount: 0,
     bookingCount: 12,
     createdAt: '15 Mar 2025',
-    lastActivityAt: '25 Sept 2026, 10:30'
+    lastActivityAt: '25 Sept 2026, 10:30',
+      processedBy: '--',
+      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Confirmed'}, {id: 'BK-8001', venue: 'Riverside 5-a-side', date: '2026-09-19', status: 'Completed'}, {id: 'BK-8002', venue: 'Eastfield Sports', date: '2026-09-18', status: 'Completed'}],
+      relatedReports: []
   },
   {
     id: 'USR-1002',
@@ -123,7 +126,11 @@ export const mockUsers = [
     warningCount: 1,
     bookingCount: 8,
     createdAt: '22 May 2025',
-    lastActivityAt: '24 Sept 2026, 14:20'
+    lastActivityAt: '24 Sept 2026, 14:20',
+      processedBy: 'Morgan Chen',
+      adminNote: 'Reported for late cancellation.',
+      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Confirmed'}],
+      relatedReports: [{id: 'RPT-1002', type: 'User conduct', date: '24 Sept 2026'}]
   },
   {
     id: 'USR-1003',
@@ -160,7 +167,12 @@ export const mockUsers = [
     warningCount: 1,
     bookingCount: 7,
     createdAt: '14 Feb 2025',
-    lastActivityAt: '25 Sept 2026, 08:00'
+    lastActivityAt: '25 Sept 2026, 08:00',
+      processedBy: 'Jordan Park',
+      adminNote: 'Account restored after review period.',
+      restoredAt: '01 Sept 2026, 10:00',
+      recentBookings: [],
+      relatedReports: [{id: 'RPT-1006', type: 'User conduct', date: '25 Sept 2026'}]
   }
 ];
 
@@ -232,3 +244,4 @@ export const mockManagers = [
     lastActivityAt: '24 Sept 2026, 11:20'
   }
 ];
+

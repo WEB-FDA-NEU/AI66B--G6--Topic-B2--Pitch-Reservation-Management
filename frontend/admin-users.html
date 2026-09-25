@@ -89,43 +89,121 @@
   </main>
 
   <!-- Modal Template for Action -->
-  <dialog id="action-modal" class="admin-modal" aria-labelledby="modal-title">
-    <div class="admin-modal__header">
-      <h2 id="modal-title" class="admin-modal__title">Administrative Action</h2>
-      <button class="admin-modal__close" id="modal-close" aria-label="Đóng">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      <dialog id="action-modal" class="admin-modal admin-modal--lg" aria-labelledby="modal-title">
+      <button class="admin-modal__close" id="modal-close" aria-label="Close" style="position: absolute; top: 24px; right: 24px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
-    </div>
-    <div class="admin-modal__body">
-      <div class="admin-modal-info">
-        <div class="admin-modal-info__row">
-          <span class="admin-modal-info__label">User</span>
-          <span class="admin-modal-info__value" id="modal-user-name">-</span>
+
+      <!-- VIEW STATE -->
+      <div id="modal-view-state">
+        <div class="modal-header-user">
+          <h2 id="modal-view-name">User Name</h2>
+          <span id="modal-view-badge" class="badge">Status</span>
         </div>
-        <div class="admin-modal-info__row">
-          <span class="admin-modal-info__label">Current Status</span>
-          <span class="admin-modal-info__value" id="modal-user-status">-</span>
+        <div class="modal-subtitle" id="modal-view-subtitle">email@example.com - USR-1000</div>
+
+        <div class="modal-grid-info">
+          <div>
+            <span class="modal-grid-label">Role</span>
+            <span class="modal-grid-val" id="modal-view-role">User</span>
+          </div>
+          <div>
+            <span class="modal-grid-label">Warnings</span>
+            <span class="modal-grid-val" id="modal-view-warnings">0</span>
+          </div>
+          <div>
+            <span class="modal-grid-label">Bookings</span>
+            <span class="modal-grid-val" id="modal-view-bookings">0</span>
+          </div>
+          <div>
+            <span class="modal-grid-label">Registered</span>
+            <span class="modal-grid-val" id="modal-view-registered">--</span>
+          </div>
+          <div>
+            <span class="modal-grid-label">Last activity</span>
+            <span class="modal-grid-val" id="modal-view-activity">--</span>
+          </div>
+          <div>
+            <span class="modal-grid-label">Processed by</span>
+            <span class="modal-grid-val" id="modal-view-processed">--</span>
+          </div>
+        </div>
+
+        <div id="modal-view-restoration-box" class="admin-modal-blue-box" hidden>
+          <div class="admin-modal-blue-box__title">Restoration</div>
+          <div class="admin-modal-blue-box__text" id="modal-view-restoration-text">Account restored on...</div>
+        </div>
+
+        <div id="modal-view-admin-note" class="admin-modal-gray-box" hidden>
+          <div class="admin-modal-gray-box__title">Admin note</div>
+          <div class="admin-modal-gray-box__text" id="modal-view-admin-note-text">No note</div>
+        </div>
+
+        <div class="modal-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Related reports
+        </div>
+        <div id="modal-view-reports" class="modal-list">
+          <!-- Reports injected via JS -->
+        </div>
+
+        <div class="modal-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Recent bookings
+        </div>
+        <div id="modal-view-bookings-list" class="modal-list">
+          <!-- Bookings injected via JS -->
+        </div>
+
+        <div class="admin-modal__actions--left">
+          <button type="button" class="btn-admin btn-admin--warning" id="btn-show-warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align: text-bottom; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Issue warning
+          </button>
+          <button type="button" class="btn-admin btn-admin--danger" id="btn-show-suspend">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align: text-bottom; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            Suspend account
+          </button>
+          <button type="button" class="btn-admin btn-admin--blue" id="btn-show-restore" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+            Restore account
+          </button>
+          <button type="button" class="btn-admin btn-admin--outline" id="btn-show-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Add note
+          </button>
         </div>
       </div>
 
-      <div class="admin-modal-warning" id="modal-warning-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <div>
-          <strong>Important:</strong> 
-          <span id="modal-warning-text">Suspending this user will prevent them from making new bookings. Existing bookings will not be cancelled automatically.</span>
+      <!-- ACTION STATE -->
+      <div id="modal-action-state" hidden>
+        <div class="modal-header-user">
+          <h2 id="modal-action-title">Action Title</h2>
+        </div>
+        <br>
+        <div class="admin-modal-gray-box" style="margin-bottom: var(--sp-5);">
+          <div class="modal-header-user" style="margin-bottom: 2px;">
+            <strong id="modal-action-name" style="font-size: 0.9375rem;">User Name</strong>
+            <span id="modal-action-badge" class="badge">Status</span>
+          </div>
+          <div class="modal-subtitle" id="modal-action-subtitle" style="margin-bottom: 0;">email@example.com - USR-1000</div>
+        </div>
+
+        <div class="effects-list" id="modal-action-effects">
+          Effects of this action
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="admin-reason">Administrative reason / note <span class="required" style="color:red">*</span></label>
+          <textarea id="admin-reason" class="textarea" rows="3" placeholder="Provide a reason for this action..."></textarea>
+        </div>
+
+        <div class="admin-modal__actions--right">
+          <button type="button" class="btn-admin btn-admin--outline" id="btn-cancel-action">Cancel</button>
+          <button type="button" class="btn-admin btn-admin--warning" id="btn-confirm-action">Confirm Action</button>
         </div>
       </div>
-
-      <div class="field">
-        <label class="field__label" for="admin-reason">Reason / Note <span class="field__hint">(Required)</span></label>
-        <textarea id="admin-reason" class="textarea" rows="3" placeholder="Enter administrative note..."></textarea>
-      </div>
-    </div>
-    <div class="admin-modal__actions">
-      <button type="button" class="btn-admin btn-admin--outline" id="modal-cancel">Cancel</button>
-      <button type="button" class="btn-admin btn-admin--danger" id="modal-confirm">Confirm Action</button>
-    </div>
-  </dialog>
+    </dialog>
 
   <!-- Template for User Row -->
   <template id="tpl-user-row">
@@ -152,3 +230,4 @@
   <script type="module" src="js/pages/admin-users.js"></script>
 </body>
 </html>
+
