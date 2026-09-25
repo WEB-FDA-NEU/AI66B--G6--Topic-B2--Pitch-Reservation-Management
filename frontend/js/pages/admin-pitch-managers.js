@@ -5,6 +5,10 @@ let managersData = [...mockManagers];
 let currentPage = 1;
 const itemsPerPage = 6;
 
+
+const searchInput = document.getElementById('manager-search');
+const filterStatus = document.getElementById('filter-status');
+
 const tbody = document.getElementById('managers-tbody');
 const tpl = document.getElementById('tpl-manager-row');
 const modal = document.getElementById('action-modal');
@@ -42,10 +46,10 @@ function renderManagers() {
 
     clone.querySelector('.td-user-name').textContent = mgr.fullName;
     clone.querySelector('.td-user-meta').textContent = `${mgr.email}  ${mgr.id}`;
-    clone.querySelector('.td-pitches').textContent = mgr.managedPitches;
+    clone.querySelector('.td-pitches').textContent = mgr.managedPitchCount;
     // mock some booking & balance data as the template has them
-    clone.querySelector('.td-bookings').textContent = mgr.bookingCount || Math.floor(Math.random() * 50);
-    clone.querySelector('.td-balance').textContent = mgr.balance || '$120.00';
+    clone.querySelector('.td-bookings').textContent = mgr.activeBookingCount || Math.floor(Math.random() * 50);
+    clone.querySelector('.td-balance').textContent = mgr.simulatedBalance || '$120.00';
 
     const badge = clone.querySelector('.badge');
     badge.textContent = mgr.accountStatus;
@@ -111,10 +115,10 @@ let currentManager = null;
     
     document.getElementById('modal-view-subtitle').textContent = mgr.email + ' · ' + mgr.id;
     
-    document.getElementById('modal-view-pitches').textContent = mgr.managedPitches || 0;
-    document.getElementById('modal-view-bookings').textContent = mgr.activeBookings || 0;
+    document.getElementById('modal-view-pitches').textContent = mgr.managedPitchCount || 0;
+    document.getElementById('modal-view-bookings').textContent = mgr.activeBookingCount || 0;
     document.getElementById('modal-view-warnings').textContent = mgr.warnings || 0;
-    document.getElementById('modal-view-balance').textContent = mgr.balance || '$0';
+    document.getElementById('modal-view-balance').textContent = mgr.simulatedBalance || '$0';
 
     // Show view state, hide action state
     viewState.hidden = false;
