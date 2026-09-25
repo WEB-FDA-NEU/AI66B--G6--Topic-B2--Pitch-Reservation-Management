@@ -6,7 +6,7 @@
   <title>Activity Log - Admin | Pitch Point</title>
   
   <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/admin-activity-log.css">
@@ -18,14 +18,14 @@
   <main class="admin-main">
     
     <header class="admin-header-hero">
-      <div class="admin-hero-content">
-        <div class="admin-hero-breadcrumbs">ADMINISTRATION / S34</div>
-        <h1 class="admin-hero-title">Activity Log</h1>
-        <p class="admin-hero-desc">A read-only audit history of important system actions.</p>
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S34</p>
+        <h1 class="admin-header-hero__title">Activity Log</h1>
+        <p class="admin-header-hero__desc">A read-only audit history of important system actions.</p>
         
         <div class="admin-hero-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="searchInput" placeholder="Search by actor, action, target...">
+          <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" class="admin-hero-search__input" id="searchInput" placeholder="Search by actor, action, target...">
         </div>
       </div>
     </header>

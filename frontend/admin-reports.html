@@ -6,7 +6,7 @@
   <title>Report Management - Admin | Pitch Point</title>
   
   <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/admin-reports.css">
@@ -20,14 +20,14 @@
     
     <!-- Hero Header -->
     <header class="admin-header-hero">
-      <div class="admin-hero-content">
-        <div class="admin-hero-breadcrumbs">ADMINISTRATION / S31</div>
-        <h1 class="admin-hero-title">Report Management</h1>
-        <p class="admin-hero-desc">Review, investigate, and resolve reports submitted by users and managers.</p>
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S31</p>
+        <h1 class="admin-header-hero__title">Report Management</h1>
+        <p class="admin-header-hero__desc">Review, investigate, and resolve reports submitted by users and managers.</p>
         
         <div class="admin-hero-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="searchInput" placeholder="Search by ID, summary, reporter...">
+          <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" class="admin-hero-search__input" id="searchInput" placeholder="Search by ID, summary, reporter...">
         </div>
       </div>
     </header>
