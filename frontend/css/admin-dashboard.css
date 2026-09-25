@@ -128,7 +128,7 @@ body.admin-body {
 }
 
 .admin-header-hero__content {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -203,7 +203,7 @@ body.admin-body {
 
 /* The White Board */
 .admin-board {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: -80px auto 40px; /* Overlap the green header */
   background: var(--c-bg);
   border-radius: var(--radius);

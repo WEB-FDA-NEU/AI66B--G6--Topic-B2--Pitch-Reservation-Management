@@ -3,128 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Không tìm thấy trang — Pitch Point</title>
+  <title>404 Thẻ đỏ — Pitch Point</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <style>
-    .not-found-page {
+    body {
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      background: #f8f9fa; /* Light grey/white background */
+      font-family: var(--font);
       text-align: center;
-      background: var(--c-surface);
-      position: relative;
-      overflow: hidden;
     }
 
-    /* Abstract shapes for background effect */
-    .not-found-page::before,
-    .not-found-page::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      background: var(--c-primary);
-      opacity: 0.05;
-      z-index: 0;
-    }
-
-    .not-found-page::before {
+    .not-found-image {
+      max-width: 100%;
       width: 600px;
-      height: 600px;
-      top: -200px;
-      left: -200px;
-      animation: float 10s ease-in-out infinite alternate;
-    }
-
-    .not-found-page::after {
-      width: 400px;
-      height: 400px;
-      bottom: -100px;
-      right: -100px;
-      animation: float 8s ease-in-out infinite alternate-reverse;
-      background: var(--c-accent);
-      opacity: 0.1;
-    }
-
-    @keyframes float {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(50px, 30px) rotate(15deg); }
-    }
-
-    .not-found-content {
-      position: relative;
-      z-index: 1;
-      background: var(--c-bg);
-      padding: var(--sp-7);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      max-width: 500px;
-      width: 90%;
-      border: 1px solid var(--c-border);
-    }
-
-    .not-found__code {
-      font-size: clamp(6rem, 15vw, 10rem);
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--c-primary), var(--c-accent-d));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      height: auto;
       margin-bottom: var(--sp-4);
-      letter-spacing: -0.05em;
+      object-fit: contain;
     }
 
-    .not-found__title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--c-text);
+    .not-found-title {
+      font-size: 2rem;
+      font-weight: 800;
+      font-style: italic;
+      color: #111;
       margin-bottom: var(--sp-2);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
 
-    .not-found__desc {
-      color: var(--c-muted);
-      margin-bottom: var(--sp-5);
-      line-height: 1.6;
+    .not-found-desc {
+      font-size: 1.125rem;
+      color: #444;
+      margin-bottom: var(--sp-6);
     }
 
-    .not-found__action {
+    .btn-return {
       display: inline-flex;
       align-items: center;
-      gap: var(--sp-2);
-      padding: var(--sp-3) var(--sp-5);
+      gap: 8px;
+      background-color: #d32f2f; /* Red matching the card */
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
       font-size: 1.125rem;
-      border-radius: 50px; /* Pill shape for action */
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: background-color 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
     }
 
-    .not-found__action:hover {
+    .btn-return:hover {
+      background-color: #b71c1c;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(184, 242, 59, 0.4);
     }
 
-    .not-found__icon {
+    .btn-return svg {
       width: 20px;
       height: 20px;
+      fill: currentColor;
     }
   </style>
 </head>
 <body>
-  <main class="not-found-page">
-    <div class="not-found-content">
-      <div class="not-found__code">404</div>
-      <h1 class="not-found__title">Không tìm thấy trang</h1>
-      <p class="not-found__desc">Rất tiếc, trang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời không thể truy cập.</p>
-      <a href="index.html" class="btn btn--primary not-found__action">
-        <svg class="not-found__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Quay lại Trang chủ
-      </a>
-    </div>
-  </main>
+
+  <img src="img/404-referee.png" alt="Trọng tài giơ thẻ đỏ 404" class="not-found-image">
+  
+  <h1 class="not-found-title">404 - THẺ ĐỎ TRỰC TIẾP!</h1>
+  <p class="not-found-desc">Trang web này đã bị truất quyền thi đấu khỏi hệ thống. Vui lòng rời sân.</p>
+
+  <button class="btn-return" onclick="history.back()">
+    <!-- Whistle or back icon -->
+    <svg viewBox="0 0 24 24">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+    </svg>
+    Về phòng thay đồ
+  </button>
+
 </body>
 </html>
