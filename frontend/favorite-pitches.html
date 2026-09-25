@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Danh sách sân bóng yêu thích của bạn trên Pitch Point.">
+  <title>Sân yêu thích — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/favorite-pitches.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <main class="container favorite-page" id="main-content" hidden>
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="index.html">Trang chủ</a></li>
+        <li aria-current="page">Sân yêu thích</li>
+      </ol>
+    </nav>
+
+    <header class="toolbar favorite-header">
+      <div>
+        <h1 id="page-title">Sân bóng yêu thích</h1>
+        <p class="toolbar__count" id="favorite-count">Đang tải...</p>
+      </div>
+    </header>
+
+    <div class="grid search-pitch-grid" id="favorite-list">
+      <!-- JS sẽ đổ danh sách sân yêu thích vào đây -->
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <!-- Template thẻ sân bóng -->
+  <template id="tpl-card">
+    <article class="card search-pitch-card">
+      <button class="card__favorite is-active" type="button" title="Bỏ yêu thích">
+        <span aria-hidden="true">♥</span>
+      </button>
+
+      <a class="card__link">
+        <img class="card__img" src="" alt="" loading="lazy">
+        <div class="card__body">
+          <div class="card__heading">
+            <h3 class="card__title"></h3>
+            <p class="card__rating" aria-label="Điểm đánh giá"></p>
+          </div>
+          <p class="card__meta"></p>
+          <p class="card__type"></p>
+          <p class="card__price"></p>
+          <span class="card__action">Xem chi tiết</span>
+        </div>
+      </a>
+      <span class="card__badge"></span>
+    </article>
+  </template>
+
+  <!-- Template khi danh sách trống -->
+  <template id="tpl-empty-state">
+    <div class="empty">
+      <p class="empty__title">Chưa có sân bóng nào</p>
+      <p class="empty__hint">Bạn chưa thêm sân bóng nào vào danh sách yêu thích.</p>
+      <a href="search.html" class="btn btn--primary empty__action">Khám phá ngay</a>
+    </div>
+  </template>
+
+  <script type="module" src="js/pages/favorite-pitches.js"></script>
+</body>
+</html>

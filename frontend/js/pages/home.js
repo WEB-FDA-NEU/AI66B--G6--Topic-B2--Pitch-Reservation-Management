@@ -1,255 +1,136 @@
-import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
-import '../components/site-header.js';
-import '../components/site-footer.js';
+﻿import { MOCK_PITCHES, formatPitchPrice } from "../data/pitches.js";
+import "../components/site-header.js";
+import "../components/site-footer.js";
 
 const elements = {
-  form: document.getElementById('quick-search-form'),
-  dateButton: document.getElementById('date-picker-button'),
-  datePanel: document.getElementById('date-picker-panel'),
-  dateValue: document.getElementById('date-picker-value'),
-  dateInput: document.getElementById('search-date'),
-  calendarMonth: document.getElementById('calendar-month'),
-  calendarDays: document.getElementById('calendar-days'),
-  timeButton: document.getElementById('time-picker-button'),
-  timePanel: document.getElementById('time-picker-panel'),
-  timeValue: document.getElementById('time-picker-value'),
-  timeInput: document.getElementById('search-time'),
-  results: document.getElementById('results'),
-  resultSummary: document.getElementById('result-summary'),
-  messageBubble: document.querySelector('.message-bubble'),
-  quickSearch: document.getElementById('quick-search'),
-  featuredSection: document.getElementById('results')?.closest('section'),
-  footer: document.querySelector('site-footer'),
+  form: document.getElementById("quick-search-form"),
+  dateButton: document.getElementById("date-picker-button"),
+  datePanel: document.getElementById("date-picker-panel"),
+  dateValue: document.getElementById("date-picker-value"),
+  dateInput: document.getElementById("search-date"),
+  calendarMonth: document.getElementById("calendar-month"),
+  calendarDays: document.getElementById("calendar-days"),
+  timeButton: document.getElementById("time-picker-button"),
+  timePanel: document.getElementById("time-picker-panel"),
+  timeValue: document.getElementById("time-picker-value"),
+  timeInput: document.getElementById("search-time"),
+  results: document.getElementById("results"),
+  resultSummary: document.getElementById("result-summary"),
+  messageBubble: document.querySelector(".message-bubble"),
+  quickSearch: document.getElementById("quick-search"),
 };
 
-const today = startOfDay(new Date());
-let visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 let selectedDate = null;
+let selectedTime = "";
 
-function startOfDay(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
+function togglePanel(panel, button) {
+  const isExpanded = button.getAttribute("aria-expanded") === "true";
+  
+  if (elements.datePanel) elements.datePanel.hidden = true;
+  if (elements.timePanel) elements.timePanel.hidden = true;
+  if (elements.dateButton) elements.dateButton.setAttribute("aria-expanded", "false");
+  if (elements.timeButton) elements.timeButton.setAttribute("aria-expanded", "false");
 
-function toDateValue(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function closePickers(except = null) {
-  [[elements.dateButton, elements.datePanel], [elements.timeButton, elements.timePanel]]
-    .forEach(([button, panel]) => {
-      if (!button || !panel || panel === except) return;
-      panel.hidden = true;
-      button.setAttribute('aria-expanded', 'false');
-    });
-}
-
-function togglePicker(button, panel) {
-  if (!button || !panel) return;
-  const willOpen = panel.hidden;
-  closePickers(panel);
-  panel.hidden = !willOpen;
-  button.setAttribute('aria-expanded', String(willOpen));
-}
-
-function renderCalendar() {
-  if (!elements.calendarDays || !elements.calendarMonth) return;
-
-  elements.calendarMonth.textContent = new Intl.DateTimeFormat('vi-VN', {
-    month: 'long',
-    year: 'numeric',
-  }).format(visibleMonth);
-
-  const monthStart = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
-  const mondayOffset = (monthStart.getDay() + 6) % 7;
-  const gridStart = new Date(monthStart);
-  gridStart.setDate(monthStart.getDate() - mondayOffset);
-
-  const fragment = document.createDocumentFragment();
-  for (let index = 0; index < 42; index += 1) {
-    const date = new Date(gridStart);
-    date.setDate(gridStart.getDate() + index);
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = String(date.getDate());
-    button.dataset.date = toDateValue(date);
-    button.setAttribute('role', 'gridcell');
-    button.setAttribute('aria-label', new Intl.DateTimeFormat('vi-VN', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }).format(date));
-
-    const isOutsideMonth = date.getMonth() !== visibleMonth.getMonth();
-    const isPast = startOfDay(date) < today;
-    const isSelected = selectedDate && toDateValue(date) === toDateValue(selectedDate);
-    if (isOutsideMonth) button.classList.add('is-outside-month');
-    if (isSelected) {
-      button.classList.add('is-selected');
-      button.setAttribute('aria-selected', 'true');
-    }
-    button.disabled = isPast;
-    button.addEventListener('click', () => selectDate(date));
-    fragment.append(button);
-  }
-
-  elements.calendarDays.replaceChildren(fragment);
-  const previousButton = elements.datePanel?.querySelector('[data-calendar-action="previous"]');
-  if (previousButton) {
-    previousButton.disabled = visibleMonth.getFullYear() === today.getFullYear()
-      && visibleMonth.getMonth() === today.getMonth();
+  if (!isExpanded) {
+    if (panel) panel.hidden = false;
+    if (button) button.setAttribute("aria-expanded", "true");
   }
 }
 
-function selectDate(date) {
-  selectedDate = startOfDay(date);
-  visibleMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-  if (elements.dateInput) elements.dateInput.value = toDateValue(date);
-  if (elements.dateValue) {
-    elements.dateValue.textContent = new Intl.DateTimeFormat('vi-VN', {
-      weekday: 'short',
-      day: '2-digit',
-      month: '2-digit',
-    }).format(date);
+function getFavorites() {
+  return JSON.parse(localStorage.getItem('app_favorites') || '[1, 3, 4, 7]');
+}
+function toggleFavorite(id, btn) {
+  let favs = getFavorites();
+  if (favs.includes(id)) {
+    favs = favs.filter(f => f !== id);
+    btn.classList.remove('is-active');
+  } else {
+    favs.push(id);
+    btn.classList.add('is-active');
   }
-  renderCalendar();
-  closePickers();
-  elements.dateButton?.focus();
+  localStorage.setItem('app_favorites', JSON.stringify(favs));
 }
 
-function changeMonth(offset) {
-  visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + offset, 1);
-  const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  if (visibleMonth < currentMonth) visibleMonth = currentMonth;
-  renderCalendar();
-}
+function renderPitches() {
+  const grid = elements.results;
+  const template = document.getElementById("tpl-card");
+  if (!grid || !template) return;
 
-function selectTime(button) {
-  const value = button.dataset.time;
-  if (!value || !elements.timePanel) return;
+  const favs = getFavorites();
 
-  elements.timePanel.querySelectorAll('[data-time]').forEach(slot => {
-    const active = slot === button;
-    slot.classList.toggle('is-selected', active);
-    slot.setAttribute('aria-pressed', String(active));
-  });
-  if (elements.timeInput) elements.timeInput.value = value;
-  if (elements.timeValue) elements.timeValue.textContent = value;
-  closePickers();
-  elements.timeButton?.focus();
-}
-
-function renderFeaturedPitches() {
-  if (!elements.results || !elements.resultSummary) return;
-  const template = document.getElementById('tpl-card');
-  const emptyTemplate = document.getElementById('tpl-empty-state');
-  if (!template || !emptyTemplate) return;
-
-  // Lọc ra các sân được đánh dấu featured (nổi bật) từ file data dùng chung
-  const items = MOCK_PITCHES.filter(p => p.featured);
-
-  if (items.length === 0) {
-    elements.results.replaceChildren(emptyTemplate.content.cloneNode(true));
-    elements.resultSummary.textContent = 'Chưa có sân mẫu để hiển thị.';
-    elements.results.setAttribute('aria-busy', 'false');
-    return;
-  }
-
-  const cards = items.map(pitch => {
+  const cards = MOCK_PITCHES.slice(0, 4).map(pitch => {
     const node = template.content.cloneNode(true);
-    const link = node.querySelector('.card__link');
-    const image = node.querySelector('.card__img');
-    const favoriteButton = node.querySelector('.card__favorite');
-    const rating = node.querySelector('.card__rating');
+    const link = node.querySelector(".card__link");
+    const image = node.querySelector(".card__img");
+    const rating = node.querySelector(".card__rating");
+    const favoriteButton = node.querySelector(".card__favorite");
 
-    // Thiết lập đường dẫn sang trang S03 (Chi tiết sân) kèm tham số chuẩn pitchId (IC-02)
     link.href = `pitch-detail.html?pitchId=${pitch.id}`;
-    link.setAttribute('aria-label', `Xem chi tiết ${pitch.name}`);
-    
-    image.src = pitch.image;
+    link.setAttribute("aria-label", `Xem chi tiết ${pitch.name}`);
+    image.src = pitch.image || "img/placeholder.svg";
     image.alt = `Hình ảnh minh họa ${pitch.name}`;
-    
-    node.querySelector('.card__title').textContent = pitch.name;
-    node.querySelector('.card__meta').textContent = pitch.location;
-    node.querySelector('.card__type').textContent = pitch.typeLabel;
-    node.querySelector('.card__price').textContent = formatPitchPrice(pitch.price);
-    
+
+    node.querySelector(".card__title").textContent = pitch.name;
+    node.querySelector(".card__meta").textContent = pitch.location;
+    node.querySelector(".card__type").textContent = pitch.typeLabel;
+    node.querySelector(".card__price").textContent = formatPitchPrice(pitch.price);
+
     rating.textContent = `★ ${pitch.rating.toFixed(1)}`;
-    rating.setAttribute('aria-label', `${pitch.rating.toFixed(1)} trên 5 sao`);
+    rating.setAttribute("aria-label", `${pitch.rating.toFixed(1)} trên 5 sao`);
+
+    const badge = node.querySelector(".card__badge");
+    if (pitch.badge) badge.textContent = pitch.badge;
+    else badge.hidden = true;
+
+    if (favs.includes(pitch.id)) {
+      favoriteButton.classList.add('is-active');
+    }
     
-    node.querySelector('.card__badge').textContent = pitch.badge;
-    favoriteButton.setAttribute('aria-label', `Thêm ${pitch.name} vào danh sách yêu thích`);
-    
+    favoriteButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleFavorite(pitch.id, favoriteButton);
+    });
+
     return node;
   });
 
-  elements.results.replaceChildren(...cards);
-  elements.resultSummary.textContent = `${items.length} sân nổi bật được đề xuất cho bạn.`;
-  elements.results.setAttribute('aria-busy', 'false');
+  grid.replaceChildren(...cards);
+  
+  if (elements.resultSummary) {
+    elements.resultSummary.textContent = "Các sân bóng được đánh giá cao nhất trong tuần.";
+  }
+  grid.removeAttribute("aria-busy");
 }
 
-function protectMobileControlsFromMessageBubble() {
-  if (!elements.messageBubble || !('IntersectionObserver' in window)) return;
-  const media = matchMedia('(max-width: 560px)');
-  const visibleTargets = new Set();
-  const update = () => {
-    elements.messageBubble.classList.toggle('is-suppressed', media.matches && visibleTargets.size > 0);
-  };
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) visibleTargets.add(entry.target);
-      else visibleTargets.delete(entry.target);
+function init() {
+  if (elements.dateButton) {
+    elements.dateButton.addEventListener("click", () => togglePanel(elements.datePanel, elements.dateButton));
+  }
+  if (elements.timeButton) {
+    elements.timeButton.addEventListener("click", () => togglePanel(elements.timePanel, elements.timeButton));
+  }
+  
+  if (elements.form) {
+    elements.form.addEventListener("submit", (e) => {
+      if (!elements.dateInput.value) {
+        e.preventDefault();
+        alert("Vui lòng chọn ngày đá!");
+      }
     });
-    update();
-  }, { threshold: 0.08 });
+  }
 
-  [elements.quickSearch, elements.featuredSection, elements.footer]
-    .filter(Boolean)
-    .forEach(target => observer.observe(target));
-  media.addEventListener('change', update);
+  document.addEventListener("click", (e) => {
+    const isClickInside = e.target.closest(".picker");
+    if (!isClickInside) {
+      if (elements.datePanel) elements.datePanel.hidden = true;
+      if (elements.timePanel) elements.timePanel.hidden = true;
+      if (elements.dateButton) elements.dateButton.setAttribute("aria-expanded", "false");
+      if (elements.timeButton) elements.timeButton.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  renderPitches();
 }
 
-function bindEvents() {
-  elements.dateButton?.addEventListener('click', () => togglePicker(elements.dateButton, elements.datePanel));
-  elements.timeButton?.addEventListener('click', () => togglePicker(elements.timeButton, elements.timePanel));
-  elements.datePanel?.querySelector('[data-calendar-action="previous"]')
-    ?.addEventListener('click', () => changeMonth(-1));
-  elements.datePanel?.querySelector('[data-calendar-action="next"]')
-    ?.addEventListener('click', () => changeMonth(1));
-
-  elements.timePanel?.querySelectorAll('[data-time]').forEach(button => {
-    button.setAttribute('aria-pressed', 'false');
-    button.addEventListener('click', () => selectTime(button));
-  });
-
-  // Ghi chú: Xóa e.preventDefault() ở đây để form submit tự nhiên bằng GET url params sang search.html
-
-  document.addEventListener('click', event => {
-    const target = event.target;
-    if (!(target instanceof Element)) return;
-
-    const clickedPicker = elements.datePanel?.contains(target)
-      || elements.dateButton?.contains(target)
-      || elements.timePanel?.contains(target)
-      || elements.timeButton?.contains(target);
-    if (!clickedPicker) closePickers();
-  });
-
-  document.addEventListener('keydown', event => {
-    if (event.key !== 'Escape') return;
-    const dateWasOpen = elements.datePanel && !elements.datePanel.hidden;
-    const timeWasOpen = elements.timePanel && !elements.timePanel.hidden;
-    closePickers();
-    if (dateWasOpen) elements.dateButton?.focus();
-    if (timeWasOpen) elements.timeButton?.focus();
-  });
-}
-
-renderCalendar();
-renderFeaturedPitches();
-protectMobileControlsFromMessageBubble();
-bindEvents();
+init();
