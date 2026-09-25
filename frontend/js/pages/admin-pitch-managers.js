@@ -126,16 +126,9 @@ let currentManager = null;
   function closeModal() {
     modal.close();
     currentManager = null;
-    reasonInput.value = '';
-    btnActionConfirm.disabled = true;
+    if(reasonInput) reasonInput.value = '';
+    if(btnActionConfirm) btnActionConfirm.disabled = true;
   }
-
-  const modalClose = document.getElementById('modal-close');
-  if(modalClose) modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
 
   function switchToActionState(action, title, effectsHtml, btnClass) {
     currentActionType = action;
@@ -162,70 +155,25 @@ let currentManager = null;
     actionState.hidden = false;
   }
 
-  // Event Listeners for switching states
-  if (btnGotoWarn) {
-    btnGotoWarn.addEventListener('click', () => {
-      switchToActionState('warning', 'Issue warning', 'A warning will be recorded on this manager account. The manager will be notified.', 'btn-admin--warning');
-      btnActionConfirm.style.background = '#f59e0b';
-      btnActionConfirm.style.color = 'white';
-      btnActionConfirm.style.border = 'none';
-    });
-  }
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase();
+  const status = filterStatus.value;
+
+  managersData = mockManagers.filter(m => {
+    const matchQ = !query || 
+      m.fullName.toLowerCase().includes(query) || 
+      m.email.toLowerCase().includes(query) ||
+      m.id.toLowerCase().includes(query);
+    const matchS = status === 'all' || m.accountStatus.toLowerCase() === status;
+    return matchQ && matchS;
+  });
   
-  if (btnGotoSuspend) {
-    btnGotoSuspend.addEventListener('click', () => {
-      switchToActionState('suspend', 'Suspend manager', 'When a manager is suspended:<br>• Management access is restricted<br>• Associated pitches stop accepting new bookings<br>• Existing confirmed bookings remain valid while under review<br>• Bookings that cannot be fulfilled may require Admin cancellation and refund processing<br>• Existing simulated balance and historical financial records remain preserved<br>• Eligible managers may later be restored', 'btn-admin--danger');
-      btnActionConfirm.style.background = ''; // reset to danger class defaults
-      btnActionConfirm.style.color = '';
-    });
-  }
+  currentPage = 1;
+  renderManagers();
+}
 
-  if (btnGotoNote) {
-    btnGotoNote.addEventListener('click', () => {
-      switchToActionState('note', 'Add note', 'An internal administrative note will be added to this profile. The manager will not be notified.', 'btn-admin--primary');
-      btnActionConfirm.style.background = '';
-      btnActionConfirm.style.color = '';
-    });
-  }
-
-  if (btnActionCancel) {
-    btnActionCancel.addEventListener('click', () => {
-      // Go back to view state
-      viewState.hidden = false;
-      actionState.hidden = true;
-    });
-  }
-
-  if (reasonInput) {
-    reasonInput.addEventListener('input', () => {
-      btnActionConfirm.disabled = reasonInput.value.trim().length === 0;
-    });
-  }
-
-  if (btnActionConfirm) {
-    btnActionConfirm.addEventListener('click', () => {
-      if (btnActionConfirm.disabled) return;
-      
-      // Execute mock action
-      if (currentActionType === 'suspend') {
-        currentManager.accountStatus = 'Suspended';
-      } else if (currentActionType === 'warning') {
-        currentManager.accountStatus = 'Warned';
-        currentManager.warnings = (currentManager.warnings || 0) + 1;
-      }
-      
-      // Fake API delay
-      const originalText = btnActionConfirm.textContent;
-      btnActionConfirm.textContent = 'Processing...';
-      setTimeout(() => {
-        btnActionConfirm.textContent = originalText;
-        closeModal();
-        renderManagers();
-      }, 600);
-    });
-  }
-
-  if (searchInput) searchInput.addEventListener('input', applyFilters);
+if (searchInput) searchInput.addEventListener('input', applyFilters);
 if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
 document.addEventListener('DOMContentLoaded', () => {
