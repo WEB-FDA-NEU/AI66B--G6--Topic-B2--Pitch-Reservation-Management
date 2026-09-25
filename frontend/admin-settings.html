@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Settings — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-settings.css">
+</head>
+<body>
+  <admin-sidebar current-page="settings"></admin-sidebar>
+
+  <main class="admin-main admin-settings-page">
+    <header class="admin-header-hero">
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S35</p>
+        <h1 class="admin-header-hero__title">Admin Settings</h1>
+        <p class="admin-header-hero__desc">Manage your preferences and permitted system-level configurations.</p>
+      </div>
+    </header>
+
+    <div class="admin-board">
+      <div class="admin-tabs-container" style="border-bottom: 1px solid var(--c-border); padding-bottom: 16px;">
+        <div class="admin-tabs-pill">
+          <button type="button" class="admin-tab-pill active" id="tab-profile">Administrative profile</button>
+          <button type="button" class="admin-tab-pill" id="tab-notifications">Notification preferences</button>
+          <button type="button" class="admin-tab-pill" id="tab-security">Security preferences</button>
+          <button type="button" class="admin-tab-pill" id="tab-moderation">Moderation preferences</button>
+          <button type="button" class="admin-tab-pill" id="tab-system">System configuration</button>
+        </div>
+      </div>
+
+      <div class="settings-content" style="padding: 32px 24px;">
+        <form id="settings-form">
+          <!-- Profile Section -->
+          <div id="sec-profile" class="settings-section">
+            <h2 style="font-size: 1.25rem; margin-bottom: 24px;">Administrative profile</h2>
+            <div style="display:flex; gap: 24px; align-items: flex-start;">
+              <div style="width: 100px; height: 100px; background: var(--c-bg-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--c-border);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--c-muted)" stroke-width="2" width="32" height="32"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:16px; max-width: 400px;">
+                <div class="form-group">
+                  <label>Administrator name</label>
+                  <input type="text" class="form-control" value="Super Admin" required>
+                </div>
+                <div class="form-group">
+                  <label>Email address</label>
+                  <input type="email" class="form-control" value="admin@pitchpoint.com" required>
+                </div>
+                <div class="form-group">
+                  <label>Preferred language</label>
+                  <select class="form-control">
+                    <option value="vi">Vietnamese (vi)</option>
+                    <option value="en">English (en)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications Section -->
+          <div id="sec-notifications" class="settings-section" hidden>
+            <h2 style="font-size: 1.25rem; margin-bottom: 24px;">Notification preferences</h2>
+            <div style="display:flex; flex-direction:column; gap:16px; max-width: 500px;">
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> New report notifications
+              </label>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> Enforcement result notifications
+              </label>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox"> Refund-related notifications
+              </label>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> Important system alerts
+              </label>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox"> Announcement status notifications
+              </label>
+            </div>
+          </div>
+
+          <!-- Security Section -->
+          <div id="sec-security" class="settings-section" hidden>
+            <h2 style="font-size: 1.25rem; margin-bottom: 24px;">Security preferences</h2>
+            <div style="max-width: 400px; display:flex; flex-direction:column; gap:24px;">
+              <div>
+                <h3 style="font-size: 1rem; margin-bottom:12px;">Change Password</h3>
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label>Current password</label>
+                  <input type="password" class="form-control">
+                </div>
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label>New password</label>
+                  <input type="password" class="form-control">
+                </div>
+                <button type="button" class="btn-admin btn-admin--primary">Update password</button>
+              </div>
+              <hr style="border:none; border-top:1px solid var(--c-border);">
+              <div>
+                <h3 style="font-size: 1rem; margin-bottom:12px;">Active Sessions</h3>
+                <p style="font-size:0.875rem; color:var(--c-muted); margin-bottom:12px;">You are currently logged in on Windows (Chrome) at 192.168.1.1.</p>
+                <div style="display:flex; gap:12px;">
+                  <button type="button" class="btn-admin btn-admin--neutral">Logout current session</button>
+                  <button type="button" class="btn-admin btn-admin--danger">Logout other sessions</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Moderation Section -->
+          <div id="sec-moderation" class="settings-section" hidden>
+            <h2 style="font-size: 1.25rem; margin-bottom: 24px;">Moderation preferences</h2>
+            <div style="max-width: 400px; display:flex; flex-direction:column; gap:16px;">
+              <div class="form-group">
+                <label>Default report priority</label>
+                <select class="form-control">
+                  <option value="Low">Low</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> Require confirmation before suspension
+              </label>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> Require confirmation before report resolution
+              </label>
+              <div class="form-group" style="margin-top:16px;">
+                <label>Activity-log display preferences</label>
+                <select class="form-control">
+                  <option value="Detailed">Detailed view</option>
+                  <option value="Compact">Compact view</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Default table page size</label>
+                <select class="form-control">
+                  <option value="10">10 rows</option>
+                  <option value="25" selected>25 rows</option>
+                  <option value="50">50 rows</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Configuration Section -->
+          <div id="sec-system" class="settings-section" hidden>
+            <h2 style="font-size: 1.25rem; margin-bottom: 24px;">System configuration</h2>
+            <div style="max-width: 400px; display:flex; flex-direction:column; gap:16px;">
+              <div class="form-group">
+                <label>Initial simulated user balance (VND)</label>
+                <input type="number" class="form-control" value="0">
+              </div>
+              <div class="form-group">
+                <label>Default display language</label>
+                <select class="form-control">
+                  <option value="vi">Vietnamese (vi)</option>
+                  <option value="en">English (en)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Date and time format</label>
+                <select class="form-control">
+                  <option value="DD/MM/YYYY">DD/MM/YYYY (24h)</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY (12h)</option>
+                </select>
+              </div>
+              <label style="display:flex; align-items:center; gap:12px;">
+                <input type="checkbox" checked> Enable general booking display preferences
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--c-border); display: flex; gap: 12px; justify-content: flex-end;">
+            <span id="save-status" style="align-self:center; font-size:0.875rem; color:var(--c-muted); margin-right:16px;" hidden>Saving...</span>
+            <button type="button" class="btn-admin btn-admin--neutral" id="btn-cancel">Discard changes</button>
+            <button type="submit" class="btn-admin btn-admin--primary" id="btn-save">Save settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/components/admin-sidebar.js"></script>
+  <script type="module" src="js/pages/admin-settings.js"></script>
+</body>
+</html>

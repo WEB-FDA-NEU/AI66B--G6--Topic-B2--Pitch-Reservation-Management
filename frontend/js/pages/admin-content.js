@@ -99,8 +99,19 @@ function renderBanners() {
     
     clone.querySelector('.td-date').textContent = `${banner.startDate} — ${banner.endDate}`;
     
+    
     const tr = clone.querySelector('tr');
-    tr.addEventListener('click', () => openBannerModal(banner));
+    // We bind specifically to action buttons now to avoid conflicts
+    clone.querySelector('.btn-edit').addEventListener('click', () => openBannerModal(banner));
+    clone.querySelector('.btn-preview').addEventListener('click', () => openPreview(banner, 'banner'));
+    clone.querySelector('.btn-toggle').addEventListener('click', () => toggleStatus(banner, 'banner'));
+    
+    const btnDelete = clone.querySelector('.btn-delete');
+    if (banner.status === 'Draft') {
+      btnDelete.style.display = 'inline-flex';
+      btnDelete.addEventListener('click', () => deleteItem(banner, 'banner'));
+    }
+
     
     tbodyBanners.appendChild(clone);
   });
@@ -129,8 +140,18 @@ function renderAnnouncements() {
     
     clone.querySelector('.td-date').textContent = ann.publishedDate;
     
+    
     const tr = clone.querySelector('tr');
-    tr.addEventListener('click', () => openAnnModal(ann));
+    clone.querySelector('.btn-edit').addEventListener('click', () => openAnnModal(ann));
+    clone.querySelector('.btn-preview').addEventListener('click', () => openPreview(ann, 'ann'));
+    clone.querySelector('.btn-toggle').addEventListener('click', () => toggleStatus(ann, 'ann'));
+    
+    const btnDelete = clone.querySelector('.btn-delete');
+    if (ann.status === 'Draft' || ann.status === 'Scheduled') {
+      btnDelete.style.display = 'inline-flex';
+      btnDelete.addEventListener('click', () => deleteItem(ann, 'ann'));
+    }
+
     
     tbodyAnnouncements.appendChild(clone);
   });
@@ -236,4 +257,60 @@ function openAnnModal(ann = null) {
 
 function closeAnnModal() {
   annModal.close();
+}
+
+
+const previewModal = document.getElementById('preview-modal');
+document.getElementById('preview-modal-close')?.addEventListener('click', () => previewModal.close());
+previewModal?.addEventListener('click', (e) => { if (e.target === previewModal) previewModal.close(); });
+
+function openPreview(item, type) {
+  document.getElementById('preview-status').textContent = item.status;
+  document.getElementById('preview-status').className = 'badge ' + item.statusClass;
+  document.getElementById('preview-title').textContent = item.title;
+  document.getElementById('preview-desc').textContent = type === 'banner' ? item.description : item.content;
+  
+  if (type === 'banner') {
+    document.getElementById('preview-link').textContent = item.link;
+    document.getElementById('preview-link').hidden = false;
+    document.getElementById('preview-meta-label1').textContent = 'Position';
+    document.getElementById('preview-meta-value1').textContent = item.position;
+    document.getElementById('preview-meta-label2').textContent = 'Date range';
+    document.getElementById('preview-meta-value2').textContent = item.startDate + ' — ' + item.endDate;
+  } else {
+    document.getElementById('preview-link').hidden = true;
+    document.getElementById('preview-meta-label1').textContent = 'Audience';
+    document.getElementById('preview-meta-value1').textContent = item.audience;
+    document.getElementById('preview-meta-label2').textContent = 'Published';
+    document.getElementById('preview-meta-value2').textContent = item.publishedDate;
+  }
+  
+  previewModal.showModal();
+}
+
+function deleteItem(item, type) {
+  if (confirm('Are you sure you want to delete this draft?')) {
+    if (type === 'banner') {
+      bannersData = bannersData.filter(b => b.id !== item.id);
+      renderBanners();
+    } else {
+      announcementsData = announcementsData.filter(a => a.id !== item.id);
+      renderAnnouncements();
+    }
+    updatePagination();
+  }
+}
+
+function toggleStatus(item, type) {
+  if (confirm('Are you sure you want to change the status?')) {
+    // Mock toggle
+    if (item.status === 'Active' || item.status === 'Published') {
+      item.status = 'Inactive';
+      item.statusClass = 'badge--neutral';
+    } else {
+      item.status = type === 'banner' ? 'Active' : 'Published';
+      item.statusClass = 'badge--success';
+    }
+    type === 'banner' ? renderBanners() : renderAnnouncements();
+  }
 }
