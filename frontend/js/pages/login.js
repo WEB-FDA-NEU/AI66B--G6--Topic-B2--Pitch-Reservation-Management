@@ -1,7 +1,7 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
 import { login, ApiError } from '../api.js';
-import { saveSession, returnAfterLogin } from '../auth.js';
+import { logout, saveSession, returnAfterLogin } from '../auth.js';
 import { clearFieldErrors, setFieldError } from '../ui.js';
 
 const form = document.getElementById('login-form');
@@ -14,6 +14,11 @@ const spinner = form?.querySelector('.login-form__spinner');
 const errorMessage = document.getElementById('login-error');
 const statusMessage = document.getElementById('login-status');
 const originalSubmitLabel = submitLabel?.textContent ?? 'Đăng nhập';
+const DEMO_ACCOUNTS = {
+  customer: { email: 'customer@pitchpoint.test', password: '123456' },
+  manager: { email: 'manager@pitchpoint.test', password: '123456' },
+  admin: { email: 'admin@pitchpoint.test', password: '123456' },
+};
 
 function setLoading(isLoading) {
   if (submitButton) submitButton.disabled = isLoading;
@@ -41,6 +46,20 @@ function showAuthenticationError(message) {
   errorMessage.textContent = message;
   errorMessage.hidden = false;
 }
+
+document.querySelectorAll('[data-demo-role]').forEach(button => {
+  button.addEventListener('click', () => {
+    const account = DEMO_ACCOUNTS[button.dataset.demoRole];
+    if (!account || !identifier || !password) return;
+    identifier.value = account.email;
+    password.value = account.password;
+    identifier.focus();
+  });
+});
+
+document.getElementById('guest-login')?.addEventListener('click', () => {
+  logout();
+});
 
 passwordToggle?.addEventListener('click', () => {
   if (!password) return;
@@ -70,8 +89,8 @@ form?.addEventListener('submit', async event => {
   if (!password?.value) {
     if (password) setFieldError(password, 'Vui lòng nhập mật khẩu.');
     isValid = false;
-  } else if (password.value.length < 8) {
-    setFieldError(password, 'Mật khẩu cần có ít nhất 8 ký tự.');
+  } else if (password.value.length < 6) {
+    setFieldError(password, 'Mật khẩu cần có ít nhất 6 ký tự.');
     isValid = false;
   }
   if (!isValid) return;
