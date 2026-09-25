@@ -111,8 +111,8 @@ function closeActionModal() {
   modal.close();
 }
 
-btnClose.addEventListener('click', closeActionModal);
-btnCancel.addEventListener('click', closeActionModal);
+if(btnClose) btnClose.addEventListener('click', closeActionModal);
+if(btnCancel) btnCancel.addEventListener('click', closeActionModal);
 modal.addEventListener('click', (e) => {
   if (e.target === modal) modal.close();
 });
@@ -171,3 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+

@@ -88,8 +88,8 @@ let currentManager = null;
 
 function openModal(mgr) {
   currentManager = mgr;
-  document.getElementById('modal-mgr-name').textContent = mgr.fullName;
-  document.getElementById('modal-mgr-status').textContent = mgr.accountStatus;
+  document.getElementById('modal-manager-name').textContent = mgr.fullName;
+  document.getElementById('modal-manager-status').textContent = mgr.accountStatus;
   
   const warningBox = document.getElementById('modal-warning-box');
   const warningText = document.getElementById('modal-warning-text');
@@ -199,4 +199,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 

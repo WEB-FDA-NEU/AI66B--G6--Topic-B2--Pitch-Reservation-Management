@@ -258,6 +258,11 @@
 
 /* Modals */
 .admin-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
   padding: var(--sp-6);
   border: none;
   border-radius: var(--radius);
@@ -407,3 +412,4 @@
 .td-action-btn svg {
   flex-shrink: 0;
 }
+

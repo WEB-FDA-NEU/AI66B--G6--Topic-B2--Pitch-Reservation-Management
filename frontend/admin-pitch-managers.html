@@ -90,43 +90,31 @@
   </main>
 
   <!-- Modal Template for Action -->
-  <dialog id="action-modal" class="admin-modal" aria-labelledby="modal-title">
-    <div class="admin-modal__header">
-      <h2 id="modal-title" class="admin-modal__title">Administrative Action</h2>
-      <button class="admin-modal__close" id="modal-close" aria-label="Đóng">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      <dialog id="action-modal" class="admin-modal admin-modal--lg">
+      <button class="admin-modal__close" id="modal-close" aria-label="Close modal" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
-    </div>
-    <div class="admin-modal__body">
-      <div class="admin-modal-info">
-        <div class="admin-modal-info__row">
-          <span class="admin-modal-info__label">Manager</span>
-          <span class="admin-modal-info__value" id="modal-manager-name">-</span>
-        </div>
-        <div class="admin-modal-info__row">
-          <span class="admin-modal-info__label">Current Status</span>
-          <span class="admin-modal-info__value" id="modal-manager-status">-</span>
-        </div>
+
+      <div class="modal-header-user">
+        <h2 id="modal-manager-name">Manager Name</h2>
+        <span id="modal-manager-status" class="badge">--</span>
       </div>
 
-      <div class="admin-modal-warning" id="modal-warning-box">
+      <div class="admin-modal-warning" id="modal-warning-box" style="margin-top: 16px;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <div>
-          <strong>Important:</strong> 
-          <span id="modal-warning-text">When suspended, associated pitches stop accepting new bookings. Existing bookings remain valid while under review.</span>
-        </div>
+        <span id="modal-warning-text">When suspended, associated pitches stop accepting new bookings.</span>
       </div>
 
-      <div class="field">
-        <label class="field__label" for="admin-reason">Reason / Note <span class="field__hint">(Required)</span></label>
-        <textarea id="admin-reason" class="textarea" rows="3" placeholder="Enter administrative note..."></textarea>
+      <div class="form-group" style="margin-top: 24px;">
+        <label for="admin-reason">Note / Reason <span class="required">*</span></label>
+        <textarea id="admin-reason" class="form-control" rows="3" placeholder="Enter reason for this action..."></textarea>
       </div>
-    </div>
-    <div class="admin-modal__actions">
-      <button type="button" class="btn-admin btn-admin--outline" id="modal-cancel">Cancel</button>
-      <button type="button" class="btn-admin btn-admin--danger" id="modal-confirm">Confirm Action</button>
-    </div>
-  </dialog>
+      
+      <div class="admin-modal__actions--right">
+        <button type="button" class="btn-admin btn-admin--outline" id="modal-cancel">Cancel</button>
+        <button type="button" class="btn-admin btn-admin--danger" id="modal-confirm" disabled>Confirm Action</button>
+      </div>
+    </dialog>
 
   <!-- Template for Manager Row -->
   <template id="tpl-manager-row">
@@ -152,4 +140,5 @@
   <script type="module" src="js/pages/admin-pitch-managers.js"></script>
 </body>
 </html>
+
 
