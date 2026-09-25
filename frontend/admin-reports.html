@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Management - Admin | Pitch Point</title>
+  
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-reports.css">
+</head>
+<body class="admin-users-page">
+
+  <!-- Admin Sidebar Component -->
+  <admin-sidebar current-page="reports"></admin-sidebar>
+
+  <main class="admin-main">
+    
+    <!-- Hero Header -->
+    <header class="admin-header-hero">
+      <div class="admin-hero-content">
+        <div class="admin-hero-breadcrumbs">ADMINISTRATION / S31</div>
+        <h1 class="admin-hero-title">Report Management</h1>
+        <p class="admin-hero-desc">Review, investigate, and resolve reports submitted by users and managers.</p>
+        
+        <div class="admin-hero-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Search by ID, summary, reporter...">
+        </div>
+      </div>
+    </header>
+
+    <!-- Data Board -->
+    <div class="admin-board">
+      
+      <!-- Filters -->
+      <div class="admin-filters">
+        <div class="admin-filters__group">
+          <div class="filter-field">
+            <label for="filterType">Type</label>
+            <select id="filterType">
+              <option value="all">All types</option>
+              <option value="User report">User report</option>
+              <option value="Pitch manager report">Pitch manager report</option>
+              <option value="Pitch report">Pitch report</option>
+              <option value="Booking-related report">Booking-related report</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="filterStatus">Status</label>
+            <select id="filterStatus">
+              <option value="all">All statuses</option>
+              <option value="Submitted">Submitted</option>
+              <option value="Under review">Under review</option>
+              <option value="Investigation required">Investigation required</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Dismissed">Dismissed</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="filterPriority">Priority</label>
+            <select id="filterPriority">
+              <option value="all">All priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-filters__group">
+          <div class="filter-field">
+            <label for="filterReporter">Reporter</label>
+            <input type="text" id="filterReporter" placeholder="Filter by name...">
+          </div>
+          <div class="filter-field">
+            <label for="filterDateFrom">From</label>
+            <input type="date" id="filterDateFrom">
+          </div>
+          <div class="filter-field">
+            <label for="filterDateTo">To</label>
+            <input type="date" id="filterDateTo">
+          </div>
+        </div>
+      </div>
+      
+      <div class="admin-board-meta">
+        <span id="resultCount">0 reports</span>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Report</th>
+              <th>Type</th>
+              <th>Reporter</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Rows rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="admin-empty-state" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+        <h3>No reports found</h3>
+        <p>Try adjusting your search or filters to find what you're looking for.</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="admin-pagination">
+        <button class="btn-page" disabled>&laquo; Prev</button>
+        <button class="btn-page is-active">1</button>
+        <button class="btn-page" disabled>Next &raquo;</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Report Action Modal -->
+  <dialog id="actionModal" class="admin-modal">
+    <div class="admin-modal__content">
+      <div class="admin-modal__header">
+        <h2 class="admin-modal__title">Report Details</h2>
+        <button type="button" class="admin-modal__close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="admin-modal__body">
+        
+        <div class="report-detail-card">
+          <div class="report-meta">
+            <div class="report-meta-item">
+              <span class="report-meta-label">Report ID</span>
+              <span id="modalReportId" class="report-meta-val">--</span>
+            </div>
+            <div class="report-meta-item">
+              <span class="report-meta-label">Status</span>
+              <span id="modalReportStatus" class="badge">--</span>
+            </div>
+            <div class="report-meta-item">
+              <span class="report-meta-label">Priority</span>
+              <span id="modalReportPriority" class="badge">--</span>
+            </div>
+          </div>
+          
+          <h3 id="modalReportSummary" class="report-summary">--</h3>
+          <p id="modalReportDesc" class="report-desc">--</p>
+          
+          <div class="report-entities">
+            <div class="entity-box">
+              <span class="entity-label">Reporter</span>
+              <div id="modalReporterName" class="entity-name">--</div>
+              <div id="modalReporterId" class="entity-id">--</div>
+            </div>
+            <div class="entity-box">
+              <span class="entity-label">Reported Entity</span>
+              <div id="modalTargetType" class="entity-name">--</div>
+              <div id="modalTargetId" class="entity-id">--</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="investigation-notes">
+          <h4>Investigation Notes</h4>
+          <ul id="modalNotesList" class="notes-list">
+            <!-- Notes -->
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <label for="adminAction">Administrative Action</label>
+          <select id="adminAction" class="form-control">
+            <option value="">-- Select an action --</option>
+            <option value="investigate">Start investigation</option>
+            <option value="note">Add investigation note</option>
+            <option value="resolve">Resolve without enforcement</option>
+            <option value="dismiss">Dismiss report</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="reasonGroup" hidden>
+          <label for="actionReason">Note / Reason <span class="required">*</span></label>
+          <textarea id="actionReason" class="form-control" rows="3" placeholder="Enter investigation notes or resolution reason..."></textarea>
+        </div>
+        
+        <!-- Alerts -->
+        <div id="modalAlert" class="admin-alert" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="admin-alert__text"></span>
+        </div>
+
+      </div>
+      <div class="admin-modal__footer">
+        <button type="button" class="btn-admin btn-admin--outline" id="btnCancel">Cancel</button>
+        <button type="button" class="btn-admin btn-admin--primary" id="btnConfirm" disabled>Apply Action</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Template for Report Row -->
+  <template id="tpl-report-row">
+    <tr>
+      <td>
+        <span class="td-user-name td-report-id"></span>
+        <span class="td-user-meta td-report-summary"></span>
+      </td>
+      <td class="td-report-type"></td>
+      <td class="td-reporter"></td>
+      <td class="td-priority"><span class="badge badge-priority"></span></td>
+      <td><span class="badge badge-status"></span></td>
+      <td class="td-date"></td>
+      <td>
+        <button type="button" class="td-action-btn" aria-label="Investigate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </td>
+    </tr>
+  </template>
+
+  <script type="module" src="js/pages/admin-reports.js"></script>
+</body>
+</html>

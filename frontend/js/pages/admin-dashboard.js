@@ -11,13 +11,13 @@ function renderMockData() {
     reportsTbody.innerHTML = '';
     mockReports.forEach(report => {
       const clone = reportTemplate.content.cloneNode(true);
-      clone.querySelector('.td-report-id').textContent = report.id;
-      clone.querySelector('.td-report-meta').textContent = report.reason;
-      clone.querySelector('.td-reporter').textContent = report.reporter;
-      clone.querySelector('.td-date').textContent = report.date;
+      clone.querySelector('.td-report-id').textContent = report.reportId;
+      clone.querySelector('.td-report-meta').textContent = report.reportType;
+      clone.querySelector('.td-reporter').textContent = report.reporterName;
+      clone.querySelector('.td-date').textContent = report.submittedAt;
       
       const badge = clone.querySelector('.badge');
-      badge.textContent = report.statusText;
+      badge.textContent = report.reportStatus;
       badge.className = `badge ${report.statusClass}`;
       
       reportsTbody.appendChild(clone);
@@ -32,14 +32,14 @@ function renderMockData() {
     activityList.innerHTML = '';
     mockActivities.forEach(activity => {
       const clone = activityTemplate.content.cloneNode(true);
-      clone.querySelector('.activity-title').textContent = activity.action;
+      clone.querySelector('.activity-title').textContent = activity.actionType;
       
       const badge = clone.querySelector('.badge');
-      badge.textContent = activity.status;
-      badge.className = `badge ${activity.statusClass}`;
+      badge.textContent = activity.result;
+      badge.className = `badge ${activity.resultClass}`;
       
-      clone.querySelector('.activity-item__desc').innerHTML = `${activity.adminName} &middot; ${activity.target}`;
-      clone.querySelector('.activity-item__date').textContent = activity.date;
+      clone.querySelector('.activity-item__desc').innerHTML = `${activity.actorName} &middot; ${activity.targetId}`;
+      clone.querySelector('.activity-item__date').textContent = activity.createdAt;
       
       activityList.appendChild(clone);
     });

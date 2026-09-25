@@ -1,55 +1,102 @@
 // frontend/js/data/admin.js
 export const mockReports = [
   {
-    id: 'RPT-1048',
-    reason: 'Pitch condition',
-    reporter: 'Alex Morgan',
-    date: '25 Sept 2026',
-    statusText: 'Pending',
-    statusClass: 'badge--pending'
+    reportId: 'RPT-1048',
+    summary: 'Pitch surface is damaged and unsafe for play',
+    description: 'When we arrived for our booking, the turf near the north goal was completely ripped up. Two players tripped on it. This needs immediate maintenance.',
+    reporterName: 'Alex Morgan',
+    reporterId: 'USR-1001',
+    reportedEntityType: 'Pitch',
+    reportedEntityId: 'PITCH-552',
+    reportType: 'Pitch report',
+    priority: 'High',
+    priorityClass: 'badge--danger',
+    reportStatus: 'Submitted',
+    statusClass: 'badge--pending',
+    submittedAt: '25 Sept 2026',
+    assignedAdmin: null,
+    investigationNotes: []
   },
   {
-    id: 'RPT-1047',
-    reason: 'Booking dispute',
-    reporter: 'Jamie Lee',
-    date: '24 Sept 2026',
-    statusText: 'In review',
-    statusClass: 'badge--review'
+    reportId: 'RPT-1047',
+    summary: 'Charged twice for the same booking',
+    description: 'My credit card shows two separate charges for the booking BK-8829 on Saturday. Please refund the duplicate charge.',
+    reporterName: 'Jamie Lee',
+    reporterId: 'USR-1002',
+    reportedEntityType: 'Booking',
+    reportedEntityId: 'BK-8829',
+    reportType: 'Booking-related report',
+    priority: 'Medium',
+    priorityClass: 'badge--review',
+    reportStatus: 'Under review',
+    statusClass: 'badge--review',
+    submittedAt: '24 Sept 2026',
+    assignedAdmin: 'Morgan Chen',
+    investigationNotes: ['Checking payment gateway logs for duplicate transactions.']
   },
   {
-    id: 'RPT-1046',
-    reason: 'Manager conduct',
-    reporter: 'Taylor Reed',
-    date: '24 Sept 2026',
-    statusText: 'Pending',
-    statusClass: 'badge--pending'
+    reportId: 'RPT-1046',
+    summary: 'Manager refused to honour confirmed booking',
+    description: 'We had a confirmed booking but when we arrived, the manager had let another team onto the pitch and told us we had to leave.',
+    reporterName: 'Taylor Reed',
+    reporterId: 'USR-1003',
+    reportedEntityType: 'Pitch Manager',
+    reportedEntityId: 'MGR-2002',
+    reportType: 'Pitch manager report',
+    priority: 'High',
+    priorityClass: 'badge--danger',
+    reportStatus: 'Investigation required',
+    statusClass: 'badge--danger',
+    submittedAt: '24 Sept 2026',
+    assignedAdmin: 'Jordan Park',
+    investigationNotes: ['Reached out to manager for their side of the story.']
   }
 ];
 
 export const mockActivities = [
   {
-    action: 'User warning',
-    adminName: 'Morgan Chen',
-    target: 'Alex Morgan',
-    date: '25 Sept 2026, 10:12 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
+    activityId: 'ACT-207',
+    actorRole: 'Admin',
+    actorName: 'Morgan Chen',
+    actionType: 'User warning',
+    targetId: 'Jamie Lee',
+    result: 'Success',
+    resultClass: 'badge--success',
+    createdAt: '25 Sept 2026, 10:12',
+    details: 'Issued formal warning for late cancellations.'
   },
   {
-    action: 'Pitch suspension',
-    adminName: 'Jordan Park',
-    target: 'Hillcrest Pitch 2',
-    date: '25 Sept 2026, 08:35 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
+    activityId: 'ACT-206',
+    actorRole: 'Admin',
+    actorName: 'Jordan Park',
+    actionType: 'Pitch suspension',
+    targetId: 'Hillcrest Pitch 2',
+    result: 'Success',
+    resultClass: 'badge--success',
+    createdAt: '25 Sept 2026, 08:35',
+    details: 'Suspended pitch pending maintenance review.'
   },
   {
-    action: 'Report resolution',
-    adminName: 'Morgan Chen',
-    target: 'RPT-1044',
-    date: '24 Sept 2026, 16:48 UTC',
-    status: 'Completed',
-    statusClass: 'badge--success'
+    activityId: 'ACT-205',
+    actorRole: 'Admin',
+    actorName: 'Morgan Chen',
+    actionType: 'Report status update',
+    targetId: 'RPT-1044',
+    result: 'Success',
+    resultClass: 'badge--success',
+    createdAt: '24 Sept 2026, 16:48',
+    details: 'Status changed from Investigation required to Resolved.'
+  },
+  {
+    activityId: 'ACT-204',
+    actorRole: 'Manager',
+    actorName: 'Casey Tran',
+    actionType: 'Login',
+    targetId: 'Web session',
+    result: 'Success',
+    resultClass: 'badge--success',
+    createdAt: '24 Sept 2026, 13:26',
+    details: 'Successful authentication from new IP.'
   }
 ];
 
