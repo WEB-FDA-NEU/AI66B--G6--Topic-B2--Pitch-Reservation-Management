@@ -1,3 +1,4 @@
+﻿
 <!doctype html>
 <html lang="vi">
 <head>
@@ -14,13 +15,15 @@
 <body>
   <site-header active="search"></site-header>
 
-  <main class="container search-page search-layout" id="main-content">
+  <main class="container search-page" id="main-content">
     <nav class="breadcrumb" aria-label="Đường dẫn">
       <ol>
         <li><a href="index.html">Trang chủ</a></li>
         <li aria-current="page" id="crumb-current">Tìm sân</li>
       </ol>
     </nav>
+
+    <div class="search-layout">
 
     <aside class="search-sidebar" id="search-sidebar" aria-label="Bộ lọc sân bóng">
       <form id="filter-form">
@@ -94,6 +97,7 @@
       <div class="grid search-pitch-grid" id="results"></div>
       <nav class="pagination" id="pagination" aria-label="Phân trang kết quả"></nav>
     </section>
+      </div>
   </main>
 
   <site-footer></site-footer>
@@ -131,3 +135,6 @@
   <script type="module" src="js/pages/search.js"></script>
 </body>
 </html>
+
+
+
