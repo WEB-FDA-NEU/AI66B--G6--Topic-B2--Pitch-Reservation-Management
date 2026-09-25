@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bảng điều khiển dành cho Chủ sân - Pitch Point">
+  <title>Bảng điều khiển Chủ sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/manager-dashboard.css">
+</head>
+<body>
+  <site-header></site-header>
+
+  <main class="container manager-dashboard-page" id="main-content" hidden>
+    <header class="dashboard-header">
+      <h1>Bảng điều khiển</h1>
+      <p>Xin chào, <strong id="manager-name">Chủ sân</strong>! Chúc bạn một ngày làm việc hiệu quả.</p>
+    </header>
+
+    <section class="dashboard-stats" aria-labelledby="stats-title">
+      <h2 class="visually-hidden" id="stats-title">Tổng quan hoạt động</h2>
+      
+      <div class="stat-card">
+        <h3 class="stat-card__title">Sân đang hoạt động</h3>
+        <p class="stat-card__value" id="stat-pitches">--</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3 class="stat-card__title">Lịch chờ duyệt</h3>
+        <p class="stat-card__value" id="stat-pending-bookings">--</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3 class="stat-card__title">Lượt đặt hôm nay</h3>
+        <p class="stat-card__value" id="stat-today-bookings">--</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3 class="stat-card__title">Doanh thu tháng (VND)</h3>
+        <p class="stat-card__value" id="stat-revenue">--</p>
+      </div>
+    </section>
+
+    <section class="dashboard-menu" aria-labelledby="menu-title">
+      <h2 class="visually-hidden" id="menu-title">Chức năng quản lý</h2>
+      
+      <div class="grid menu-grid">
+        <a href="manager-pitches.html" class="menu-card">
+          <div class="menu-card__icon" aria-hidden="true">🏟️</div>
+          <h3 class="menu-card__title">Quản lý Sân bóng</h3>
+          <p class="menu-card__desc">Xem danh sách, thêm, sửa thông tin và tạm ngưng sân.</p>
+        </a>
+        
+        <a href="booking-management.html" class="menu-card">
+          <div class="menu-card__icon" aria-hidden="true">📅</div>
+          <h3 class="menu-card__title">Quản lý Đặt sân</h3>
+          <p class="menu-card__desc">Xem danh sách lịch đặt, thực hiện duyệt hoặc hủy lịch.</p>
+        </a>
+        
+        <a href="revenue-dashboard.html" class="menu-card">
+          <div class="menu-card__icon" aria-hidden="true">💰</div>
+          <h3 class="menu-card__title">Báo cáo Doanh thu</h3>
+          <p class="menu-card__desc">Theo dõi dòng tiền, doanh thu tạm tính và lịch sử giao dịch.</p>
+        </a>
+
+        <a href="manager-messages.html" class="menu-card">
+          <div class="menu-card__icon" aria-hidden="true">✉️</div>
+          <h3 class="menu-card__title">Tin nhắn</h3>
+          <p class="menu-card__desc">Trao đổi và hỗ trợ khách hàng liên hệ.</p>
+        </a>
+        
+        <a href="manager-settings.html" class="menu-card">
+          <div class="menu-card__icon" aria-hidden="true">⚙️</div>
+          <h3 class="menu-card__title">Cài đặt tài khoản</h3>
+          <p class="menu-card__desc">Thiết lập thông tin cá nhân và phương thức thanh toán.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/manager-dashboard.js"></script>
+</body>
+</html>

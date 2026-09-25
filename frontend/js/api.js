@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 //  Tầng DUY NHẤT được phép gọi mạng.
 //  Không file nào khác được viết fetch().
 //
@@ -69,14 +69,25 @@ export function getItem(id) {
 export function login(email, password) {
   if (USE_MOCK) {
     if (password === 'sai') return Promise.reject(new ApiError(401, 'Email hoặc mật khẩu không đúng.'));
+    
+    let role = 'customer';
+    let name = 'Người dùng mẫu';
+    
+    if (email.includes('manager')) {
+      role = 'manager';
+      name = 'Chủ sân Demo';
+    } else if (email.includes('admin')) {
+      role = 'admin';
+      name = 'Quản trị viên Demo';
+    }
+
     return Promise.resolve({
       access_token: 'mock-token', token_type: 'bearer',
-      user: { id: 1, display_name: 'Người dùng mẫu', role: 'user' },
+      user: { id: 1, email: email, display_name: name, role: role },
     });
   }
   return request(`${API_BASE}/auth/login`, { method: 'POST', body: { email, password } });
 }
-
 export function register(payload) {
   if (USE_MOCK)
     return Promise.resolve({ access_token: 'mock-token',
@@ -109,3 +120,5 @@ function filterMock(data, { q = '', sort = 'newest', category = '',
   const start = (Number(page) - 1) * size;
   return { items: items.slice(start, start + size), total, page: Number(page), page_size: size };
 }
+
+
