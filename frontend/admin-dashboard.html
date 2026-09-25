@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tổng quan hệ thống dành cho Ban Quản Trị (Admin Dashboard).">
+  <title>Tổng quan Quản trị — Pitch Point</title>
+  
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li aria-current="page">Tổng quan Quản trị</li>
+    </ol>
+  </nav>
+
+  <main class="container admin-dashboard-page" id="main-content">
+    <header class="screen-heading">
+      <div>
+        <p class="screen-heading__eyebrow">Administration & Enforcement</p>
+        <h1>Tổng quan Quản trị</h1>
+        <p class="screen-heading__description">Thống kê hoạt động, kiểm duyệt và quản lý nền tảng Pitch Point.</p>
+      </div>
+      <div class="screen-heading__actions" aria-label="Lối tắt quản trị">
+        <a href="admin-settings.html" class="btn" type="button">Cài đặt hệ thống</a>
+        <a href="admin-activity-log.html" class="btn btn--primary" type="button">Nhật ký hoạt động</a>
+      </div>
+    </header>
+
+    <div class="dashboard-layout">
+      <!-- Sidebar Shortcuts -->
+      <aside class="dashboard-sidebar">
+        <nav aria-label="Quản lý tính năng khác">
+          <ul class="sidebar-menu">
+            <li><a href="admin-finance.html" class="sidebar-menu__link">Tài chính & Hoàn tiền</a></li>
+            <li><a href="admin-content.html" class="sidebar-menu__link">Quản lý Nội dung (Banner)</a></li>
+            <li><a href="admin-activity-log.html" class="sidebar-menu__link">Nhật ký hoạt động (Audit)</a></li>
+            <li><a href="admin-settings.html" class="sidebar-menu__link">Cài đặt quản trị</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Tabs Content -->
+      <div class="dashboard-content">
+        <!-- Tabs Nav -->
+        <nav class="tabs-nav" aria-label="Danh mục tổng quan">
+          <button class="tabs-nav__btn" data-tab="users" aria-selected="true" aria-controls="panel-users">Người dùng</button>
+          <button class="tabs-nav__btn" data-tab="pitches" aria-selected="false" aria-controls="panel-pitches">Sân bóng</button>
+          <button class="tabs-nav__btn" data-tab="reports" aria-selected="false" aria-controls="panel-reports">Báo cáo vi phạm</button>
+        </nav>
+
+        <!-- Panel: Users -->
+        <section class="screen-panel tab-panel" id="panel-users" aria-labelledby="tab-users-title">
+          <header class="screen-panel__heading">
+            <div>
+              <h2 id="tab-users-title">Quản lý Con người</h2>
+              <p>Tóm tắt thông tin tài khoản Khách hàng và Chủ sân mới cập nhật.</p>
+            </div>
+            <div class="screen-heading__actions">
+              <a href="admin-users.html" class="btn">Xem danh sách Khách hàng</a>
+              <a href="admin-pitch-managers.html" class="btn">Xem danh sách Chủ sân</a>
+            </div>
+          </header>
+          
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <p class="kpi-card__label">Khách hàng mới</p>
+              <p class="kpi-card__value" id="kpi-new-users">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Chủ sân chờ duyệt</p>
+              <p class="kpi-card__value" id="kpi-pending-managers">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Tài khoản bị khóa</p>
+              <p class="kpi-card__value kpi-card__value--danger" id="kpi-suspended">--</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel: Pitches -->
+        <section class="screen-panel tab-panel hidden" id="panel-pitches" aria-labelledby="tab-pitches-title" hidden>
+          <header class="screen-panel__heading">
+            <div>
+              <h2 id="tab-pitches-title">Kiểm duyệt Sân bóng</h2>
+              <p>Trạng thái hoạt động và các sân bóng cần xử lý/đình chỉ.</p>
+            </div>
+            <div class="screen-heading__actions">
+              <a href="admin-pitch-moderation.html" class="btn btn--primary">Đến trang Kiểm duyệt Sân</a>
+            </div>
+          </header>
+          
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <p class="kpi-card__label">Sân mới (chờ duyệt)</p>
+              <p class="kpi-card__value" id="kpi-pending-pitches">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Sân đang hoạt động</p>
+              <p class="kpi-card__value" id="kpi-active-pitches">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Sân bị đình chỉ</p>
+              <p class="kpi-card__value kpi-card__value--danger" id="kpi-suspended-pitches">--</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel: Reports -->
+        <section class="screen-panel tab-panel hidden" id="panel-reports" aria-labelledby="tab-reports-title" hidden>
+          <header class="screen-panel__heading">
+            <div>
+              <h2 id="tab-reports-title">Xử lý Báo cáo</h2>
+              <p>Danh sách tố cáo, đánh giá vi phạm chưa được giải quyết.</p>
+            </div>
+            <div class="screen-heading__actions">
+              <a href="admin-reports.html" class="btn btn--primary">Quản lý Báo cáo</a>
+            </div>
+          </header>
+          
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <p class="kpi-card__label">Báo cáo mới</p>
+              <p class="kpi-card__value kpi-card__value--danger" id="kpi-new-reports">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Đang xử lý</p>
+              <p class="kpi-card__value" id="kpi-progress-reports">--</p>
+            </div>
+            <div class="kpi-card">
+              <p class="kpi-card__label">Đã giải quyết</p>
+              <p class="kpi-card__value" id="kpi-resolved-reports">--</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/admin-dashboard.js"></script>
+</body>
+</html>
