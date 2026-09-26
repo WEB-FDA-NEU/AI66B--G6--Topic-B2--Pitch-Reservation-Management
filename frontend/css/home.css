@@ -141,6 +141,17 @@ body {
   cursor: pointer;
 }
 
+.home-hero__admin-link {
+  border-color: rgba(255,255,255,.55);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+}
+
+.home-hero__admin-link:hover {
+  border-color: var(--home-accent);
+  background: rgba(184, 242, 59, .12);
+}
+
 .home-hero__spotlight {
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid rgba(255,255,255,.18);

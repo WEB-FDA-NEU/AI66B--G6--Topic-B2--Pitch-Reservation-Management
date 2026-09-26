@@ -1,0 +1,21 @@
+.admin-activity-log-skip-link { position: fixed; inset: 0 auto auto 0; z-index: 100; padding: var(--sp-3) var(--sp-4); background: var(--c-primary); color: var(--c-bg); transform: translateY(-120%); }
+.admin-activity-log-skip-link:focus { transform: translateY(0); }
+.admin-activity-log-page { display: grid; gap: var(--sp-6); padding-block: var(--sp-6); }
+.admin-activity-log-page > section { min-width: 0; }
+.admin-activity-log-page header h1 { margin-block: var(--sp-1) var(--sp-2); }
+.admin-activity-log-page__eyebrow { color: var(--c-primary); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.admin-activity-log-page__filters { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.admin-activity-log-page__filter-form { display: grid; gap: var(--sp-3); align-items: end; }
+.admin-activity-log-page__result-heading { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-3); }
+.admin-activity-log-page__table-wrap { width: 100%; min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius); }
+.admin-activity-log-page table { width: 100%; min-width: 64rem; border-collapse: collapse; background: var(--c-bg); }
+.admin-activity-log-page th, .admin-activity-log-page td { padding: var(--sp-3); border-bottom: 1px solid var(--c-border); text-align: left; vertical-align: middle; }
+.admin-activity-log-page th { background: var(--c-surface); }
+.admin-activity-log-page__status[data-result="success"] { color: var(--c-success); }
+.admin-activity-log-page__status[data-result="failed"] { color: var(--c-danger); }
+.admin-activity-log-page__dialog { width: min(42rem, calc(100% - 2rem)); max-height: calc(100vh - 2rem); padding: var(--sp-5); border: 0; border-radius: var(--radius); box-shadow: var(--shadow); }
+.admin-activity-log-page__dialog::backdrop { background: rgba(12, 27, 42, .55); }
+.admin-activity-log-page__dialog-close { float: right; }
+.admin-activity-log-page__detail { clear: both; display: grid; grid-template-columns: minmax(7rem, 1fr) 2fr; gap: var(--sp-2) var(--sp-4); padding-top: var(--sp-5); }
+.admin-activity-log-page__detail dd { overflow-wrap: anywhere; font-weight: 600; }
+@media (min-width: 48rem) { .admin-activity-log-page__filter-form { grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .5fr) minmax(10rem, .5fr) auto; } .admin-activity-log-page__filter-form label { grid-row: 1; } .admin-activity-log-page__filter-form input, .admin-activity-log-page__filter-form select, .admin-activity-log-page__filter-form button { grid-row: 2; } }

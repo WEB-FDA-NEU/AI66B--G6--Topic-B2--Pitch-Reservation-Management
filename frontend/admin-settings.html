@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cài đặt quản trị — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-settings.css">
+</head>
+<body>
+  <a class="admin-settings-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-settings-page">
+    <nav aria-label="Điều hướng quản trị">
+      <a class="btn btn--secondary" href="admin-dashboard.html">← Quay lại bảng điều khiển</a>
+    </nav>
+    <header><p class="admin-settings-page__eyebrow">S35 · Quản trị hệ thống</p><h1>Cài đặt quản trị</h1><p>Điều chỉnh tùy chọn hiển thị và quy trình làm việc của khu vực Admin.</p></header>
+    <form id="admin-settings-form" class="admin-settings-page__form">
+      <section class="card admin-settings-page__section" aria-labelledby="display-settings-heading">
+        <div><h2 id="display-settings-heading">Hiển thị</h2><p>Các tùy chọn chỉ áp dụng cho giao diện quản trị.</p></div>
+        <label for="table-page-size">Số dòng mặc định</label><select id="table-page-size" class="select" name="tablePageSize"><option value="10">10 dòng</option><option value="20">20 dòng</option><option value="50">50 dòng</option></select>
+        <label for="activity-display">Cách hiển thị nhật ký</label><select id="activity-display" class="select" name="activityDisplay"><option value="compact">Thu gọn</option><option value="detailed">Chi tiết</option></select>
+      </section>
+      <section class="card admin-settings-page__section" aria-labelledby="workflow-settings-heading">
+        <div><h2 id="workflow-settings-heading">Quy trình xử lý</h2><p>Giữ quyết định quản trị nhất quán và có thể kiểm tra.</p></div>
+        <label for="default-report-priority">Ưu tiên báo cáo mặc định</label><select id="default-report-priority" class="select" name="defaultReportPriority"><option value="low">Thấp</option><option value="medium">Trung bình</option><option value="high">Cao</option></select>
+        <label class="admin-settings-page__check" for="require-decision-reason"><input id="require-decision-reason" name="requireDecisionReason" type="checkbox">Bắt buộc nhập lý do cho quyết định quản trị</label>
+      </section>
+      <div class="admin-settings-page__footer"><p id="settings-feedback" class="admin-settings-page__feedback" role="status"></p><button class="btn" type="submit">Lưu cài đặt</button></div>
+    </form>
+  </main>
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/admin-settings.js"></script>
+</body>
+</html>

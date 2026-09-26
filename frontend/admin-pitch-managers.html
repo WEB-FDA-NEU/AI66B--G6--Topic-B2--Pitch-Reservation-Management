@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý chủ sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-pitch-managers.css">
+</head>
+<body>
+  <a class="admin-pitch-managers-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-pitch-managers-page">
+    <nav aria-label="Điều hướng quản trị">
+      <a class="btn btn--secondary" href="admin-dashboard.html">← Quay lại bảng điều khiển</a>
+    </nav>
+    <header>
+      <p class="admin-pitch-managers-page__eyebrow">S28 · Quản trị hệ thống</p>
+      <h1>Quản lý chủ sân</h1>
+      <p>Tra cứu tài khoản quản lý sân và ghi nhận cảnh báo thuộc phạm vi Admin.</p>
+    </header>
+    <section class="card admin-pitch-managers-page__filters" aria-labelledby="manager-filter-heading">
+      <h2 id="manager-filter-heading">Bộ lọc</h2>
+      <form id="manager-filter-form" class="admin-pitch-managers-page__filter-form">
+        <label for="manager-query">Tìm theo tên, email hoặc mã</label>
+        <input id="manager-query" class="input" name="query" type="search" autocomplete="off">
+        <label for="manager-status">Trạng thái</label>
+        <select id="manager-status" class="select" name="status">
+          <option value="">Tất cả</option>
+          <option value="active">Đang hoạt động</option>
+          <option value="suspended">Đang đình chỉ</option>
+        </select>
+        <button class="btn btn--secondary" type="reset">Đặt lại</button>
+      </form>
+    </section>
+    <section aria-labelledby="manager-result-heading">
+      <div class="admin-pitch-managers-page__result-heading">
+        <h2 id="manager-result-heading">Danh sách chủ sân</h2>
+        <p id="manager-count" aria-live="polite"></p>
+      </div>
+      <div class="admin-pitch-managers-page__table-wrap">
+        <table>
+          <thead><tr><th scope="col">Chủ sân</th><th scope="col">Liên hệ</th><th scope="col">Số sân</th><th scope="col">Lịch xác nhận</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead>
+          <tbody id="manager-rows"></tbody>
+        </table>
+      </div>
+      <div id="manager-empty" class="empty" hidden>Không có chủ sân phù hợp.</div>
+    </section>
+  </main>
+  <site-footer></site-footer>
+  <dialog id="manager-dialog" class="admin-pitch-managers-page__dialog" aria-labelledby="manager-dialog-title">
+    <form method="dialog" class="admin-pitch-managers-page__dialog-close"><button class="btn btn--secondary" type="submit">Đóng</button></form>
+    <h2 id="manager-dialog-title">Chi tiết chủ sân</h2>
+    <dl id="manager-detail" class="admin-pitch-managers-page__detail"></dl>
+    <form id="manager-warning-form" class="admin-pitch-managers-page__warning-form">
+      <label for="manager-reason">Lý do cảnh báo</label>
+      <textarea id="manager-reason" class="textarea" rows="4" minlength="8" required></textarea>
+      <label class="admin-pitch-managers-page__check" for="manager-confirmed"><input id="manager-confirmed" type="checkbox" required>Đã rà soát căn cứ và xác nhận gửi cảnh báo.</label>
+      <p id="manager-feedback" class="admin-pitch-managers-page__feedback" role="status"></p>
+      <div class="admin-pitch-managers-page__actions">
+        <button class="btn" type="submit">Ghi nhận cảnh báo</button>
+        <button class="btn btn--secondary" type="button" disabled>Liên hệ chủ sân</button>
+      </div>
+    </form>
+  </dialog>
+  <template id="tpl-manager-row">
+    <tr>
+      <td><strong class="admin-pitch-managers-page__name"></strong><span class="admin-pitch-managers-page__id"></span></td>
+      <td><span class="admin-pitch-managers-page__email"></span><span class="admin-pitch-managers-page__phone"></span></td>
+      <td class="admin-pitch-managers-page__pitch-count"></td>
+      <td class="admin-pitch-managers-page__booking-count"></td>
+      <td><span class="admin-pitch-managers-page__status"></span></td>
+      <td><button class="btn btn--secondary admin-pitch-managers-page__open" type="button">Xem chi tiết</button></td>
+    </tr>
+  </template>
+  <script type="module" src="js/pages/admin-pitch-managers.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.admin-settings-skip-link { position: fixed; inset: 0 auto auto 0; z-index: 100; padding: var(--sp-3) var(--sp-4); background: var(--c-primary); color: var(--c-bg); transform: translateY(-120%); }
+.admin-settings-skip-link:focus { transform: translateY(0); }
+.admin-settings-page { display: grid; gap: var(--sp-6); padding-block: var(--sp-6); }
+.admin-settings-page header h1 { margin-block: var(--sp-1) var(--sp-2); }
+.admin-settings-page__eyebrow { color: var(--c-primary); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.admin-settings-page__form { display: grid; gap: var(--sp-5); }
+.admin-settings-page__section { display: grid; gap: var(--sp-3); align-content: start; padding: var(--sp-5); }
+.admin-settings-page__section h2 { margin-bottom: var(--sp-1); }
+.admin-settings-page__check { display: flex; gap: var(--sp-3); align-items: flex-start; padding-block: var(--sp-2); }
+.admin-settings-page__check input { width: 1.15rem; height: 1.15rem; margin-top: .15rem; accent-color: var(--c-primary); }
+.admin-settings-page__footer { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: center; justify-content: space-between; }
+.admin-settings-page__feedback { min-height: 1.5em; color: var(--c-success); }
+@media (min-width: 48rem) { .admin-settings-page__form { grid-template-columns: repeat(2, minmax(0, 1fr)); } .admin-settings-page__footer { grid-column: 1 / -1; } }

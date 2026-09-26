@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'pitch-point:state:v1';
 const USERS_URL = new URL('../../mock/users.json', import.meta.url);
+const ADMIN_URL = new URL('../../mock/admin.json', import.meta.url);
 let initializationPromise = null;
 
 function isValidState(state) {
@@ -27,26 +28,54 @@ export function saveState(state) {
   return state;
 }
 
-async function initializeFromSeed() {
-  const response = await fetch(USERS_URL);
-  if (!response.ok) throw new Error('Không tải được tài khoản dùng thử.');
+async function loadSeedData() {
+  const [usersResponse, adminResponse] = await Promise.all([
+    fetch(USERS_URL),
+    fetch(ADMIN_URL),
+  ]);
+  if (!usersResponse.ok || !adminResponse.ok) throw new Error('Không tải được dữ liệu mô phỏng.');
+  const [demoUsers, adminSeed] = await Promise.all([usersResponse.json(), adminResponse.json()]);
+  if (!Array.isArray(demoUsers) || !Array.isArray(adminSeed.users)) {
+    throw new Error('Dữ liệu mô phỏng không hợp lệ.');
+  }
+  return { demoUsers, adminSeed };
+}
 
-  const users = await response.json();
-  if (!Array.isArray(users)) throw new Error('Dữ liệu tài khoản dùng thử không hợp lệ.');
+function mergeUsers(currentUsers, seededUsers) {
+  const existingEmails = new Set(currentUsers.map(user => String(user.email).toLocaleLowerCase('vi')));
+  return [
+    ...currentUsers,
+    ...seededUsers.filter(user => !existingEmails.has(String(user.email).toLocaleLowerCase('vi'))),
+  ];
+}
 
+async function initializeFromSeed(existing = null) {
+  const { demoUsers, adminSeed } = await loadSeedData();
+  const baseUsers = existing?.users ?? demoUsers;
   return saveState({
+    ...adminSeed,
+    ...existing,
     version: 1,
-    users,
-    session: null,
+    users: mergeUsers(baseUsers, adminSeed.users),
+    session: existing?.session ?? null,
+    reports: existing?.reports ?? adminSeed.reports,
+    contents: existing?.contents ?? adminSeed.contents,
+    activities: existing?.activities ?? adminSeed.activities,
+    settings: existing?.settings ?? adminSeed.settings,
   });
 }
 
 export async function initializeState() {
   const existing = loadState();
-  if (existing) return existing;
+  const hasAdminCollections = existing
+    && Array.isArray(existing.reports)
+    && Array.isArray(existing.contents)
+    && Array.isArray(existing.activities)
+    && existing.settings?.admin;
+  if (hasAdminCollections) return existing;
 
   if (!initializationPromise) {
-    initializationPromise = initializeFromSeed().finally(() => {
+    initializationPromise = initializeFromSeed(existing).finally(() => {
       initializationPromise = null;
     });
   }

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý báo cáo — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-reports.css">
+</head>
+<body>
+  <a class="admin-reports-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-reports-page">
+    <nav aria-label="Điều hướng quản trị">
+      <a class="btn btn--secondary" href="admin-dashboard.html">← Quay lại bảng điều khiển</a>
+    </nav>
+    <header>
+      <p class="admin-reports-page__eyebrow">S31 · Quản trị hệ thống</p>
+      <h1>Quản lý báo cáo</h1>
+      <p>Rà soát báo cáo trước khi đưa ra kết luận và lưu lại lý do xử lý.</p>
+    </header>
+    <section class="card admin-reports-page__filters" aria-labelledby="report-filter-heading">
+      <h2 id="report-filter-heading">Bộ lọc</h2>
+      <form id="report-filter-form" class="admin-reports-page__filter-form">
+        <label for="report-query">Tìm kiếm</label><input id="report-query" class="input" name="query" type="search" autocomplete="off">
+        <label for="report-status">Trạng thái</label><select id="report-status" class="select" name="status"><option value="">Tất cả</option><option value="submitted">Đã gửi</option><option value="under-review">Đang rà soát</option><option value="resolved">Đã xử lý</option><option value="dismissed">Đã bác bỏ</option></select>
+        <label for="report-priority">Ưu tiên</label><select id="report-priority" class="select" name="priority"><option value="">Tất cả</option><option value="high">Cao</option><option value="medium">Trung bình</option><option value="low">Thấp</option></select>
+        <label for="report-target-type">Đối tượng</label><select id="report-target-type" class="select" name="targetType"><option value="">Tất cả</option><option value="user">Người dùng</option><option value="manager">Chủ sân</option><option value="pitch">Sân</option><option value="booking">Đặt sân</option></select>
+        <button class="btn btn--secondary" type="reset">Đặt lại</button>
+      </form>
+    </section>
+    <section aria-labelledby="report-result-heading">
+      <div class="admin-reports-page__result-heading"><h2 id="report-result-heading">Danh sách báo cáo</h2><p id="report-count" aria-live="polite"></p></div>
+      <div class="admin-reports-page__table-wrap">
+        <table><thead><tr><th scope="col">Báo cáo</th><th scope="col">Người gửi</th><th scope="col">Đối tượng</th><th scope="col">Ưu tiên</th><th scope="col">Trạng thái</th><th scope="col">Ngày gửi</th><th scope="col">Thao tác</th></tr></thead><tbody id="report-rows"></tbody></table>
+      </div>
+      <div id="report-empty" class="empty" hidden>Không có báo cáo phù hợp.</div>
+    </section>
+  </main>
+  <site-footer></site-footer>
+  <dialog id="report-dialog" class="admin-reports-page__dialog" aria-labelledby="report-dialog-title">
+    <form method="dialog" class="admin-reports-page__dialog-close"><button class="btn btn--secondary" type="submit">Đóng</button></form>
+    <h2 id="report-dialog-title">Chi tiết báo cáo</h2>
+    <dl id="report-detail" class="admin-reports-page__detail"></dl>
+    <section aria-labelledby="report-description-heading"><h3 id="report-description-heading">Nội dung phản ánh</h3><p id="report-description"></p></section>
+    <section aria-labelledby="report-note-heading"><h3 id="report-note-heading">Lịch sử ghi chú</h3><ol id="report-notes" class="admin-reports-page__notes"></ol></section>
+    <form id="report-action-form" class="admin-reports-page__action-form">
+      <label for="report-next-status">Trạng thái tiếp theo</label><select id="report-next-status" class="select" required></select>
+      <label for="report-reason">Kết quả hoặc lý do</label><textarea id="report-reason" class="textarea" rows="4" minlength="8" required></textarea>
+      <label class="admin-reports-page__check" for="report-confirmed"><input id="report-confirmed" type="checkbox" required>Đã rà soát báo cáo và xác nhận kết quả xử lý.</label>
+      <p id="report-feedback" class="admin-reports-page__feedback" role="status"></p>
+      <div class="admin-reports-page__actions"><button id="report-submit" class="btn" type="submit">Lưu xử lý</button><button class="btn btn--secondary" type="button" disabled>Kiểm tra đối tượng</button></div>
+    </form>
+  </dialog>
+  <template id="tpl-report-row"><tr><td><strong class="admin-reports-page__summary"></strong><span class="admin-reports-page__id"></span></td><td class="admin-reports-page__reporter"></td><td class="admin-reports-page__target"></td><td><span class="admin-reports-page__priority"></span></td><td><span class="admin-reports-page__status"></span></td><td><time class="admin-reports-page__date"></time></td><td><button class="btn btn--secondary admin-reports-page__open" type="button">Xem chi tiết</button></td></tr></template>
+  <script type="module" src="js/pages/admin-reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bảng điều khiển quản trị — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<body>
+  <a class="admin-dashboard-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-dashboard-page">
+    <header class="admin-dashboard-page__heading">
+      <div>
+        <p class="admin-dashboard-page__eyebrow">Quản trị hệ thống</p>
+        <h1>Bảng điều khiển</h1>
+        <p>Theo dõi nhanh người dùng, sân và báo cáo trên Pitch Point.</p>
+      </div>
+      <p id="admin-identity" class="admin-dashboard-page__identity"></p>
+    </header>
+    <section aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Tổng quan</h2>
+      <div id="summary-grid" class="admin-dashboard-page__summary-grid" aria-live="polite"></div>
+    </section>
+    <section class="admin-dashboard-page__workspace" aria-labelledby="workspace-heading">
+      <div class="admin-dashboard-page__section-heading">
+        <div>
+          <h2 id="workspace-heading">Không gian quản lý</h2>
+          <p>Chọn nhóm dữ liệu để xem tóm tắt tại bảng điều khiển.</p>
+        </div>
+      </div>
+      <div class="admin-dashboard-page__tabs" role="tablist" aria-label="Nhóm dữ liệu quản trị">
+        <button id="tab-users" class="admin-dashboard-page__tab" type="button" role="tab" aria-selected="true" aria-controls="panel-users" data-tab="users">Người dùng</button>
+        <button id="tab-pitches" class="admin-dashboard-page__tab" type="button" role="tab" aria-selected="false" aria-controls="panel-pitches" data-tab="pitches" tabindex="-1">Sân</button>
+        <button id="tab-reports" class="admin-dashboard-page__tab" type="button" role="tab" aria-selected="false" aria-controls="panel-reports" data-tab="reports" tabindex="-1">Báo cáo</button>
+      </div>
+      <section id="panel-users" class="admin-dashboard-page__panel" role="tabpanel" aria-labelledby="tab-users">
+        <div id="user-summary"></div>
+        <a class="btn" href="admin-users.html">Quản lý người dùng</a>
+      </section>
+      <section id="panel-pitches" class="admin-dashboard-page__panel" role="tabpanel" aria-labelledby="tab-pitches" hidden>
+        <div id="pitch-summary"></div>
+        <div class="admin-dashboard-page__panel-actions">
+          <a class="btn" href="admin-pitch-managers.html">Quản lý chủ sân</a>
+          <button class="btn btn--secondary" type="button" disabled>Kiểm duyệt sân</button>
+        </div>
+      </section>
+      <section id="panel-reports" class="admin-dashboard-page__panel" role="tabpanel" aria-labelledby="tab-reports" hidden>
+        <div id="report-summary"></div>
+        <a class="btn" href="admin-reports.html">Quản lý báo cáo</a>
+      </section>
+    </section>
+    <section aria-labelledby="admin-navigation-heading">
+      <div class="admin-dashboard-page__section-heading">
+        <div>
+          <h2 id="admin-navigation-heading">Công cụ quản trị</h2>
+          <p>Truy cập các màn hình quản trị đã sẵn sàng tích hợp.</p>
+        </div>
+      </div>
+      <nav class="admin-dashboard-page__navigation" aria-label="Các màn hình quản trị">
+        <a class="card admin-dashboard-page__navigation-card" href="admin-users.html"><strong>Người dùng</strong><span>Cảnh báo, đình chỉ và khôi phục khách hàng</span></a>
+        <a class="card admin-dashboard-page__navigation-card" href="admin-pitch-managers.html"><strong>Chủ sân</strong><span>Tra cứu và cảnh báo tài khoản quản lý sân</span></a>
+        <a class="card admin-dashboard-page__navigation-card" href="admin-reports.html"><strong>Báo cáo</strong><span>Rà soát và kết luận báo cáo</span></a>
+        <a class="card admin-dashboard-page__navigation-card" href="admin-content.html"><strong>Nội dung</strong><span>Quản lý banner và thông báo</span></a>
+        <a class="card admin-dashboard-page__navigation-card" href="admin-activity-log.html"><strong>Nhật ký</strong><span>Đối chiếu hoạt động quản trị</span></a>
+        <a class="card admin-dashboard-page__navigation-card" href="admin-settings.html"><strong>Cài đặt</strong><span>Tùy chỉnh quy trình làm việc Admin</span></a>
+      </nav>
+    </section>
+    <section aria-labelledby="activity-heading">
+      <div class="admin-dashboard-page__section-heading">
+        <div>
+          <h2 id="activity-heading">Hoạt động gần đây</h2>
+          <p>Các thay đổi quản trị được ghi nhận theo thứ tự thời gian.</p>
+        </div>
+        <a class="btn btn--secondary" href="admin-activity-log.html">Xem toàn bộ nhật ký</a>
+      </div>
+      <ol id="recent-activities" class="admin-dashboard-page__activity-list"></ol>
+      <div id="activity-empty" class="empty" hidden>Chưa có hoạt động quản trị.</div>
+    </section>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-summary-card">
+    <article class="card admin-dashboard-page__summary-card">
+      <p class="admin-dashboard-page__summary-label"></p>
+      <strong class="admin-dashboard-page__summary-value"></strong>
+      <span class="admin-dashboard-page__summary-note"></span>
+    </article>
+  </template>
+  <template id="tpl-activity">
+    <li class="card admin-dashboard-page__activity-item">
+      <div>
+        <strong class="admin-dashboard-page__activity-title"></strong>
+        <p class="admin-dashboard-page__activity-reason"></p>
+      </div>
+      <time class="admin-dashboard-page__activity-time"></time>
+    </li>
+  </template>
+  <script type="module" src="js/pages/admin-dashboard.js"></script>
+</body>
+</html>

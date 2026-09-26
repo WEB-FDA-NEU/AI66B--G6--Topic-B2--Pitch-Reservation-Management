@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý nội dung — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-content.css">
+</head>
+<body>
+  <a class="admin-content-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-content-page">
+    <nav aria-label="Điều hướng quản trị">
+      <a class="btn btn--secondary" href="admin-dashboard.html">← Quay lại bảng điều khiển</a>
+    </nav>
+    <header class="admin-content-page__heading">
+      <div><p class="admin-content-page__eyebrow">S33 · Quản trị hệ thống</p><h1>Quản lý thông báo và banner</h1><p>Soạn, lên lịch và kiểm soát trạng thái nội dung dùng chung.</p></div>
+      <button id="create-content" class="btn" type="button">Tạo nội dung</button>
+    </header>
+    <section class="card admin-content-page__filters" aria-labelledby="content-filter-heading">
+      <h2 id="content-filter-heading">Bộ lọc</h2>
+      <form id="content-filter-form" class="admin-content-page__filter-form">
+        <label for="content-query">Tìm kiếm</label><input id="content-query" class="input" name="query" type="search" autocomplete="off">
+        <label for="content-type-filter">Loại nội dung</label><select id="content-type-filter" class="select" name="contentType"><option value="">Tất cả</option><option value="banner">Banner</option><option value="announcement">Thông báo</option></select>
+        <label for="content-status-filter">Trạng thái</label><select id="content-status-filter" class="select" name="status"><option value="">Tất cả</option><option value="draft">Bản nháp</option><option value="scheduled">Đã lên lịch</option><option value="published">Đang xuất bản</option><option value="unpublished">Đã gỡ</option></select>
+        <button class="btn btn--secondary" type="reset">Đặt lại</button>
+      </form>
+    </section>
+    <section aria-labelledby="content-result-heading">
+      <div class="admin-content-page__result-heading"><h2 id="content-result-heading">Danh sách nội dung</h2><p id="content-count" aria-live="polite"></p></div>
+      <div class="admin-content-page__table-wrap"><table><thead><tr><th scope="col">Nội dung</th><th scope="col">Loại</th><th scope="col">Đối tượng</th><th scope="col">Thời gian hiển thị</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead><tbody id="content-rows"></tbody></table></div>
+      <div id="content-empty" class="empty" hidden>Không có nội dung phù hợp.</div>
+    </section>
+  </main>
+  <site-footer></site-footer>
+  <dialog id="content-dialog" class="admin-content-page__dialog" aria-labelledby="content-dialog-title">
+    <form method="dialog" class="admin-content-page__dialog-close"><button class="btn btn--secondary" type="submit">Đóng</button></form>
+    <h2 id="content-dialog-title">Tạo nội dung</h2>
+    <form id="content-form" class="admin-content-page__content-form">
+      <input id="content-id" name="id" type="hidden">
+      <label for="content-type">Loại nội dung</label><select id="content-type" class="select" name="contentType" required><option value="banner">Banner</option><option value="announcement">Thông báo</option></select>
+      <label for="content-title">Tiêu đề</label><input id="content-title" class="input" name="title" required maxlength="120">
+      <label for="content-body">Nội dung</label><textarea id="content-body" class="textarea" name="body" rows="5" required></textarea>
+      <label for="content-audience">Đối tượng</label><select id="content-audience" class="select" name="audience" required><option value="public">Công khai</option><option value="authenticated">Người dùng đã đăng nhập</option><option value="customer">Khách hàng</option><option value="manager">Chủ sân</option></select>
+      <label for="content-status">Trạng thái</label><select id="content-status" class="select" name="status" required><option value="draft">Bản nháp</option><option value="scheduled">Đã lên lịch</option><option value="published">Đang xuất bản</option><option value="unpublished">Đã gỡ</option></select>
+      <div class="admin-content-page__dates"><div><label for="content-start">Bắt đầu</label><input id="content-start" class="input" name="startsAt" type="date" required></div><div><label for="content-end">Kết thúc</label><input id="content-end" class="input" name="endsAt" type="date" required></div></div>
+      <label for="content-audit-reason">Lý do thay đổi</label><textarea id="content-audit-reason" class="textarea" name="auditReason" rows="3" minlength="8" required></textarea>
+      <p id="content-feedback" class="admin-content-page__feedback" role="status"></p>
+      <div class="admin-content-page__actions"><button class="btn" type="submit">Lưu nội dung</button><button id="delete-content" class="btn btn--secondary" type="button" hidden>Xóa bản nháp</button></div>
+    </form>
+  </dialog>
+  <dialog id="delete-dialog" class="admin-content-page__confirm-dialog" aria-labelledby="delete-dialog-title">
+    <h2 id="delete-dialog-title">Xóa bản nháp?</h2><p>Thao tác này chỉ áp dụng cho nội dung chưa xuất bản.</p>
+    <form id="delete-form"><label for="delete-reason">Lý do xóa</label><textarea id="delete-reason" class="textarea" rows="3" minlength="8" required></textarea><p id="delete-feedback" class="admin-content-page__feedback" role="status"></p><div class="admin-content-page__actions"><button class="btn" type="submit">Xác nhận xóa</button><button id="cancel-delete" class="btn btn--secondary" type="button">Hủy</button></div></form>
+  </dialog>
+  <template id="tpl-content-row"><tr><td><strong class="admin-content-page__title"></strong><span class="admin-content-page__id"></span></td><td class="admin-content-page__type"></td><td class="admin-content-page__audience"></td><td><time class="admin-content-page__start"></time><span>đến</span><time class="admin-content-page__end"></time></td><td><span class="admin-content-page__status"></span></td><td><button class="btn btn--secondary admin-content-page__edit" type="button">Chỉnh sửa</button></td></tr></template>
+  <script type="module" src="js/pages/admin-content.js"></script>
+</body>
+</html>

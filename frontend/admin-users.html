@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý người dùng — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-users.css">
+</head>
+<body>
+  <a class="admin-users-skip-link" href="#main-content">Bỏ qua đến nội dung chính</a>
+  <site-header></site-header>
+  <main id="main-content" class="container admin-users-page">
+    <nav aria-label="Điều hướng quản trị">
+      <a class="btn btn--secondary" href="admin-dashboard.html">← Quay lại bảng điều khiển</a>
+    </nav>
+    <header>
+      <p class="admin-users-page__eyebrow">S27 · Quản trị hệ thống</p>
+      <h1>Quản lý người dùng</h1>
+      <p>Tra cứu, cảnh báo, đình chỉ hoặc khôi phục tài khoản khách hàng.</p>
+    </header>
+    <section class="card admin-users-page__filters" aria-labelledby="filter-heading">
+      <h2 id="filter-heading">Bộ lọc</h2>
+      <form id="user-filter-form" class="admin-users-page__filter-form">
+        <label for="user-query">Tìm theo tên, email hoặc mã</label>
+        <input id="user-query" class="input" name="query" type="search" autocomplete="off">
+        <label for="user-status">Trạng thái</label>
+        <select id="user-status" class="select" name="status">
+          <option value="">Tất cả</option>
+          <option value="active">Đang hoạt động</option>
+          <option value="suspended">Đang đình chỉ</option>
+        </select>
+        <button class="btn btn--secondary" type="reset">Đặt lại</button>
+      </form>
+    </section>
+    <section aria-labelledby="result-heading">
+      <div class="admin-users-page__result-heading">
+        <h2 id="result-heading">Danh sách khách hàng</h2>
+        <p id="user-count" aria-live="polite"></p>
+      </div>
+      <div class="admin-users-page__table-wrap">
+        <table>
+          <thead><tr><th scope="col">Khách hàng</th><th scope="col">Liên hệ</th><th scope="col">Lượt đặt</th><th scope="col">Cảnh báo</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead>
+          <tbody id="user-rows"></tbody>
+        </table>
+      </div>
+      <div id="user-empty" class="empty" hidden>Không có khách hàng phù hợp.</div>
+    </section>
+  </main>
+  <site-footer></site-footer>
+  <dialog id="user-dialog" class="admin-users-page__dialog" aria-labelledby="user-dialog-title">
+    <form method="dialog" class="admin-users-page__dialog-close"><button class="btn btn--secondary" type="submit">Đóng</button></form>
+    <h2 id="user-dialog-title">Chi tiết khách hàng</h2>
+    <dl id="user-detail" class="admin-users-page__detail"></dl>
+    <form id="user-action-form" class="admin-users-page__action-form">
+      <label for="user-action">Hành động</label>
+      <select id="user-action" class="select" name="action" required></select>
+      <label for="user-reason">Lý do</label>
+      <textarea id="user-reason" class="textarea" name="reason" rows="4" minlength="8" required></textarea>
+      <label class="admin-users-page__check" for="user-confirmed"><input id="user-confirmed" name="confirmed" type="checkbox" required>Đã rà soát căn cứ và xác nhận hành động phù hợp chính sách.</label>
+      <p id="user-action-feedback" class="admin-users-page__feedback" role="status"></p>
+      <div class="admin-users-page__actions">
+        <button class="btn" type="submit">Xác nhận</button>
+        <button class="btn btn--secondary" type="button" disabled>Liên hệ người dùng</button>
+      </div>
+    </form>
+  </dialog>
+  <template id="tpl-user-row">
+    <tr>
+      <td><strong class="admin-users-page__name"></strong><span class="admin-users-page__id"></span></td>
+      <td><span class="admin-users-page__email"></span><span class="admin-users-page__phone"></span></td>
+      <td class="admin-users-page__bookings"></td>
+      <td class="admin-users-page__warnings"></td>
+      <td><span class="admin-users-page__status"></span></td>
+      <td><button class="btn btn--secondary admin-users-page__open" type="button">Xem chi tiết</button></td>
+    </tr>
+  </template>
+  <script type="module" src="js/pages/admin-users.js"></script>
+</body>
+</html>

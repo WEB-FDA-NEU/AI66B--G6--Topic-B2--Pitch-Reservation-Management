@@ -1,5 +1,7 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
+import { getCurrentUser } from '../services/auth-service.js';
+import { initializeState } from '../services/storage-service.js';
 
 const FEATURED_PITCHES = [
   {
@@ -58,6 +60,7 @@ const elements = {
   quickSearch: document.getElementById('quick-search'),
   featuredSection: document.getElementById('results')?.closest('section'),
   footer: document.querySelector('site-footer'),
+  adminDashboardLink: document.getElementById('admin-dashboard-link'),
 };
 
 const today = startOfDay(new Date());
@@ -264,6 +267,17 @@ function protectMobileControlsFromMessageBubble() {
   media.addEventListener('change', update);
 }
 
+async function showAdminDashboardLink() {
+  if (!elements.adminDashboardLink) return;
+  try {
+    await initializeState();
+    const user = getCurrentUser();
+    elements.adminDashboardLink.hidden = user?.role !== 'admin' || user.status !== 'active';
+  } catch {
+    elements.adminDashboardLink.hidden = true;
+  }
+}
+
 function bindEvents() {
   elements.dateButton?.addEventListener('click', () => togglePicker(elements.dateButton, elements.datePanel));
   elements.timeButton?.addEventListener('click', () => togglePicker(elements.timeButton, elements.timePanel));
@@ -305,3 +319,4 @@ renderFeaturedPitches(FEATURED_PITCHES);
 disableUnfinishedNavigation();
 protectMobileControlsFromMessageBubble();
 bindEvents();
+showAdminDashboardLink();
