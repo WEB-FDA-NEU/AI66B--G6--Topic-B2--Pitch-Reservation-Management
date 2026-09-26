@@ -14,8 +14,6 @@ body.admin-body {
   display: none !important;
 }
 
-
-
 /* Main Area */
 .admin-main {
   flex: 1;
@@ -183,7 +181,35 @@ body.admin-body {
   color: var(--c-muted);
 }
 
+/* 2-Column Grid for Reports & Activity */
+.admin-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-6);
+  align-items: stretch; /* Make both columns same height */
+}
+
 /* Generic Section Styles */
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  padding: var(--sp-5);
+  background: var(--c-bg);
+  height: 100%; /* Fill container height */
+}
+/* Ensure the quick nav wrapper doesn't have border since we want border only on its inner cards */
+.admin-board > .admin-section {
+  border: none;
+  padding: 0;
+}
+.admin-grid-2col .admin-section {
+  border: 1px solid var(--c-border);
+  padding: var(--sp-4);
+  /* The layout shows they look like cards themselves */
+}
+
 .admin-section__header {
   display: flex;
   justify-content: space-between;
@@ -192,7 +218,7 @@ body.admin-body {
 }
 
 .admin-section__title {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   margin-bottom: 4px;
 }
@@ -204,17 +230,18 @@ body.admin-body {
 
 .admin-section__link {
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--c-primary);
   text-decoration: none;
 }
 .admin-section__link:hover { text-decoration: underline; }
 
-/* Table Container */
+/* Table Container inside 2-col */
 .admin-table-container {
+  overflow-x: auto;
   border: 1px solid var(--c-border);
   border-radius: var(--radius-s);
-  overflow-x: auto;
+  flex: 1;
 }
 
 .admin-table {
@@ -236,7 +263,7 @@ body.admin-body {
   padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--c-border);
   font-size: 0.9375rem;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .admin-table tr:last-child td {
@@ -246,12 +273,12 @@ body.admin-body {
 .td-report-id {
   font-weight: 600;
   color: var(--c-text);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .td-report-meta, .td-reporter, .td-date {
   color: var(--c-muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 /* Badges */
@@ -264,9 +291,9 @@ body.admin-body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.badge--pending { background: #fff8e1; color: #f57f17; } /* Yellowish */
-.badge--review  { background: #e3f2fd; color: #1565c0; } /* Blueish */
-.badge--success { background: #e8f5e9; color: #2e7d32; } /* Greenish */
+.badge--pending { background: #fff8e1; color: #f57f17; }
+.badge--review  { background: #e3f2fd; color: #1565c0; }
+.badge--success { background: #e8f5e9; color: #2e7d32; }
 
 /* Activity List */
 .admin-activity-list {
@@ -276,6 +303,7 @@ body.admin-body {
   padding: var(--sp-4);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-s);
+  flex: 1;
 }
 
 .activity-item {
@@ -316,10 +344,11 @@ body.admin-body {
 .activity-title {
   font-weight: 600;
   color: var(--c-text);
+  font-size: 0.9375rem;
 }
 
 .activity-item__desc {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--c-text);
   margin-bottom: 2px;
 }
@@ -329,18 +358,18 @@ body.admin-body {
   color: var(--c-muted);
 }
 
-/* Quick Navigation */
+/* Quick Navigation - 4 Columns */
 .admin-quick-nav {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--sp-3);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
 }
 
 .quick-nav-card {
   display: flex;
   align-items: center;
   gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-s);
   background: var(--c-bg);
@@ -352,19 +381,21 @@ body.admin-body {
 .quick-nav-card:hover {
   background: var(--c-surface);
   border-color: var(--c-primary);
+  transform: translateY(-2px);
 }
 
 .quick-nav-card__icon {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   background: var(--c-surface);
   color: var(--c-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
-.quick-nav-card__icon svg { width: 18px; height: 18px; }
+.quick-nav-card__icon svg { width: 22px; height: 22px; }
 
 .quick-nav-card__content {
   flex: 1;
@@ -376,19 +407,31 @@ body.admin-body {
   font-size: 0.75rem;
   color: var(--c-muted);
   font-weight: 700;
+  margin-bottom: 2px;
 }
 
 .quick-nav-card__title {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .quick-nav-card__arrow {
   color: var(--c-muted);
   font-weight: 700;
+  opacity: 0.5;
+  transition: 0.2s;
 }
 .quick-nav-card:hover .quick-nav-card__arrow {
   color: var(--c-primary);
+  opacity: 1;
+}
+
+/* Responsive / Mobile overrides */
+@media (max-width: 1200px) {
+  .admin-quick-nav {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 900px) {
@@ -401,5 +444,23 @@ body.admin-body {
   .admin-board {
     margin-top: -60px;
     padding: var(--sp-4);
+  }
+  .admin-grid-2col {
+    grid-template-columns: 1fr;
+  }
+  .admin-quick-nav {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-quick-nav {
+    grid-template-columns: 1fr;
+  }
+  .admin-header-hero__title {
+    font-size: 2rem;
+  }
+  .admin-grid-kpi {
+    grid-template-columns: 1fr;
   }
 }
