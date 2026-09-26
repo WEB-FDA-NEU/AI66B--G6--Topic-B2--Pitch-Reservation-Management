@@ -400,9 +400,9 @@ function toggleStatus(item, type) {
 
   confirmTitle.textContent = `${actionName} ${typeName}`;
   if (type === 'announcement' && isActivating) {
-    confirmText.textContent = `${actionName} "${item.title}" to ${item.audience}?`;
+    confirmText.textContent = `${actionName} "${item.title}" tới ${item.audience}?`;
   } else {
-    confirmText.textContent = `Are you sure you want to ${actionName.toLowerCase()} "${item.title}"?`;
+    confirmText.textContent = `Bạn có chắc chắn muốn ${actionName.toLowerCase()} "${item.title}" không?`;
   }
 
   btnConfirmOk.className = 'btn-admin btn-admin--primary';

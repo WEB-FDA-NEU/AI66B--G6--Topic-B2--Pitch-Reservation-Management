@@ -2,8 +2,8 @@
 export const mockReports = [
   {
     reportId: 'RPT-1048',
-    summary: 'Pitch surface is damaged and unsafe for play',
-    description: 'When we arrived for our booking, the turf near the north goal was completely ripped up. Two players tripped on it. This needs immediate maintenance.',
+    summary: 'Mặt sân bị hỏng và không an toàn để thi đấu',
+    description: 'Khi chúng tôi đến nơi, phần cỏ giả gần gôn phía bắc đã bị rách tươm. Hai cầu thủ bị vấp ngã. Cần được bảo trì ngay lập tức.',
     reporterName: 'Alex Morgan',
     reporterId: 'USR-1001',
     reportedEntityType: 'Pitch',
@@ -13,13 +13,13 @@ export const mockReports = [
     priorityClass: 'badge--danger',
     reportStatus: 'Submitted',
     statusClass: 'badge--pending',
-    submittedAt: '25 Sept 2026',
+    submittedAt: '25 Tháng 9 2026',
     assignedAdmin: null,
     investigationNotes: []
   },
   {
     reportId: 'RPT-1047',
-    summary: 'Charged twice for the same booking',
+    summary: 'Bị trừ tiền 2 lần cho cùng một đặt sân',
     description: 'My credit card shows two separate charges for the booking BK-8829 on Saturday. Please refund the duplicate charge.',
     reporterName: 'Jamie Lee',
     reporterId: 'USR-1002',
@@ -30,14 +30,14 @@ export const mockReports = [
     priorityClass: 'badge--review',
     reportStatus: 'Under review',
     statusClass: 'badge--review',
-    submittedAt: '24 Sept 2026',
+    submittedAt: '24 Tháng 9 2026',
     assignedAdmin: 'Morgan Chen',
     investigationNotes: ['Checking payment gateway logs for duplicate transactions.']
   },
   {
     reportId: 'RPT-1046',
-    summary: 'Manager refused to honour confirmed booking',
-    description: 'We had a confirmed booking but when we arrived, the manager had let another team onto the pitch and told us we had to leave.',
+    summary: 'Quản lý từ chối xác nhận đặt sân',
+    description: 'Chúng tôi đã đặt và được xác nhận nhưng khi đến nơi, quản lý lại cho đội khác vào đá và đuổi chúng tôi.',
     reporterName: 'Taylor Reed',
     reporterId: 'USR-1003',
     reportedEntityType: 'Pitch Manager',
@@ -47,7 +47,7 @@ export const mockReports = [
     priorityClass: 'badge--danger',
     reportStatus: 'Investigation required',
     statusClass: 'badge--danger',
-    submittedAt: '24 Sept 2026',
+    submittedAt: '24 Tháng 9 2026',
     assignedAdmin: 'Jordan Park',
     investigationNotes: ['Reached out to manager for their side of the story.']
   }
@@ -62,7 +62,7 @@ export const mockActivities = [
     targetId: 'Jamie Lee',
     result: 'Success',
     resultClass: 'badge--success',
-    createdAt: '25 Sept 2026, 10:12',
+    createdAt: '25 Tháng 9 2026, 10:12',
     details: 'Issued formal warning for late cancellations.'
   },
   {
@@ -73,7 +73,7 @@ export const mockActivities = [
     targetId: 'Hillcrest Pitch 2',
     result: 'Success',
     resultClass: 'badge--success',
-    createdAt: '25 Sept 2026, 08:35',
+    createdAt: '25 Tháng 9 2026, 08:35',
     details: 'Suspended pitch pending maintenance review.'
   },
   {
@@ -84,7 +84,7 @@ export const mockActivities = [
     targetId: 'RPT-1044',
     result: 'Success',
     resultClass: 'badge--success',
-    createdAt: '24 Sept 2026, 16:48',
+    createdAt: '24 Tháng 9 2026, 16:48',
     details: 'Status changed from Investigation required to Resolved.'
   },
   {
@@ -95,7 +95,7 @@ export const mockActivities = [
     targetId: 'Phiên web',
     result: 'Success',
     resultClass: 'badge--success',
-    createdAt: '24 Sept 2026, 13:26',
+    createdAt: '24 Tháng 9 2026, 13:26',
     details: 'Successful authentication from new IP.'
   }
 ];
@@ -110,10 +110,10 @@ export const mockUsers = [
     statusClass: 'badge--success',
     warningCount: 0,
     bookingCount: 12,
-    createdAt: '15 Mar 2025',
-    lastActivityAt: '25 Sept 2026, 10:30',
+    createdAt: '15 Tháng 3 2025',
+    lastActivityAt: '25 Tháng 9 2026, 10:30',
       processedBy: '--',
-      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Confirmed'}, {id: 'BK-8001', venue: 'Riverside 5-a-side', date: '2026-09-19', status: 'Completed'}, {id: 'BK-8002', venue: 'Eastfield Sports', date: '2026-09-18', status: 'Completed'}],
+      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Đã xác nhận'}, {id: 'BK-8001', venue: 'Riverside 5-a-side', date: '2026-09-19', status: 'Đã hoàn thành'}, {id: 'BK-8002', venue: 'Eastfield Sports', date: '2026-09-18', status: 'Đã hoàn thành'}],
       relatedReports: []
   },
   {
@@ -125,12 +125,12 @@ export const mockUsers = [
     statusClass: 'badge--pending',
     warningCount: 1,
     bookingCount: 8,
-    createdAt: '22 May 2025',
-    lastActivityAt: '24 Sept 2026, 14:20',
+    createdAt: '22 Tháng 5 2025',
+    lastActivityAt: '24 Tháng 9 2026, 14:20',
       processedBy: 'Morgan Chen',
       adminNote: 'Reported for late cancellation.',
-      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Confirmed'}],
-      relatedReports: [{id: 'RPT-1002', type: 'User conduct', date: '24 Sept 2026'}]
+      recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Đã xác nhận'}],
+      relatedReports: [{id: 'RPT-1002', type: 'Hành vi người dùng', date: '24 Tháng 9 2026'}]
   },
   {
     id: 'USR-1003',
@@ -141,8 +141,8 @@ export const mockUsers = [
     statusClass: 'badge--danger',
     warningCount: 2,
     bookingCount: 5,
-    createdAt: '10 Jan 2025',
-    lastActivityAt: '20 Sept 2026, 16:45',
+    createdAt: '10 Tháng 1 2025',
+    lastActivityAt: '20 Tháng 9 2026, 16:45',
     suspensionReason: 'Repeated no-shows'
   },
   {
@@ -154,8 +154,8 @@ export const mockUsers = [
     statusClass: 'badge--success',
     warningCount: 0,
     bookingCount: 15,
-    createdAt: '05 Nov 2024',
-    lastActivityAt: '25 Sept 2026, 09:15'
+    createdAt: '05 Tháng 11 2024',
+    lastActivityAt: '25 Tháng 9 2026, 09:15'
   },
   {
     id: 'USR-1006',
@@ -166,13 +166,13 @@ export const mockUsers = [
     statusClass: 'badge--review',
     warningCount: 1,
     bookingCount: 7,
-    createdAt: '14 Feb 2025',
-    lastActivityAt: '25 Sept 2026, 08:00',
+    createdAt: '14 Tháng 2 2025',
+    lastActivityAt: '25 Tháng 9 2026, 08:00',
       processedBy: 'Jordan Park',
       adminNote: 'Account restored after review period.',
-      restoredAt: '01 Sept 2026, 10:00',
+      restoredAt: '01 Tháng 9 2026, 10:00',
       recentBookings: [],
-      relatedReports: [{id: 'RPT-1006', type: 'User conduct', date: '25 Sept 2026'}]
+      relatedReports: [{id: 'RPT-1006', type: 'Hành vi người dùng', date: '25 Tháng 9 2026'}]
   }
 ];
 
@@ -187,8 +187,8 @@ export const mockManagers = [
     managedPitchCount: 3,
     activeBookingCount: '24',
     simulatedBalance: '$12,400',
-    createdAt: '01 Jan 2024',
-    lastActivityAt: '25 Sept 2026, 09:00'
+    createdAt: '01 Tháng 1 2024',
+    lastActivityAt: '25 Tháng 9 2026, 09:00'
   },
   {
     id: 'MGR-2002',
@@ -200,8 +200,8 @@ export const mockManagers = [
     managedPitchCount: 2,
     activeBookingCount: '18',
     simulatedBalance: '$8,200',
-    createdAt: '15 Mar 2024',
-    lastActivityAt: '24 Sept 2026, 15:30'
+    createdAt: '15 Tháng 3 2024',
+    lastActivityAt: '24 Tháng 9 2026, 15:30'
   },
   {
     id: 'MGR-2003',
@@ -213,8 +213,8 @@ export const mockManagers = [
     managedPitchCount: 1,
     activeBookingCount: '0 (5 affected)',
     simulatedBalance: '$3,100',
-    createdAt: '10 May 2024',
-    lastActivityAt: '20 Sept 2026, 17:00',
+    createdAt: '10 Tháng 5 2024',
+    lastActivityAt: '20 Tháng 9 2026, 17:00',
     suspensionReason: 'Unresponsive to reports'
   },
   {
@@ -227,8 +227,8 @@ export const mockManagers = [
     managedPitchCount: 4,
     activeBookingCount: '31',
     simulatedBalance: '$15,600',
-    createdAt: '22 Aug 2024',
-    lastActivityAt: '25 Sept 2026, 08:45'
+    createdAt: '22 Tháng 8 2024',
+    lastActivityAt: '25 Tháng 9 2026, 08:45'
   },
   {
     id: 'MGR-2005',
@@ -240,27 +240,27 @@ export const mockManagers = [
     managedPitchCount: 2,
     activeBookingCount: '12',
     simulatedBalance: '$6,800',
-    createdAt: '30 Nov 2024',
-    lastActivityAt: '24 Sept 2026, 11:20'
+    createdAt: '30 Tháng 11 2024',
+    lastActivityAt: '24 Tháng 9 2026, 11:20'
   }
 ];
 
 
 
 export const mockBanners = [
-  { id: 'B-001', title: 'Summer Tournament Registration', description: 'Register your team for the summer tournament.', position: 'Màn hình chính (Hero)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '01 Sept 2026', endDate: '31 Oct 2026', imageUrl: '', link: '/promos/summer' },
-  { id: 'B-002', title: 'New Pitch Launch at Riverside', description: 'Book the newly opened pitches at Riverside.', position: 'Màn hình chính (Hero)', status: 'Đã lên lịch', statusClass: 'badge--primary', startDate: '01 Oct 2026', endDate: '30 Nov 2026', imageUrl: '', link: '/pitches/riverside' },
-  { id: 'B-003', title: 'Weekend Discount Promo', description: 'Get 20% off weekend bookings at select pitches.', position: 'Thanh bên (Sidebar)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '15 Sept 2026', endDate: '30 Sept 2026', imageUrl: '', link: '/promos/weekend' },
-  { id: 'B-004', title: 'Holiday Special Offer', description: 'Special holiday rates for all 5-a-side pitches.', position: 'Thanh bên (Sidebar)', status: 'Bản nháp', statusClass: 'badge--neutral', startDate: '01 Dec 2026', endDate: '31 Dec 2026', imageUrl: '', link: '/promos/holiday' },
-  { id: 'B-005', title: 'Partner Spotlight: SportsCo', description: 'Check out our partner SportsCo for pre...', position: 'Footer', status: 'Đã hết hạn', statusClass: 'badge--warning', startDate: '01 Aug 2026', endDate: '31 Aug 2026', imageUrl: '', link: '' },
-  { id: 'B-006', title: 'Download Our Mobile App', description: 'Book on the go with our mobile app.', position: 'Booking page top', status: 'Ngừng hoạt động', statusClass: 'badge--neutral', startDate: '01 Sept 2026', endDate: '31 Dec 2026', imageUrl: '', link: '' }
+  { id: 'B-001', title: 'Đăng ký Giải đấu Mùa hè', description: 'Đăng ký đội của bạn tham gia giải mùa hè.', position: 'Màn hình chính (Hero)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '01 Tháng 9 2026', endDate: '31 Tháng 10 2026', imageUrl: '', link: '/promos/summer' },
+  { id: 'B-002', title: 'Khai trương Sân mới tại Riverside', description: 'Đặt sân mới khai trương tại Riverside.', position: 'Màn hình chính (Hero)', status: 'Đã lên lịch', statusClass: 'badge--primary', startDate: '01 Tháng 10 2026', endDate: '30 Tháng 11 2026', imageUrl: '', link: '/pitches/riverside' },
+  { id: 'B-003', title: 'Khuyến mãi Giảm giá Cuối tuần', description: 'Giảm giá 20% cho các đặt sân cuối tuần tại một số sân.', position: 'Thanh bên (Sidebar)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '15 Tháng 9 2026', endDate: '30 Tháng 9 2026', imageUrl: '', link: '/promos/weekend' },
+  { id: 'B-004', title: 'Ưu đãi Đặc biệt Ngày lễ', description: 'Giá ưu đãi ngày lễ cho tất cả các sân 5 người.', position: 'Thanh bên (Sidebar)', status: 'Bản nháp', statusClass: 'badge--neutral', startDate: '01 Tháng 12 2026', endDate: '31 Tháng 12 2026', imageUrl: '', link: '/promos/holiday' },
+  { id: 'B-005', title: 'Partner Spotlight: SportsCo', description: 'Check out our partner SportsCo for pre...', position: 'Chân trang (Footer)', status: 'Đã hết hạn', statusClass: 'badge--warning', startDate: '01 Tháng 8 2026', endDate: '31 Tháng 8 2026', imageUrl: '', link: '' },
+  { id: 'B-006', title: 'Tải Ứng dụng Di động', description: 'Đặt sân nhanh chóng mọi lúc mọi nơi.', position: 'Đầu trang Đặt sân', status: 'Ngừng hoạt động', statusClass: 'badge--neutral', startDate: '01 Tháng 9 2026', endDate: '31 Tháng 12 2026', imageUrl: '', link: '' }
 ];
 
 export const mockAnnouncements = [
-  { id: 'A-001', title: 'Platform Maintenance Notice', content: 'The platform will undergo scheduled maintenance on September 28th from 2:00 AM to 4:00 AM UTC. Some features may be temporarily unavailable.', audience: 'All authenticated users', status: 'Published', statusClass: 'badge--success', publishedDate: '25 Sept 2026', expDate: '29 Sept 2026' },
-  { id: 'A-002', title: 'New Feature: Team Chat', content: 'You can now chat with your team members directly on the platform.', audience: 'Registered users', status: 'Published', statusClass: 'badge--success', publishedDate: '22 Sept 2026', expDate: '22 Oct 2026' },
-  { id: 'A-003', title: 'Payout Schedule Update', content: 'Manager payouts will now be processed every Monday.', audience: 'Pitch managers', status: 'Published', statusClass: 'badge--success', publishedDate: '20 Sept 2026', expDate: '20 Dec 2026' },
-  { id: 'A-004', title: 'Security Policy Update', content: 'Our security policy has been updated.', audience: 'All authenticated users', status: 'Đã lên lịch', statusClass: 'badge--primary', publishedDate: '01 Oct 2026', expDate: '01 Nov 2026' },
-  { id: 'A-005', title: 'Admin Training Session', content: 'A training session for new admin tools...', audience: 'Administrators', status: 'Bản nháp', statusClass: 'badge--neutral', publishedDate: '05 Oct 2026', expDate: '05 Oct 2026' },
-  { id: 'A-006', title: 'Holiday Schedule', content: 'Modified support hours during the holi...', audience: 'All authenticated users', status: 'Unpublished', statusClass: 'badge--neutral', publishedDate: '10 Sept 2026', expDate: '31 Dec 2026' }
+  { id: 'A-001', title: 'Thông báo Bảo trì Hệ thống', content: 'The platform will undergo scheduled maintenance on Tháng 9ember 28th from 2:00 AM to 4:00 AM UTC. Some features may be temporarily unavailable.', audience: 'Tất cả người dùng đã đăng nhập', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '25 Tháng 9 2026', expDate: '29 Tháng 9 2026' },
+  { id: 'A-002', title: 'Tính năng mới: Chat Nhóm', content: 'Bây giờ bạn có thể chat trực tiếp với đội của mình trên hệ thống.', audience: 'Người dùng đăng ký', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '22 Tháng 9 2026', expDate: '22 Tháng 10 2026' },
+  { id: 'A-003', title: 'Cập nhật Lịch Chi trả', content: 'Việc chi trả cho chủ sân sẽ được xử lý vào mỗi thứ Hai.', audience: 'Quản lý sân', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '20 Tháng 9 2026', expDate: '20 Tháng 12 2026' },
+  { id: 'A-004', title: 'Cập nhật Chính sách Bảo mật', content: 'Chính sách bảo mật của chúng tôi đã được cập nhật.', audience: 'Tất cả người dùng đã đăng nhập', status: 'Đã lên lịch', statusClass: 'badge--primary', publishedDate: '01 Tháng 10 2026', expDate: '01 Tháng 11 2026' },
+  { id: 'A-005', title: 'Đào tạo Admin', content: 'Một buổi đào tạo về các công cụ admin mới...', audience: 'Quản trị viên', status: 'Bản nháp', statusClass: 'badge--neutral', publishedDate: '05 Tháng 10 2026', expDate: '05 Tháng 10 2026' },
+  { id: 'A-006', title: 'Lịch nghỉ Lễ', content: 'Giờ hỗ trợ sẽ được thay đổi trong các ngày lễ...', audience: 'Tất cả người dùng đã đăng nhập', status: 'Chưa phát hành', statusClass: 'badge--neutral', publishedDate: '10 Tháng 9 2026', expDate: '31 Tháng 12 2026' }
 ];

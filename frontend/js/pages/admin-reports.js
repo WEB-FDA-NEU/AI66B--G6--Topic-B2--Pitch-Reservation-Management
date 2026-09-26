@@ -119,7 +119,7 @@ function openActionModal(rep) {
       notesContainer.innerHTML += `<li style="font-size: 0.875rem; margin-bottom: 8px;"><strong>${note.author}</strong> (${note.date}): ${note.text}</li>`;
     });
   } else {
-    notesContainer.innerHTML = `<span style="font-size: 0.875rem; color: var(--c-muted);">No investigation notes yet.</span>`;
+    notesContainer.innerHTML = `<span style="font-size: 0.875rem; color: var(--c-muted);">Chưa có ghi chú điều tra nào.</span>`;
   }
   
   // reset action form

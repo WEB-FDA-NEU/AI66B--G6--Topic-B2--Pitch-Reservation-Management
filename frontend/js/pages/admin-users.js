@@ -231,7 +231,7 @@ btnConfirmAction.addEventListener('click', () => {
     currentUser.accountStatus = 'Restored';
     currentUser.statusClass = 'badge--info';
     const today = new Date();
-    currentUser.restoredAt = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + today.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    currentUser.restoredAt = today.toLocaleDateString('vi-VN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + today.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
   }
 
   renderUsers();
