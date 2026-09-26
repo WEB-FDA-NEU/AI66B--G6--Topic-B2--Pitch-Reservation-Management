@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Content Management — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-content.css">
+</head>
+<body>
+  <admin-sidebar current-page="content"></admin-sidebar>
+
+  <main class="admin-main admin-content-page">
+    <header class="admin-header-hero">
+      <div class="admin-header-hero__content">
+        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S33</p>
+        <h1 class="admin-header-hero__title">Announcement & Banner Management</h1>
+        <p class="admin-header-hero__desc">Manage website banners and system-wide announcements.</p>
+      </div>
+    </header>
+
+    <div class="admin-board">
+      <div class="admin-tabs-container" style="display: flex; justify-content: space-between; align-items: center; padding: 24px 24px 16px;">
+        <div class="admin-tabs-pill">
+          <button type="button" class="admin-tab-pill active" id="tab-banners">Banners <span id="banners-count">(6)</span></button>
+          <button type="button" class="admin-tab-pill" id="tab-announcements">Announcements <span id="announcements-count">(6)</span></button>
+        </div>
+        <button type="button" class="btn-admin btn-admin--primary" id="btn-create-content" style="display:flex; align-items:center; border-radius:6px; padding:8px 16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Create banner
+        </button>
+      </div>
+
+      <!-- Banners Table -->
+      <div class="admin-table-wrapper" id="view-banners">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Banner</th>
+              <th>Position</th>
+              <th>Status</th>
+              <th>Date range</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="banners-tbody" aria-live="polite">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Announcements Table -->
+      <div class="admin-table-wrapper" id="view-announcements" hidden>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Announcement</th>
+              <th>Audience</th>
+              <th>Status</th>
+              <th>Published</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="announcements-tbody" aria-live="polite">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-pagination">
+        <div class="admin-pagination__info">Page 1 of 1</div>
+        <div class="admin-pagination__controls">
+          <button class="admin-pagination__btn btn-prev" aria-label="Previous page" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="admin-pagination__btn btn-next" aria-label="Next page" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Banner Modal -->
+  <dialog id="banner-modal" class="admin-modal admin-modal--lg">
+    <div class="admin-modal__header">
+      <h2 class="admin-modal__title" id="banner-modal-title">Create banner</h2>
+      <button class="admin-modal__close" id="banner-modal-close" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="admin-modal__body">
+      <form id="banner-form" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label>Title <span style="color:var(--c-danger);">*</span></label>
+          <input type="text" class="form-control" id="banner-title" placeholder="Banner title" required>
+        </div>
+        <div class="form-group">
+          <label>Description <span style="color:var(--c-danger);">*</span></label>
+          <textarea class="form-control" id="banner-desc" rows="3" placeholder="Banner description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" class="form-control" id="banner-img" placeholder="https://... (optional)">
+          <p class="help-text" style="font-size:0.8rem; color:var(--c-muted); margin-top:4px;">Leave empty to use a placeholder image.</p>
+        </div>
+        <div class="form-group">
+          <label>Destination link <span style="color:var(--c-danger);">*</span></label>
+          <input type="text" class="form-control" id="banner-link" placeholder="/promos or https://..." required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Start date <span style="color:var(--c-danger);">*</span></label>
+            <input type="date" class="form-control" id="banner-start" required>
+          </div>
+          <div class="form-group">
+            <label>End date <span style="color:var(--c-danger);">*</span></label>
+            <input type="date" class="form-control" id="banner-end" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Display position</label>
+          <select class="form-control" id="banner-position" required>
+            <option value="" disabled selected hidden>Select position</option>
+              <option value="Homepage hero">Homepage hero</option>
+            <option value="Homepage sidebar">Homepage sidebar</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="admin-modal__footer" style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+      <button type="button" class="btn-admin btn-admin--neutral" id="banner-modal-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="banner-modal-save">Save banner</button>
+    </div>
+  </dialog>
+
+  <!-- Announcement Modal -->
+  <dialog id="announcement-modal" class="admin-modal admin-modal--lg">
+    <div class="admin-modal__header">
+      <h2 class="admin-modal__title" id="ann-modal-title">Create announcement</h2>
+      <button class="admin-modal__close" id="ann-modal-close" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="admin-modal__body">
+      <form id="ann-form" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label>Title <span style="color:var(--c-danger);">*</span></label>
+          <input type="text" class="form-control" id="ann-title" placeholder="Announcement title" required>
+        </div>
+        <div class="form-group">
+          <label>Content <span style="color:var(--c-danger);">*</span></label>
+          <textarea class="form-control" id="ann-content" rows="4" placeholder="Announcement content" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Target audience <span style="color:var(--c-danger);">*</span></label>
+          <select class="form-control" id="ann-audience" required>
+            <option value="" disabled selected hidden>Select audience</option>
+              <option value="All authenticated users">All authenticated users</option>
+            <option value="Registered users">Registered users</option>
+            <option value="Pitch managers">Pitch managers</option>
+          </select>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Publication date <span style="color:var(--c-danger);">*</span></label>
+            <input type="date" class="form-control" id="ann-pub-date" required>
+          </div>
+          <div class="form-group">
+            <label>Expiration date <span style="color:var(--c-danger);">*</span></label>
+            <input type="date" class="form-control" id="ann-exp-date" required>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="admin-modal__footer" style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+      <button type="button" class="btn-admin btn-admin--neutral" id="ann-modal-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="ann-modal-save">Save announcement</button>
+    </div>
+  </dialog>
+
+  
+  <dialog id="preview-modal" class="admin-modal">
+    <button class="admin-modal__close" id="preview-modal-close" aria-label="Close modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <div class="admin-modal__header" style="display:flex; align-items:center; gap:12px; border-bottom:none; padding-bottom:0;">
+      <h2 class="admin-modal__title">Preview</h2>
+      <span class="badge" id="preview-status"></span>
+    </div>
+    <div class="admin-modal__body" style="padding-top: 16px;">
+      <div id="preview-hero" style="background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%); color: #fff; border-radius: 12px; padding: 32px 24px; text-align: center; margin-bottom: 24px;">
+        <h3 id="preview-title" style="font-size: 1.25rem; margin-bottom: 8px;"></h3>
+        <p id="preview-desc" style="font-size: 0.9375rem; opacity: 0.9; margin-bottom: 16px;"></p>
+        <div id="preview-link" style="display:inline-block; padding: 6px 16px; background: rgba(255,255,255,0.2); border-radius: 100px; font-size: 0.875rem;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:0.875rem;">
+        <div>
+          <div style="color:var(--c-muted); margin-bottom:4px;" id="preview-meta-label1">Position</div>
+          <strong id="preview-meta-value1" style="color:var(--c-text);"></strong>
+        </div>
+        <div style="text-align:right;">
+          <div style="color:var(--c-muted); margin-bottom:4px;" id="preview-meta-label2">Date range</div>
+          <strong id="preview-meta-value2" style="color:var(--c-text);"></strong>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  
+  <!-- Confirm Modal -->
+  <dialog id="confirm-modal" class="admin-modal" style="max-width: 480px;">
+    <div class="admin-modal__header" style="margin-bottom: 16px;">
+      <h2 class="admin-modal__title" id="confirm-title">Confirm</h2>
+    </div>
+    <div class="admin-modal__body" style="margin-bottom: 24px;">
+      <p id="confirm-text" style="color: var(--c-muted); font-size: 0.9375rem; line-height: 1.5;"></p>
+    </div>
+    <div class="admin-modal__actions" style="display:flex; justify-content:flex-end; gap:12px;">
+      <button type="button" class="btn-admin btn-admin--neutral" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="confirm-ok">Confirm</button>
+    </div>
+  </dialog>
+
+  <!-- Templates -->
+  <template id="tpl-banner-row">
+    <tr>
+      <td>
+        <strong class="td-title" style="display:block; font-weight:600; color:var(--c-text);"></strong>
+        <span class="td-desc" style="font-size:0.875rem; color:var(--c-muted);"></span>
+      </td>
+      <td class="td-position" style="color:var(--c-text);"></td>
+      <td><span class="badge td-status"></span></td>
+      <td class="td-date" style="font-size:0.875rem; color:var(--c-muted);"></td>
+      
+      <td style="text-align: right; white-space: nowrap;">
+        <button type="button" class="td-action-btn btn-edit" aria-label="Edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-preview" aria-label="Preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-toggle" aria-label="Toggle status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-delete" aria-label="Delete" style="color: var(--c-danger); display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      </td>
+
+    </tr>
+  </template>
+
+  <template id="tpl-ann-row">
+    <tr>
+      <td>
+        <strong class="td-title" style="display:block; font-weight:600; color:var(--c-text);"></strong>
+        <span class="td-desc" style="font-size:0.875rem; color:var(--c-muted);"></span>
+      </td>
+      <td class="td-audience" style="color:var(--c-text);"></td>
+      <td><span class="badge td-status"></span></td>
+      <td class="td-date" style="font-size:0.875rem; color:var(--c-muted);"></td>
+      
+      <td style="text-align: right; white-space: nowrap;">
+        <button type="button" class="td-action-btn btn-edit" aria-label="Edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-preview" aria-label="Preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-toggle" aria-label="Toggle status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+        </button>
+        <button type="button" class="td-action-btn btn-delete" aria-label="Delete" style="color: var(--c-danger); display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      </td>
+
+    </tr>
+  </template>
+
+  <script type="module" src="js/components/admin-sidebar.js"></script>
+  <script type="module" src="js/pages/admin-content.js"></script>
+</body>
+</html>
