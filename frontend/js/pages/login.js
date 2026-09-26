@@ -6,15 +6,40 @@ import {
   getRoleLandingPage,
   login,
   logout,
-} from '../services/auth-service.js';
+} from '../services/auth-service.js?v=3';
 import { clearFieldErrors, setFieldError } from '../ui.js';
 
 const APPROVED_RETURN_TARGETS = new Set([
   'index.html',
   'search.html',
   'pitch-detail.html',
+  'favorite-pitches.html',
+  'booking-schedule.html',
+  'booking-confirmation.html',
+  'payment.html',
+  'booking-result.html',
+  'booking-history.html',
+  'booking-details.html',
+  'payment-history.html',
+  'manager-dashboard.html',
+  'manager-pitches.html',
+  'add-pitch.html',
+  'edit-pitch.html',
+  'pitch-availability.html',
+  'manager-bookings.html',
+  'manager-revenue.html',
+  'admin-dashboard.html',
+  'admin-users.html',
+  'admin-pitch-managers.html',
+  'admin-pitch-moderation.html',
+  'admin-reports.html',
+  'admin-finance.html',
+  'admin-content.html',
+  'admin-activity-log.html',
+  'admin-settings.html',
+  'settings.html',
 ]);
-const AVAILABLE_ROLE_LANDINGS = new Set(['index.html']);
+const AVAILABLE_ROLE_LANDINGS = new Set(['index.html', 'manager-dashboard.html', 'admin-dashboard.html']);
 
 const form = document.getElementById('login-form');
 const identifier = document.getElementById('login-identifier');

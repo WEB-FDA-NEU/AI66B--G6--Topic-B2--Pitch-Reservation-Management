@@ -72,6 +72,12 @@
 .booking-details-page__history { display: grid; gap: var(--sp-3); margin-top: var(--sp-3); padding-left: var(--sp-5); }
 .booking-details-page__history time { display: block; margin-top: var(--sp-1); color: var(--c-muted); font-size: .82rem; }
 .booking-details-page__actions { display: grid; gap: var(--sp-2); margin-top: var(--sp-4); }
+.booking-details-page__feedback { min-height: 1.5em; margin-top: var(--sp-3); color: var(--c-primary); }
+.booking-details-page__rating-field { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-block: var(--sp-4); }
+.booking-details-page__rating-field legend { width: 100%; margin-bottom: var(--sp-2); font-weight: 700; }
+.booking-details-page__rating-field label { padding: var(--sp-2); border: 1px solid var(--c-border); border-radius: var(--radius-s); }
+#cancel-dialog, #review-dialog { width: min(34rem, calc(100% - 2rem)); max-width: 34rem; }
+#cancel-dialog p, #review-dialog p { margin-top: var(--sp-3); }
 
 @media (min-width: 640px) {
   .booking-details-page__panel-heading { flex-direction: row; align-items: center; justify-content: space-between; }

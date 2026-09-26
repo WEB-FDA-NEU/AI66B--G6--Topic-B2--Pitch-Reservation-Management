@@ -1,6 +1,5 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { initializeState } from '../services/storage-service.js';
 import { requireRole, ROLES } from '../services/access-control.js';
 import {
   BOOKING_STATUS_META,
@@ -8,8 +7,10 @@ import {
   getManagerBooking,
   listManagerBookings,
   listManagerPitches,
+  prepareBookingData,
 } from '../services/booking-service.js';
 import { formatVND } from '../render.js';
+import { cancelManagerBooking } from '../services/finance-service.js';
 
 const elements = {
   content: document.getElementById('manager-content'),
@@ -36,11 +37,16 @@ const elements = {
   panelAmount: document.getElementById('panel-amount'),
   panelPayment: document.getElementById('panel-payment-status'),
   panelBooking: document.getElementById('panel-booking-status'),
+  cancelButton: document.getElementById('manager-cancel-button'),
+  cancelDialog: document.getElementById('manager-cancel-dialog'),
+  cancelForm: document.getElementById('manager-cancel-form'),
+  cancelFeedback: document.getElementById('manager-cancel-feedback'),
 };
 
 let currentUser = null;
 let currentPitch = null;
 let bookings = [];
+let selectedBooking = null;
 
 function showState(title, message) {
   elements.content.hidden = true;
@@ -116,6 +122,7 @@ function render() {
 }
 
 function openPanel(booking) {
+  selectedBooking = booking;
   elements.panelRef.textContent = booking.id;
   elements.panelCustomer.textContent = booking.customer?.displayName ?? booking.customerId;
   elements.panelPhone.textContent = booking.customer?.phone ?? '—';
@@ -123,16 +130,18 @@ function openPanel(booking) {
   elements.panelAmount.textContent = formatVND(booking.amount);
   elements.panelPayment.textContent = PAYMENT_STATUS_LABELS[booking.paymentStatus];
   elements.panelBooking.textContent = BOOKING_STATUS_META[booking.status].label;
+  elements.cancelButton.hidden = booking.status !== 'Confirmed' || Date.parse(booking.slotStart) <= Date.now();
   elements.panel.hidden = false;
   elements.panelClose.focus();
 }
 
 function closePanel() {
   elements.panel.hidden = true;
+  selectedBooking = null;
 }
 
 async function init() {
-  await initializeState();
+  await prepareBookingData();
   currentUser = requireRole([ROLES.MANAGER]);
   if (!currentUser) return;
 
@@ -153,6 +162,26 @@ async function init() {
   elements.form.addEventListener('submit', event => event.preventDefault());
   elements.form.addEventListener('input', render);
   elements.panelClose.addEventListener('click', closePanel);
+  elements.cancelButton.addEventListener('click', () => {
+    elements.cancelFeedback.textContent = '';
+    elements.cancelForm.reset();
+    elements.cancelDialog.showModal();
+  });
+  document.getElementById('manager-cancel-close').addEventListener('click', () => elements.cancelDialog.close());
+  elements.cancelForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!selectedBooking) return;
+    const result = await cancelManagerBooking(currentUser, selectedBooking.id, new FormData(elements.cancelForm).get('reason'));
+    if (!result.ok) {
+      elements.cancelFeedback.textContent = 'Không thể huỷ lượt đặt sân ở trạng thái hiện tại.';
+      return;
+    }
+    elements.cancelDialog.close();
+    bookings = listManagerBookings(currentUser, currentPitch.id);
+    renderCounts();
+    render();
+    openPanel(bookings.find(booking => booking.id === result.booking.id));
+  });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !elements.panel.hidden) closePanel();
   });

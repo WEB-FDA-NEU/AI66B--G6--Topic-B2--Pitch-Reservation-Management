@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cài đặt tài khoản theo vai trò trên Pitch Point.">
+  <title>Cài đặt — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+  <main class="container settings-page" id="main-content" hidden>
+    <header>
+      <p class="settings-page__eyebrow">Tài khoản</p>
+      <h1>Cài đặt</h1>
+      <p id="settings-role-description"></p>
+    </header>
+    <form class="card settings-page__form" id="settings-form">
+      <section aria-labelledby="profile-title">
+        <h2 id="profile-title">Thông tin hiển thị</h2>
+        <div class="field"><label class="field__label" for="display-name">Tên hiển thị</label><input class="input" id="display-name" name="displayName" minlength="2" required></div>
+        <div class="field"><label class="field__label" for="phone">Số điện thoại</label><input class="input" id="phone" name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}"></div>
+      </section>
+      <section aria-labelledby="preference-title">
+        <h2 id="preference-title">Tùy chọn giao diện và thông tin</h2>
+        <label class="settings-page__check"><input id="compact-cards" name="compactCards" type="checkbox"> Ưu tiên cách hiển thị cô đọng</label>
+        <label class="settings-page__check"><input id="role-updates" name="roleUpdates" type="checkbox"> <span id="role-updates-label"></span></label>
+      </section>
+      <p class="settings-page__feedback" id="settings-feedback" role="status"></p>
+      <div class="settings-page__actions"><a class="btn" id="settings-back-link" href="index.html">Quay lại</a><button class="btn btn--primary" type="submit">Lưu cài đặt</button></div>
+    </form>
+  </main>
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/settings.js"></script>
+</body>
+</html>

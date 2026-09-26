@@ -2,7 +2,7 @@ import '../components/site-header.js';
 import '../components/site-footer.js';
 import { initializeState } from '../services/storage-service.js';
 import { requireRole, ROLES } from '../services/access-control.js';
-import { revalidateBookingDraft } from '../services/booking-service.js';
+import { acceptBookingDraftTerms, revalidateBookingDraft } from '../services/booking-service.js';
 import { formatVND } from '../render.js';
 
 const elements = {
@@ -22,6 +22,8 @@ const elements = {
   services: document.getElementById('included-services'),
   backLink: document.getElementById('back-link'),
   proceedButton: document.getElementById('proceed-button'),
+  acceptTerms: document.getElementById('accept-terms'),
+  termsChangeNotice: document.getElementById('terms-change-notice'),
 };
 
 let draft = null;
@@ -68,6 +70,14 @@ async function init() {
   }
 
   draft = result.draft;
+  if (result.termsChanged) {
+    elements.termsChangeNotice.hidden = false;
+    draft = {
+      ...draft,
+      amount: result.currentAmount,
+      snapshot: { ...draft.snapshot, price: result.currentAmount, services: [...result.pitch.services] },
+    };
+  }
   elements.pitchName.textContent = draft.snapshot.pitchName;
   elements.pitchLocation.textContent = draft.snapshot.pitchLocation;
   elements.pitchType.textContent = draft.snapshot.pitchTypeLabel;
@@ -80,7 +90,27 @@ async function init() {
     item.textContent = service;
     return item;
   }));
-  elements.backLink.href = `booking-schedule.html?${new URLSearchParams({ pitchId: String(draft.pitchId) })}`;
+  const backParams = draft.rescheduleBookingId
+    ? { pitchId: String(draft.pitchId), rescheduleBookingId: draft.rescheduleBookingId }
+    : { pitchId: String(draft.pitchId) };
+  elements.backLink.href = `booking-schedule.html?${new URLSearchParams(backParams)}`;
+  elements.acceptTerms.addEventListener('change', () => {
+    elements.proceedButton.disabled = !elements.acceptTerms.checked;
+  });
+  elements.proceedButton.addEventListener('click', () => {
+    if (!elements.acceptTerms.checked) return;
+    elements.proceedButton.disabled = true;
+    let latest = revalidateBookingDraft(user, draft.id);
+    if (latest.valid && latest.termsChanged) {
+      draft = acceptBookingDraftTerms(user, draft.id);
+      latest = revalidateBookingDraft(user, draft.id);
+    }
+    if (!latest.valid || latest.termsChanged) {
+      showState('Không thể tiếp tục thanh toán', 'Thông tin giữ chỗ đã thay đổi hoặc không còn hợp lệ.');
+      return;
+    }
+    location.assign(`payment.html?${new URLSearchParams({ bookingDraftId: draft.id })}`);
+  });
   elements.content.hidden = false;
   updateTimer();
   timerId = window.setInterval(updateTimer, 1000);

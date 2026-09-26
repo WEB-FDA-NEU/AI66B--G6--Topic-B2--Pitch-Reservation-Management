@@ -17,6 +17,12 @@ function cloneRecords(records) {
   return records.map(record => structuredClone(record));
 }
 
+function requireAdmin(actor) {
+  if (!actor || actor.role !== 'admin' || actor.status !== 'active') {
+    throw new Error('Tài khoản không có quyền thực hiện thao tác quản trị.');
+  }
+}
+
 export async function listCustomers(filters = {}) {
   const state = await initializeState();
   const query = normalize(filters.query);
@@ -46,6 +52,7 @@ export async function getAccount(accountId, role) {
 }
 
 export async function applyCustomerAction(input, actor) {
+  requireAdmin(actor);
   const allowedActions = new Set(['warn', 'suspend', 'restore']);
   if (!allowedActions.has(input.action)) throw new Error('Hành động quản trị không hợp lệ.');
   if (!input.confirmed) throw new Error('Cần xác nhận đã rà soát căn cứ xử lý.');
@@ -87,7 +94,10 @@ export async function applyCustomerAction(input, actor) {
   return structuredClone(updated);
 }
 
-export async function warnManager(input, actor) {
+export async function applyManagerAction(input, actor) {
+  requireAdmin(actor);
+  const allowedActions = new Set(['warn', 'suspend', 'restore']);
+  if (!allowedActions.has(input.action)) throw new Error('Hành động quản trị không hợp lệ.');
   if (!input.confirmed) throw new Error('Cần xác nhận đã rà soát căn cứ xử lý.');
   const reason = requireReason(input.reason);
   await initializeState();
@@ -96,20 +106,54 @@ export async function warnManager(input, actor) {
     const manager = state.users.find(user => user.id === input.managerId && user.role === 'manager');
     if (!manager) throw new Error('Không tìm thấy quản lý sân.');
     manager.adminMeta ??= {};
-    manager.adminMeta.warningCount = Number(manager.adminMeta.warningCount ?? 0) + 1;
-    manager.adminMeta.lastWarningReason = reason;
-    manager.adminMeta.warnedAt = new Date().toISOString();
+    const now = new Date().toISOString();
+    if (input.action === 'suspend') {
+      if (manager.status !== 'active') throw new Error('Chỉ tài khoản đang hoạt động mới có thể bị đình chỉ.');
+      manager.status = 'suspended';
+      manager.adminMeta.suspensionReason = reason;
+      manager.adminMeta.suspendedAt = now;
+      state.pitches.forEach(pitch => {
+        if (pitch.ownerId === manager.id && pitch.status === 'active') {
+          pitch.status = 'deactivated';
+          pitch.deactivatedByManagerSuspension = true;
+          pitch.availableSlotsToday = 0;
+          pitch.updatedAt = now;
+        }
+      });
+    } else if (input.action === 'restore') {
+      if (manager.status !== 'suspended') throw new Error('Chỉ tài khoản đang đình chỉ mới có thể được khôi phục.');
+      manager.status = 'active';
+      manager.adminMeta.restoredAt = now;
+      delete manager.adminMeta.suspensionReason;
+      state.pitches.forEach(pitch => {
+        if (pitch.ownerId === manager.id && pitch.deactivatedByManagerSuspension) {
+          pitch.status = 'active';
+          pitch.availableSlotsToday = Math.max(1, Number(pitch.availableSlotsToday ?? 0));
+          delete pitch.deactivatedByManagerSuspension;
+          pitch.updatedAt = now;
+        }
+      });
+    } else {
+      manager.adminMeta.warningCount = Number(manager.adminMeta.warningCount ?? 0) + 1;
+      manager.adminMeta.lastWarningReason = reason;
+      manager.adminMeta.warnedAt = now;
+    }
     updated = manager;
   });
   await recordActivity({
     actorId: actor.id,
     actorName: actor.displayName,
-    actionType: 'manager-warning',
+    actionType: `manager-${input.action}`,
     entityType: 'manager',
     entityId: input.managerId,
     reason,
   });
   return structuredClone(updated);
+}
+
+
+export async function warnManager(input, actor) {
+  return applyManagerAction({ ...input, action: 'warn' }, actor);
 }
 
 export async function listReports(filters = {}) {
@@ -131,6 +175,7 @@ export async function getReport(reportId) {
 }
 
 export async function updateReportStatus(input, actor) {
+  requireAdmin(actor);
   if (!REPORT_STATUSES.has(input.status)) throw new Error('Trạng thái báo cáo không hợp lệ.');
   if (!input.confirmed) throw new Error('Cần xác nhận đã rà soát báo cáo.');
   const reason = requireReason(input.reason);

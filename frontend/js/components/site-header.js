@@ -104,15 +104,25 @@ class SiteHeader extends HTMLElement {
 
   renderRoleNavigation(container, role) {
     const destinations = {
-      customer: [['Sân yêu thích', 'favorite-pitches.html']],
-      manager: [['Tổng quan', 'manager-dashboard.html'], ['Sân của tôi', 'manager-pitches.html']],
-      admin: [['Admin', 'admin-dashboard.html'], ['Kiểm duyệt sân', 'admin-pitch-moderation.html']],
+      customer: [
+        ['Sân yêu thích', 'favorite-pitches.html'],
+        ['Lịch đặt', 'booking-history.html'],
+        ['Số dư & giao dịch', 'payment-history.html'],
+        ['Cài đặt', 'settings.html'],
+      ],
+      manager: [['Tổng quan', 'manager-dashboard.html'], ['Sân của tôi', 'manager-pitches.html'], ['Doanh thu', 'manager-revenue.html'], ['Cài đặt', 'settings.html']],
+      admin: [['Admin', 'admin-dashboard.html'], ['Kiểm duyệt sân', 'admin-pitch-moderation.html'], ['Cài đặt', 'settings.html']],
     };
+    const currentFilename = location.pathname.split('/').pop() || 'index.html';
     const links = (destinations[role] ?? []).map(([label, href]) => {
       const anchor = document.createElement('a');
       anchor.className = 'site-header__link';
       anchor.href = href;
       anchor.textContent = label;
+      if (href === currentFilename) {
+        anchor.classList.add('is-active');
+        anchor.setAttribute('aria-current', 'page');
+      }
       return anchor;
     });
     container.replaceChildren(...links);

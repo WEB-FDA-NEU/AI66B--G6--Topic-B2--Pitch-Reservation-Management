@@ -1,8 +1,7 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { initializeState } from '../services/storage-service.js';
 import { requireRole, ROLES } from '../services/access-control.js';
-import { BOOKING_STATUS_META, listCustomerBookings } from '../services/booking-service.js';
+import { BOOKING_STATUS_META, listCustomerBookings, prepareBookingData } from '../services/booking-service.js';
 import { formatVND } from '../render.js';
 
 const elements = {
@@ -89,8 +88,8 @@ function selectStatus(button) {
 }
 
 async function init() {
-  await initializeState();
-  const user = requireRole([ROLES.CUSTOMER]);
+  await prepareBookingData();
+  const user = requireRole([ROLES.CUSTOMER], { allowSuspended: true });
   if (!user) return;
   bookings = listCustomerBookings(user);
   elements.content.hidden = false;

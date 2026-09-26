@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Đối soát thanh toán và hoàn tiền mô phỏng của quản trị viên Pitch Point.">
+  <title>Quản trị tài chính — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin-finance.css">
+</head>
+<body>
+  <a class="admin-finance-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="admin-dashboard.html">Tổng quan Admin</a></li><li aria-current="page">Tài chính</li></ol></nav>
+  <main class="container admin-finance-page" id="main-content" hidden>
+    <header class="admin-finance-page__heading"><div><p>Quản trị hệ thống</p><h1>Đối soát tài chính mô phỏng</h1><span>Kiểm tra thanh toán, hoàn tiền và tính nhất quán của lượt đặt sân.</span></div><a class="btn" href="admin-dashboard.html">Về dashboard</a></header>
+    <section class="admin-finance-page__summary" aria-label="Tổng quan tài chính"><article><span>Giá trị thanh toán</span><strong id="payment-volume"></strong></article><article><span>Giá trị hoàn tiền</span><strong id="refund-volume"></strong></article><article><span>Giá trị ròng</span><strong id="net-volume"></strong></article><article><span>Số giao dịch</span><strong id="transaction-total"></strong></article></section>
+    <section class="admin-finance-page__filters" aria-labelledby="finance-filter-title"><h2 id="finance-filter-title">Bộ lọc đối soát</h2><form id="finance-filter-form"><div class="field"><label class="field__label" for="finance-query">Mã giao dịch, đặt sân hoặc tài khoản</label><input class="input" id="finance-query" name="query" type="search"></div><div class="field"><label class="field__label" for="finance-type">Loại</label><select class="select" id="finance-type" name="type"><option value="">Tất cả</option><option value="payment">Thanh toán</option><option value="refund">Hoàn tiền</option></select></div><div class="field"><label class="field__label" for="finance-status">Trạng thái</label><select class="select" id="finance-status" name="status"><option value="">Tất cả</option><option value="completed">Hoàn tất</option></select></div><button class="btn" type="reset">Đặt lại</button></form></section>
+    <p class="admin-finance-page__count" id="finance-count" aria-live="polite"></p>
+    <div class="admin-finance-page__table-wrap"><table><thead><tr><th scope="col">Giao dịch</th><th scope="col">Đặt sân</th><th scope="col">Sân</th><th scope="col">Khách hàng</th><th scope="col">Loại</th><th scope="col">Số tiền</th><th scope="col">Thời điểm</th><th scope="col">Thao tác</th></tr></thead><tbody id="finance-rows"></tbody></table></div>
+    <div class="empty" id="finance-empty" hidden><p class="empty__title">Không có bản ghi phù hợp</p><p class="empty__hint">Hãy kiểm tra lại mã tham chiếu hoặc bộ lọc.</p></div>
+    <aside class="admin-finance-page__panel" id="finance-panel" hidden aria-labelledby="finance-panel-title">
+      <header><h2 id="finance-panel-title">Chi tiết giao dịch</h2><button class="btn" id="panel-close" type="button">Đóng</button></header>
+      <dl id="finance-detail"></dl>
+      <div class="admin-finance-page__panel-links"><a class="btn" id="activity-link" href="admin-activity-log.html">Xem nhật ký</a></div>
+      <form id="refund-form" hidden><h3>Hoàn tiền mô phỏng</h3><div class="field"><label class="field__label" for="refund-reason">Lý do quyết định</label><textarea class="input" id="refund-reason" name="reason" rows="4" minlength="8" required></textarea></div><label class="admin-finance-page__confirm"><input id="refund-confirmed" type="checkbox" required> Tôi xác nhận đã rà soát lượt đặt và hậu quả hoàn tiền.</label><button class="btn btn--primary" type="submit">Xác nhận hoàn tiền</button></form>
+      <p class="admin-finance-page__feedback" id="refund-feedback" role="status"></p>
+    </aside>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-admin-transaction"><tr><td class="admin-finance-page__id"></td><td class="admin-finance-page__booking"></td><td class="admin-finance-page__pitch"></td><td class="admin-finance-page__customer"></td><td class="admin-finance-page__type"></td><td class="admin-finance-page__amount"></td><td><time class="admin-finance-page__date"></time></td><td><button class="btn admin-finance-page__open" type="button">Xem</button></td></tr></template>
+  <script type="module" src="js/pages/admin-finance.js"></script>
+</body>
+</html>

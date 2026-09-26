@@ -54,6 +54,9 @@ function renderReportDetail(report) {
   select.disabled = transitions.length === 0;
   document.querySelector('#report-reason').disabled = transitions.length === 0;
   document.querySelector('#report-confirmed').disabled = transitions.length === 0;
+  const targetLink = document.querySelector('#report-target-link');
+  targetLink.hidden = report.targetType !== 'booking';
+  if (report.targetType === 'booking') targetLink.href = `admin-finance.html?${new URLSearchParams({ bookingId: report.targetId })}`;
 }
 
 async function openReport(reportId) {

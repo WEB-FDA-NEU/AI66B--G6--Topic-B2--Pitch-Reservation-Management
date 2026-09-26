@@ -4,6 +4,8 @@ const ADMIN_URL = new URL('../../mock/admin.json', import.meta.url);
 const BOOKINGS_URL = new URL('../../mock/bookings.json', import.meta.url);
 const PITCHES_URL = new URL('../../mock/pitches.json', import.meta.url);
 const PITCH_OPERATIONS_URL = new URL('../../mock/pitch-operations.json', import.meta.url);
+const FINANCE_URL = new URL('../../mock/finance.json', import.meta.url);
+const REVIEWS_URL = new URL('../../mock/reviews.json', import.meta.url);
 let initializationPromise = null;
 
 function isValidState(state) {
@@ -32,22 +34,26 @@ export function saveState(state) {
 }
 
 async function loadSeedData() {
-  const [usersResponse, adminResponse, bookingsResponse, pitchesResponse, pitchOperationsResponse] = await Promise.all([
+  const [usersResponse, adminResponse, bookingsResponse, pitchesResponse, pitchOperationsResponse, financeResponse, reviewsResponse] = await Promise.all([
     fetch(USERS_URL),
     fetch(ADMIN_URL),
     fetch(BOOKINGS_URL),
     fetch(PITCHES_URL),
     fetch(PITCH_OPERATIONS_URL),
+    fetch(FINANCE_URL),
+    fetch(REVIEWS_URL),
   ]);
-  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok || !pitchesResponse.ok || !pitchOperationsResponse.ok) {
+  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok || !pitchesResponse.ok || !pitchOperationsResponse.ok || !financeResponse.ok || !reviewsResponse.ok) {
     throw new Error('Không tải được dữ liệu mô phỏng.');
   }
-  const [demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed] = await Promise.all([
+  const [demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed, financeSeed, reviewSeed] = await Promise.all([
     usersResponse.json(),
     adminResponse.json(),
     bookingsResponse.json(),
     pitchesResponse.json(),
     pitchOperationsResponse.json(),
+    financeResponse.json(),
+    reviewsResponse.json(),
   ]);
   if (
     !Array.isArray(demoUsers)
@@ -57,10 +63,13 @@ async function loadSeedData() {
     || !Array.isArray(pitchSeed)
     || !Array.isArray(pitchOperationsSeed.favorites)
     || !Array.isArray(pitchOperationsSeed.availability)
+    || !Array.isArray(financeSeed.balances)
+    || !Array.isArray(financeSeed.transactions)
+    || !Array.isArray(reviewSeed.reviews)
   ) {
     throw new Error('Dữ liệu mô phỏng không hợp lệ.');
   }
-  return { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed };
+  return { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed, financeSeed, reviewSeed };
 }
 
 function mergeUsers(currentUsers, seededUsers) {
@@ -75,7 +84,12 @@ function mergePitches(currentPitches, seededPitches) {
   const pitchesById = new Map(seededPitches.map(pitch => [String(pitch.id), pitch]));
   currentPitches.forEach(pitch => {
     const seededPitch = pitchesById.get(String(pitch.id)) ?? {};
-    pitchesById.set(String(pitch.id), { ...seededPitch, ...pitch });
+    pitchesById.set(String(pitch.id), {
+      ...seededPitch,
+      ...pitch,
+      ratingBase: pitch.ratingBase ?? seededPitch.rating ?? pitch.rating ?? 0,
+      reviewCountBase: pitch.reviewCountBase ?? seededPitch.reviewCount ?? pitch.reviewCount ?? 0,
+    });
   });
   return [...pitchesById.values()];
 }
@@ -87,13 +101,13 @@ function mergeRecordsById(currentRecords, seededRecords) {
 }
 
 async function initializeFromSeed(existing = null) {
-  const { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed } = await loadSeedData();
+  const { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed, financeSeed, reviewSeed } = await loadSeedData();
   const baseUsers = existing?.users ?? demoUsers;
   return saveState({
     ...adminSeed,
     ...existing,
     version: 1,
-    seedRevision: 2,
+    seedRevision: 5,
     users: mergeUsers(baseUsers, adminSeed.users),
     session: existing?.session ?? null,
     reports: mergeRecordsById(existing?.reports ?? [], adminSeed.reports),
@@ -105,6 +119,9 @@ async function initializeFromSeed(existing = null) {
     bookings: existing?.bookings ?? bookingSeed.bookings,
     favorites: existing?.favorites ?? pitchOperationsSeed.favorites,
     availability: existing?.availability ?? pitchOperationsSeed.availability,
+    balances: mergeRecordsById(existing?.balances ?? [], financeSeed.balances),
+    transactions: mergeRecordsById(existing?.transactions ?? [], financeSeed.transactions),
+    reviews: mergeRecordsById(existing?.reviews ?? [], reviewSeed.reviews),
   });
 }
 
@@ -131,7 +148,11 @@ export async function initializeState() {
   const hasPitchOperations = existing
     && Array.isArray(existing.favorites)
     && Array.isArray(existing.availability);
-  if (existing?.seedRevision === 2 && hasAdminCollections && hasBookingCollections && hasPitchCatalog && hasPitchOperations) return existing;
+  const hasFinanceCollections = existing
+    && Array.isArray(existing.balances)
+    && Array.isArray(existing.transactions);
+  const hasReviewCollections = existing && Array.isArray(existing.reviews);
+  if (existing?.seedRevision === 5 && hasAdminCollections && hasBookingCollections && hasPitchCatalog && hasPitchOperations && hasFinanceCollections && hasReviewCollections) return existing;
 
   if (!initializationPromise) {
     initializationPromise = initializeFromSeed(existing).finally(() => {

@@ -1,6 +1,5 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { initializeState } from '../services/storage-service.js';
 import { requireRole, ROLES } from '../services/access-control.js';
 import {
   BOOKING_STATUS_META,
@@ -8,8 +7,11 @@ import {
   canCustomerCancel,
   canCustomerReschedule,
   getCustomerBooking,
+  prepareBookingData,
 } from '../services/booking-service.js';
 import { formatVND } from '../render.js';
+import { cancelCustomerBooking } from '../services/finance-service.js';
+import { createReview, getReviewEligibility, prepareReviews } from '../services/review-service.js';
 
 const elements = {
   content: document.getElementById('details-content'),
@@ -30,7 +32,17 @@ const elements = {
   cancelButton: document.getElementById('cancel-button'),
   rescheduleButton: document.getElementById('reschedule-button'),
   reviewButton: document.getElementById('review-button'),
+  actionFeedback: document.getElementById('action-feedback'),
+  cancelDialog: document.getElementById('cancel-dialog'),
+  cancelForm: document.getElementById('cancel-form'),
+  cancelFeedback: document.getElementById('cancel-feedback'),
+  reviewDialog: document.getElementById('review-dialog'),
+  reviewForm: document.getElementById('review-form'),
+  reviewFeedback: document.getElementById('review-feedback'),
 };
+
+let currentUser;
+let currentBooking;
 
 function showState(title, message) {
   elements.content.hidden = true;
@@ -72,7 +84,7 @@ function renderHistory(booking) {
 function renderActions(user, booking) {
   elements.cancelButton.hidden = !canCustomerCancel(user, booking);
   elements.rescheduleButton.hidden = !canCustomerReschedule(user, booking);
-  elements.reviewButton.hidden = booking.status !== 'Completed' || Boolean(booking.reviewId);
+  elements.reviewButton.hidden = !getReviewEligibility(user, booking.id).eligible;
 }
 
 function renderBooking(user, booking) {
@@ -98,16 +110,66 @@ function renderBooking(user, booking) {
 }
 
 async function init() {
-  await initializeState();
-  const user = requireRole([ROLES.CUSTOMER]);
-  if (!user) return;
+  await Promise.all([prepareBookingData(), prepareReviews()]);
+  currentUser = requireRole([ROLES.CUSTOMER], { allowSuspended: true });
+  if (!currentUser) return;
   const bookingId = new URLSearchParams(location.search).get('bookingId');
-  const booking = getCustomerBooking(user, bookingId);
-  if (!booking) {
+  currentBooking = getCustomerBooking(currentUser, bookingId);
+  if (!currentBooking) {
     showState('Không tìm thấy lượt đặt sân', 'Mã đặt sân không hợp lệ hoặc không thuộc tài khoản hiện tại.');
     return;
   }
-  renderBooking(user, booking);
+  renderBooking(currentUser, currentBooking);
 }
+
+elements.cancelButton.addEventListener('click', () => {
+  elements.cancelFeedback.textContent = '';
+  elements.cancelDialog.showModal();
+});
+
+elements.rescheduleButton.addEventListener('click', () => {
+  if (!currentBooking) return;
+  const params = new URLSearchParams({
+    pitchId: String(currentBooking.pitchId),
+    rescheduleBookingId: currentBooking.id,
+  });
+  location.assign(`booking-schedule.html?${params}`);
+});
+
+elements.reviewButton.addEventListener('click', () => {
+  elements.reviewFeedback.textContent = '';
+  elements.reviewDialog.showModal();
+});
+
+elements.cancelForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const reason = new FormData(elements.cancelForm).get('reason');
+  const result = await cancelCustomerBooking(currentUser, currentBooking.id, reason);
+  if (!result.ok) {
+    elements.cancelFeedback.textContent = 'Không thể huỷ lượt đặt sân ở trạng thái hiện tại.';
+    return;
+  }
+  currentBooking = result.booking;
+  elements.cancelDialog.close();
+  elements.actionFeedback.textContent = 'Đã huỷ đặt sân và hoàn lại số dư mô phỏng.';
+  renderBooking(currentUser, currentBooking);
+});
+
+elements.reviewForm.addEventListener('submit', event => {
+  event.preventDefault();
+  try {
+    const review = createReview(currentUser, currentBooking.id, Object.fromEntries(new FormData(elements.reviewForm)));
+    currentBooking.reviewId = review.id;
+    elements.reviewDialog.close();
+    elements.actionFeedback.textContent = 'Đánh giá của bạn đã được ghi nhận.';
+    renderActions(currentUser, currentBooking);
+  } catch (error) {
+    elements.reviewFeedback.textContent = error.message;
+  }
+});
+
+document.querySelectorAll('[data-close-dialog]').forEach(button => {
+  button.addEventListener('click', () => document.getElementById(button.dataset.closeDialog)?.close());
+});
 
 init();

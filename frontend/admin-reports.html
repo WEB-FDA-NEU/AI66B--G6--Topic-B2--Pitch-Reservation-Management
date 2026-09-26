@@ -52,7 +52,7 @@
       <label for="report-reason">Kết quả hoặc lý do</label><textarea id="report-reason" class="textarea" rows="4" minlength="8" required></textarea>
       <label class="admin-reports-page__check" for="report-confirmed"><input id="report-confirmed" type="checkbox" required>Đã rà soát báo cáo và xác nhận kết quả xử lý.</label>
       <p id="report-feedback" class="admin-reports-page__feedback" role="status"></p>
-      <div class="admin-reports-page__actions"><button id="report-submit" class="btn" type="submit">Lưu xử lý</button><button class="btn btn--secondary" type="button" disabled>Kiểm tra đối tượng</button></div>
+      <div class="admin-reports-page__actions"><button id="report-submit" class="btn" type="submit">Lưu xử lý</button><a id="report-target-link" class="btn btn--secondary" href="admin-finance.html" hidden>Kiểm tra đối tượng</a></div>
     </form>
   </dialog>
   <template id="tpl-report-row"><tr><td><strong class="admin-reports-page__summary"></strong><span class="admin-reports-page__id"></span></td><td class="admin-reports-page__reporter"></td><td class="admin-reports-page__target"></td><td><span class="admin-reports-page__priority"></span></td><td><span class="admin-reports-page__status"></span></td><td><time class="admin-reports-page__date"></time></td><td><button class="btn btn--secondary admin-reports-page__open" type="button">Xem chi tiết</button></td></tr></template>

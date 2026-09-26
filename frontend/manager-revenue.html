@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tổng quan doanh thu mô phỏng của chủ sân Pitch Point.">
+  <title>Doanh thu chủ sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/manager-revenue.css">
+</head>
+<body>
+  <a class="manager-revenue-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header active="manager"></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="manager-dashboard.html">Tổng quan quản lý</a></li><li aria-current="page">Doanh thu</li></ol></nav>
+  <main class="container manager-revenue-page" id="main-content" hidden>
+    <header class="manager-revenue-page__heading"><div><p>Quản lý tài chính</p><h1>Doanh thu mô phỏng</h1><span>Đối chiếu các khoản thanh toán và hoàn tiền của những sân thuộc tài khoản hiện tại.</span></div><a class="btn" href="manager-dashboard.html">Về dashboard</a></header>
+    <section class="manager-revenue-page__summary" aria-label="Tổng quan doanh thu"><article><span>Số dư hiện tại</span><strong id="manager-balance"></strong></article><article><span>Tổng thanh toán</span><strong id="gross-revenue"></strong></article><article><span>Đã hoàn tiền</span><strong id="refund-volume"></strong></article><article><span>Doanh thu ròng</span><strong id="net-revenue"></strong></article></section>
+    <section class="manager-revenue-page__filters" aria-label="Bộ lọc doanh thu"><form id="revenue-filter"><div class="field"><label class="field__label" for="pitch-filter">Sân bóng</label><select class="select" id="pitch-filter" name="pitchId"><option value="">Tất cả sân</option></select></div><div class="field"><label class="field__label" for="type-filter">Loại giao dịch</label><select class="select" id="type-filter" name="type"><option value="">Tất cả</option><option value="payment">Thanh toán</option><option value="refund">Hoàn tiền</option></select></div><button class="btn" type="reset">Đặt lại</button></form></section>
+    <p class="manager-revenue-page__count" id="revenue-count" aria-live="polite"></p>
+    <div class="manager-revenue-page__table-wrap"><table><thead><tr><th scope="col">Giao dịch</th><th scope="col">Sân</th><th scope="col">Khách hàng</th><th scope="col">Thời điểm</th><th scope="col">Loại</th><th scope="col">Số tiền</th><th scope="col">Đơn đặt</th></tr></thead><tbody id="revenue-rows"></tbody></table></div>
+    <div class="empty" id="revenue-empty" hidden><p class="empty__title">Chưa có giao dịch</p><p class="empty__hint">Dữ liệu sẽ xuất hiện khi sân có thanh toán hoặc hoàn tiền.</p></div>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-manager-transaction"><tr><td class="manager-revenue-page__id"></td><td class="manager-revenue-page__pitch"></td><td class="manager-revenue-page__customer"></td><td><time class="manager-revenue-page__date"></time></td><td class="manager-revenue-page__type"></td><td class="manager-revenue-page__amount"></td><td><a class="btn manager-revenue-page__booking-link">Xem đơn</a></td></tr></template>
+  <script type="module" src="js/pages/manager-revenue.js"></script>
+</body>
+</html>

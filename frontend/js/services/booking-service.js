@@ -34,6 +34,12 @@ function requireCustomer(user) {
   }
 }
 
+function requireCustomerAccount(user) {
+  if (!user || user.role !== 'customer') {
+    throw new Error('Tài khoản không được phép xem dữ liệu đặt sân.');
+  }
+}
+
 function normalizePitchId(pitchId) {
   const value = Number(pitchId);
   return Number.isInteger(value) && value > 0 ? value : null;
@@ -62,6 +68,24 @@ function expireDrafts() {
   });
 }
 
+function completeElapsedBookings() {
+  const state = loadState();
+  if (!state) return;
+  const now = Date.now();
+  const hasCompleted = state.bookings.some(booking => (
+    booking.status === BOOKING_STATUSES.CONFIRMED && Date.parse(booking.slotEnd) <= now
+  ));
+  if (!hasCompleted) return;
+  updateState(current => {
+    current.bookings.forEach(booking => {
+      if (booking.status === BOOKING_STATUSES.CONFIRMED && Date.parse(booking.slotEnd) <= now) {
+        booking.status = BOOKING_STATUSES.COMPLETED;
+        booking.completedAt = booking.slotEnd;
+      }
+    });
+  });
+}
+
 function slotEndFromStart(slotStart) {
   return new Date(Date.parse(slotStart) + 60 * 60 * 1000).toISOString();
 }
@@ -72,6 +96,24 @@ function isWithinBookingWindow(slotStart) {
   const limit = new Date(now);
   limit.setDate(limit.getDate() + 7);
   return Number.isFinite(start.getTime()) && start > now && start <= limit;
+}
+
+export function isPitchSlotOperational(pitch, slotStart) {
+  if (!pitch || pitch.status !== 'active') return false;
+  const override = loadState()?.availability?.find(item => item.pitchId === pitch.id && item.slotStart === slotStart);
+  if (override?.status === 'unavailable') return false;
+  if (override?.status === 'available') return true;
+  const start = new Date(slotStart);
+  if (!Number.isFinite(start.getTime())) return false;
+  if (Array.isArray(pitch.openWeekdays) && !pitch.openWeekdays.includes(start.getDay())) return false;
+  const time = String(slotStart).slice(11, 16);
+  return !pitch.operatingHours
+    || (time >= pitch.operatingHours.open && time < pitch.operatingHours.close);
+}
+
+function getSlotPrice(pitch, slotStart) {
+  const override = loadState()?.availability?.find(item => item.pitchId === pitch.id && item.slotStart === slotStart);
+  return Number(override?.price) > 0 ? Number(override.price) : pitch.price;
 }
 
 function slotIsOccupied(state, pitchId, slotStart, ignoredDraftId = null) {
@@ -92,6 +134,7 @@ function slotIsOccupied(state, pitchId, slotStart, ignoredDraftId = null) {
 export async function prepareBookingData() {
   await initializeState();
   expireDrafts();
+  completeElapsedBookings();
   return loadState();
 }
 
@@ -115,7 +158,8 @@ export function listPitchSlots(pitchId, date, times, currentUserId) {
       && isActiveDraft(draft)
     ));
     let status = 'available';
-    if (!isWithinBookingWindow(slotStart)) status = 'unavailable';
+    const pitch = state.pitches.find(item => item.id === id);
+    if (!isWithinBookingWindow(slotStart) || !isPitchSlotOperational(pitch, slotStart)) status = 'unavailable';
     else if (ownDraft) status = 'selected';
     else if (slotIsOccupied(state, id, slotStart)) status = 'booked';
     return { time, slotStart, status, draft: ownDraft ?? null };
@@ -128,7 +172,7 @@ export function createBookingDraft(user, pitchId, slotStart, rescheduleBookingId
   const state = loadState();
   const id = normalizePitchId(pitchId);
   const pitch = state?.pitches.find(item => item.id === id);
-  if (!pitch || pitch.status !== 'active' || !isWithinBookingWindow(slotStart)) return null;
+  if (!pitch || !isPitchSlotOperational(pitch, slotStart) || !isWithinBookingWindow(slotStart)) return null;
   if (slotIsOccupied(state, id, slotStart)) return null;
 
   const now = new Date();
@@ -139,7 +183,7 @@ export function createBookingDraft(user, pitchId, slotStart, rescheduleBookingId
     pitchId: pitch.id,
     slotStart,
     slotEnd: slotEndFromStart(slotStart),
-    amount: pitch.price,
+    amount: getSlotPrice(pitch, slotStart),
     status: BOOKING_STATUSES.PENDING,
     paymentStatus: PAYMENT_STATUSES.PENDING,
     holdExpiresAt: new Date(now.getTime() + HOLD_DURATION_MS).toISOString(),
@@ -149,7 +193,7 @@ export function createBookingDraft(user, pitchId, slotStart, rescheduleBookingId
       pitchName: pitch.name,
       pitchLocation: pitch.location,
       pitchTypeLabel: pitch.typeLabel,
-      price: pitch.price,
+      price: getSlotPrice(pitch, slotStart),
       services: [...pitch.services],
     },
   };
@@ -201,23 +245,39 @@ export function revalidateBookingDraft(user, bookingDraftId) {
   const draft = getCustomerDraft(user, bookingDraftId);
   if (!draft || !isActiveDraft(draft)) return { valid: false, reason: 'expired' };
   const pitch = getPitch(draft.pitchId);
-  if (!pitch || pitch.status !== 'active') return { valid: false, reason: 'pitch-unavailable' };
+  if (!pitch || !isPitchSlotOperational(pitch, draft.slotStart)) return { valid: false, reason: 'pitch-unavailable' };
   const state = loadState();
   if (slotIsOccupied(state, draft.pitchId, draft.slotStart, draft.id)) {
     return { valid: false, reason: 'slot-unavailable' };
   }
-  const termsChanged = pitch.price !== draft.amount
+  const currentAmount = getSlotPrice(pitch, draft.slotStart);
+  const termsChanged = currentAmount !== draft.amount
     || JSON.stringify(pitch.services) !== JSON.stringify(draft.snapshot.services);
-  return { valid: true, draft, pitch, termsChanged };
+  return { valid: true, draft, pitch, currentAmount, termsChanged };
+}
+
+export function acceptBookingDraftTerms(user, bookingDraftId) {
+  const validation = revalidateBookingDraft(user, bookingDraftId);
+  if (!validation.valid) return null;
+  const { pitch } = validation;
+  updateState(state => {
+    const draft = state.bookingDrafts.find(item => item.id === bookingDraftId && item.customerId === user.id);
+    draft.amount = getSlotPrice(pitch, draft.slotStart);
+    draft.snapshot.price = draft.amount;
+    draft.snapshot.services = [...pitch.services];
+    draft.termsAcceptedAt = new Date().toISOString();
+  });
+  return getCustomerDraft(user, bookingDraftId);
 }
 
 export function listCustomerBookings(user) {
-  requireCustomer(user);
+  requireCustomerAccount(user);
+  completeElapsedBookings();
   return (loadState()?.bookings ?? []).filter(booking => booking.customerId === user.id);
 }
 
 export function getCustomerBooking(user, bookingId) {
-  requireCustomer(user);
+  requireCustomerAccount(user);
   return listCustomerBookings(user).find(booking => booking.id === bookingId) ?? null;
 }
 
@@ -243,13 +303,14 @@ export function getManagerBooking(user, pitchId, bookingId) {
 }
 
 export function canCustomerCancel(user, booking) {
-  if (!booking || booking.customerId !== user.id) return false;
+  if (!user || user.role !== 'customer' || !booking || booking.customerId !== user.id) return false;
   if (![BOOKING_STATUSES.PENDING, BOOKING_STATUSES.CONFIRMED].includes(booking.status)) return false;
   return Date.parse(booking.slotStart) - Date.now() >= 2 * 60 * 60 * 1000;
 }
 
 export function canCustomerReschedule(user, booking) {
-  return canCustomerCancel(user, booking)
+  return user?.status === 'active'
+    && canCustomerCancel(user, booking)
     && booking.status === BOOKING_STATUSES.CONFIRMED
     && Number(booking.rescheduleCount ?? 0) < 1;
 }

@@ -7,6 +7,7 @@ import {
 } from '../services/pitch-service.js';
 import { getCurrentUser } from '../services/auth-service.js';
 import { isFavorite, prepareFavorites, setFavorite } from '../services/favorite-service.js';
+import { listPitchReviews, prepareReviews } from '../services/review-service.js';
 
 const STATUS_META = Object.freeze({
   active: { label: 'Đang hoạt động', message: 'Lịch trống sẽ được kiểm tra tại bước chọn lịch.' },
@@ -40,6 +41,9 @@ const elements = {
   bookingAvailability: document.getElementById('booking-availability'),
   bookingButton: document.getElementById('booking-button'),
   favoriteButton: document.getElementById('favorite-button'),
+  reviewList: document.getElementById('review-list'),
+  reviewEmpty: document.getElementById('review-empty'),
+  reviewTemplate: document.getElementById('tpl-review'),
 };
 
 let currentPitch = null;
@@ -58,6 +62,21 @@ function renderFacilities(services) {
     return node;
   });
   elements.facilities.replaceChildren(...nodes);
+}
+
+function renderReviews(pitchId) {
+  const reviews = listPitchReviews(pitchId);
+  elements.reviewEmpty.hidden = reviews.length > 0;
+  elements.reviewList.replaceChildren(...reviews.map(review => {
+    const node = elements.reviewTemplate.content.cloneNode(true);
+    node.querySelector('.pitch-detail-page__review-author').textContent = review.customerName;
+    node.querySelector('.pitch-detail-page__review-rating').textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
+    node.querySelector('.pitch-detail-page__review-comment').textContent = review.comment;
+    const time = node.querySelector('.pitch-detail-page__review-date');
+    time.dateTime = review.createdAt;
+    time.textContent = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'medium' }).format(new Date(review.createdAt));
+    return node;
+  }));
 }
 
 function renderPitch(pitch) {
@@ -91,6 +110,7 @@ function renderPitch(pitch) {
     elements.bookingButton.setAttribute('aria-disabled', 'true');
   }
   renderFacilities(pitch.services);
+  renderReviews(pitch.id);
   renderFavoriteControl();
   elements.state.hidden = true;
   elements.content.hidden = false;
@@ -121,7 +141,7 @@ async function init() {
   }
 
   try {
-    await Promise.all([preparePitchCatalog(), prepareFavorites()]);
+    await Promise.all([preparePitchCatalog(), prepareFavorites(), prepareReviews()]);
     const pitch = getPitchById(pitchId);
     if (!pitch) {
       showState('Không tìm thấy sân', 'Mã sân không hợp lệ hoặc sân không còn tồn tại trong dữ liệu hiện tại.');

@@ -1,0 +1,21 @@
+.payment-skip-link { position: fixed; z-index: 100; top: var(--sp-3); left: var(--sp-3); padding: var(--sp-2) var(--sp-3); background: var(--c-primary); color: #fff; transform: translateY(-180%); }
+.payment-skip-link:focus { transform: translateY(0); }
+.payment-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.payment-page__heading { margin-bottom: var(--sp-5); }
+.payment-page__heading > p { color: var(--c-primary); font-size: .8rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.payment-page__heading h1 { margin-block: var(--sp-2); font-size: clamp(2rem, 5vw, 3rem); }
+.payment-page__heading span, .payment-page__checkout > p { color: var(--c-muted); }
+.payment-page__layout { display: grid; gap: var(--sp-4); }
+.payment-page__panel { padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-bg); box-shadow: var(--shadow); }
+.payment-page__timer { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-5); padding: var(--sp-3); border-radius: var(--radius-s); background: var(--c-surface); }
+.payment-page__timer strong { color: var(--c-primary); font-size: 1.5rem; }
+.payment-page__summary { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+.payment-page__summary div { display: flex; gap: var(--sp-3); justify-content: space-between; border-bottom: 1px solid var(--c-border); padding-bottom: var(--sp-2); }
+.payment-page__summary dt { color: var(--c-muted); }
+.payment-page__summary dd { max-width: 65%; font-weight: 700; text-align: right; }
+.payment-page__checkout { align-self: start; }
+.payment-page__balance { margin-block: var(--sp-3); color: var(--c-primary) !important; font-size: 2rem; font-weight: 800; }
+.payment-page__confirm { display: flex; gap: var(--sp-2); margin-block: var(--sp-5) var(--sp-3); }
+.payment-page__checkout .btn { width: 100%; }
+.payment-page__feedback { min-height: 1.5rem; margin-top: var(--sp-3); }
+@media (min-width: 52rem) { .payment-page__layout { grid-template-columns: minmax(0, 1.4fr) minmax(18rem, .6fr); } }

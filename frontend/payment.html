@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Thanh toán số dư mô phỏng cho lượt đặt sân Pitch Point.">
+  <title>Thanh toán mô phỏng — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+  <a class="payment-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="index.html">Trang chủ</a></li><li aria-current="page">Thanh toán</li></ol></nav>
+  <main class="container payment-page" id="main-content">
+    <header class="payment-page__heading"><p>Thanh toán mô phỏng</p><h1>Xác nhận thanh toán đặt sân</h1><span>Số tiền chỉ được ghi nhận trong dữ liệu thử nghiệm của Pitch Point.</span></header>
+    <section class="empty payment-page__state" id="payment-state" hidden aria-live="polite"><p class="empty__title" id="payment-state-title"></p><p class="empty__hint" id="payment-state-message"></p><a class="btn" href="search.html">Tìm sân khác</a></section>
+    <div class="payment-page__layout" id="payment-content" hidden>
+      <section class="payment-page__panel" aria-labelledby="payment-summary-title">
+        <div class="payment-page__timer" aria-live="polite"><span>Thời gian giữ chỗ</span><strong id="hold-timer">00:00</strong></div>
+        <h2 id="payment-summary-title">Thông tin thanh toán</h2>
+        <dl class="payment-page__summary"><div><dt>Sân bóng</dt><dd id="pitch-name"></dd></div><div><dt>Địa điểm</dt><dd id="pitch-location"></dd></div><div><dt>Khung giờ</dt><dd id="slot-time"></dd></div><div><dt>Mã giữ chỗ</dt><dd id="draft-id"></dd></div><div><dt>Tổng thanh toán</dt><dd id="payment-total"></dd></div></dl>
+      </section>
+      <aside class="payment-page__panel payment-page__checkout" aria-labelledby="balance-title">
+        <h2 id="balance-title">Số dư mô phỏng</h2>
+        <p class="payment-page__balance" id="customer-balance"></p>
+        <p id="balance-hint"></p>
+        <label class="payment-page__confirm"><input id="confirm-payment" type="checkbox"> Tôi xác nhận thanh toán bằng số dư mô phỏng.</label>
+        <button class="btn btn--primary" id="pay-button" type="button" disabled>Thanh toán</button>
+        <p class="payment-page__feedback" id="payment-feedback" role="status"></p>
+      </aside>
+    </div>
+  </main>
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/payment.js"></script>
+</body>
+</html>

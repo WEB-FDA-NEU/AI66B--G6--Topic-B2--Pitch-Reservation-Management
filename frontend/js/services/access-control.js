@@ -20,11 +20,12 @@ export function requireAuth() {
   return null;
 }
 
-export function requireRole(allowedRoles) {
+export function requireRole(allowedRoles, options = {}) {
   const user = requireAuth();
   if (!user) return null;
 
-  if (user.status !== 'active' || !allowedRoles.includes(user.role)) {
+  const statusAllowed = user.status === 'active' || (options.allowSuspended && user.status === 'suspended');
+  if (!statusAllowed || !allowedRoles.includes(user.role)) {
     location.replace('403.html');
     return null;
   }

@@ -163,6 +163,13 @@
   text-align: left;
 }
 
+.pitch-detail-page .pitch-detail-page__review-list { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+.pitch-detail-page .pitch-detail-page__review { padding-top: var(--sp-3); border-top: 1px solid var(--c-border); }
+.pitch-detail-page .pitch-detail-page__review header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-2); }
+.pitch-detail-page .pitch-detail-page__review-rating { color: var(--c-warning); font-weight: 800; }
+.pitch-detail-page .pitch-detail-page__review-comment { margin-top: var(--sp-2); }
+.pitch-detail-page .pitch-detail-page__review-date { display: block; margin-top: var(--sp-2); color: var(--c-muted); font-size: .82rem; }
+
 .pitch-detail-page .pitch-detail-page__booking {
   position: relative;
   display: grid;

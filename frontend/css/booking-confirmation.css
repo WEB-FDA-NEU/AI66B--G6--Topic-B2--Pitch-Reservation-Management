@@ -65,6 +65,7 @@
 .booking-confirmation-page__summary dt { color: var(--c-muted); }
 .booking-confirmation-page__summary dd { font-weight: 700; }
 .booking-confirmation-page__terms { display: flex; gap: var(--sp-2); align-items: flex-start; }
+.booking-confirmation-page__change-notice { margin-bottom: var(--sp-3); padding: var(--sp-3); border-radius: var(--radius-s); background: color-mix(in srgb, var(--c-warning) 14%, var(--c-bg)); }
 .booking-confirmation-page__terms input { margin-top: .2rem; }
 .booking-confirmation-page__actions { display: flex; flex-direction: column-reverse; gap: var(--sp-2); }
 

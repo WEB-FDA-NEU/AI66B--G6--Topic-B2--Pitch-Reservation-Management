@@ -1,0 +1,19 @@
+.manager-revenue-skip-link { position: fixed; z-index: 100; top: var(--sp-3); left: var(--sp-3); padding: var(--sp-2) var(--sp-3); background: var(--c-primary); color: #fff; transform: translateY(-180%); }
+.manager-revenue-skip-link:focus { transform: translateY(0); }
+.manager-revenue-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.manager-revenue-page__heading { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: end; justify-content: space-between; margin-bottom: var(--sp-5); }
+.manager-revenue-page__heading p { color: var(--c-primary); font-size: .8rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.manager-revenue-page__heading h1 { margin-block: var(--sp-2); font-size: clamp(2rem, 5vw, 3rem); }
+.manager-revenue-page__heading span, .manager-revenue-page__count { color: var(--c-muted); }
+.manager-revenue-page__summary { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.manager-revenue-page__summary article { padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-bg); box-shadow: var(--shadow); }
+.manager-revenue-page__summary span { color: var(--c-muted); }
+.manager-revenue-page__summary strong { display: block; margin-top: var(--sp-2); color: var(--c-primary); font-size: 1.5rem; }
+.manager-revenue-page__filters { margin-top: var(--sp-5); padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); }
+.manager-revenue-page__filters form { display: grid; gap: var(--sp-3); align-items: end; }
+.manager-revenue-page__count { margin-block: var(--sp-4) var(--sp-2); }
+.manager-revenue-page__table-wrap { overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius); }
+.manager-revenue-page table { width: 100%; min-width: 880px; border-collapse: collapse; }
+.manager-revenue-page th, .manager-revenue-page td { padding: var(--sp-3); border-bottom: 1px solid var(--c-border); text-align: left; }
+.manager-revenue-page__amount[data-type="refund"] { color: var(--c-danger); }
+@media (min-width: 48rem) { .manager-revenue-page__filters form { grid-template-columns: 2fr 1fr auto; } }

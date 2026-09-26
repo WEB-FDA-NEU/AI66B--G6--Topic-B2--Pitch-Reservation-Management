@@ -68,13 +68,53 @@
       <section class="booking-details-page__panel" aria-labelledby="actions-title">
         <h2 id="actions-title">Thao tác</h2>
         <div class="booking-details-page__actions">
-          <button class="btn btn--danger" type="button" id="cancel-button" disabled>Huỷ đặt sân</button>
-          <button class="btn btn--primary" type="button" id="reschedule-button" disabled>Đổi lịch đá</button>
-          <button class="btn" type="button" id="review-button" disabled>Viết đánh giá</button>
+          <button class="btn btn--danger" type="button" id="cancel-button" hidden>Huỷ đặt sân</button>
+          <button class="btn btn--primary" type="button" id="reschedule-button" hidden>Đổi lịch đá</button>
+          <button class="btn" type="button" id="review-button" hidden>Viết đánh giá</button>
         </div>
+        <p class="booking-details-page__feedback" id="action-feedback" role="status"></p>
       </section>
     </div>
   </main>
+
+  <dialog id="cancel-dialog" aria-labelledby="cancel-dialog-title">
+    <form id="cancel-form">
+      <h2 id="cancel-dialog-title">Xác nhận huỷ đặt sân</h2>
+      <p>Khoản thanh toán mô phỏng sẽ được hoàn lại đầy đủ nếu lượt đặt vẫn đủ điều kiện.</p>
+      <div class="field">
+        <label class="field__label" for="cancel-reason">Lý do huỷ</label>
+        <textarea class="textarea" id="cancel-reason" name="reason" rows="3" minlength="8" maxlength="300" required></textarea>
+      </div>
+      <p id="cancel-feedback" role="status"></p>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-close-dialog="cancel-dialog">Quay lại</button>
+        <button class="btn btn--danger" type="submit">Xác nhận huỷ</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="review-dialog" aria-labelledby="review-dialog-title">
+    <form id="review-form">
+      <h2 id="review-dialog-title">Đánh giá sân bóng</h2>
+      <fieldset class="booking-details-page__rating-field">
+        <legend>Mức đánh giá</legend>
+        <label><input type="radio" name="rating" value="5" required> 5 sao</label>
+        <label><input type="radio" name="rating" value="4"> 4 sao</label>
+        <label><input type="radio" name="rating" value="3"> 3 sao</label>
+        <label><input type="radio" name="rating" value="2"> 2 sao</label>
+        <label><input type="radio" name="rating" value="1"> 1 sao</label>
+      </fieldset>
+      <div class="field">
+        <label class="field__label" for="review-comment">Nhận xét</label>
+        <textarea class="textarea" id="review-comment" name="comment" rows="4" minlength="10" maxlength="500" required></textarea>
+      </div>
+      <p id="review-feedback" role="status"></p>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-close-dialog="review-dialog">Quay lại</button>
+        <button class="btn btn--primary" type="submit">Gửi đánh giá</button>
+      </div>
+    </form>
+  </dialog>
 
   <site-footer></site-footer>
   <script type="module" src="js/pages/booking-details.js"></script>

@@ -1,7 +1,7 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
 import { requireRole, ROLES } from '../services/access-control.js';
-import { getAccount, listManagers, warnManager } from '../services/admin-service.js';
+import { applyManagerAction, getAccount, listManagers } from '../services/admin-service.js';
 import { initializeState } from '../services/storage-service.js';
 
 const STATUS_LABELS = { active: 'Đang hoạt động', suspended: 'Đang đình chỉ' };
@@ -30,6 +30,7 @@ async function openManager(managerId) {
   if (!manager) return;
   selectedManager = manager;
   renderDetail(manager);
+  document.querySelector('#manager-action').value = manager.status === 'suspended' ? 'restore' : 'warn';
   document.querySelector('#manager-reason').value = '';
   document.querySelector('#manager-confirmed').checked = false;
   document.querySelector('#manager-feedback').textContent = '';
@@ -59,15 +60,16 @@ async function renderManagers() {
   document.querySelector('#manager-empty').hidden = managers.length > 0;
 }
 
-async function handleWarning(event) {
+async function handleAction(event) {
   event.preventDefault();
   const feedback = document.querySelector('#manager-feedback');
   try {
-    selectedManager = await warnManager({ managerId: selectedManager.id, reason: document.querySelector('#manager-reason').value, confirmed: document.querySelector('#manager-confirmed').checked }, currentAdmin);
+    const action = document.querySelector('#manager-action').value;
+    selectedManager = await applyManagerAction({ managerId: selectedManager.id, action, reason: document.querySelector('#manager-reason').value, confirmed: document.querySelector('#manager-confirmed').checked }, currentAdmin);
     renderDetail(selectedManager);
     document.querySelector('#manager-reason').value = '';
     document.querySelector('#manager-confirmed').checked = false;
-    feedback.textContent = 'Đã ghi nhận cảnh báo.';
+    feedback.textContent = 'Đã áp dụng quyết định quản trị.';
     await renderManagers();
   } catch (error) {
     feedback.textContent = error.message;
@@ -81,7 +83,7 @@ async function init() {
   const filterForm = document.querySelector('#manager-filter-form');
   filterForm.addEventListener('input', renderManagers);
   filterForm.addEventListener('reset', () => requestAnimationFrame(renderManagers));
-  document.querySelector('#manager-warning-form').addEventListener('submit', handleWarning);
+  document.querySelector('#manager-warning-form').addEventListener('submit', handleAction);
   await renderManagers();
   const managerId = new URLSearchParams(location.search).get('managerId');
   if (managerId) openManager(managerId);

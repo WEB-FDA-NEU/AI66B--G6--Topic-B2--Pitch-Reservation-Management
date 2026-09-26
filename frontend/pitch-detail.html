@@ -99,7 +99,8 @@
               </div>
               <strong id="review-summary"></strong>
             </div>
-            <div class="empty pitch-detail-page__review-empty">
+            <div class="pitch-detail-page__review-list" id="review-list"></div>
+            <div class="empty pitch-detail-page__review-empty" id="review-empty">
               <p class="empty__title">Chưa có nội dung đánh giá để hiển thị</p>
               <p class="empty__hint">Đánh giá chỉ được đồng bộ từ các lượt đặt sân đã hoàn tất.</p>
             </div>
@@ -129,6 +130,14 @@
 
   <template id="tpl-facility">
     <li><span aria-hidden="true">✓</span><span class="pitch-detail-page__facility-name"></span></li>
+  </template>
+
+  <template id="tpl-review">
+    <article class="pitch-detail-page__review">
+      <header><strong class="pitch-detail-page__review-author"></strong><span class="pitch-detail-page__review-rating"></span></header>
+      <p class="pitch-detail-page__review-comment"></p>
+      <time class="pitch-detail-page__review-date"></time>
+    </article>
   </template>
 
   <script type="module" src="js/pages/pitch-detail.js"></script>

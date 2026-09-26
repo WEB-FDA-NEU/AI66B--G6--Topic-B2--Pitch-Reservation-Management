@@ -28,6 +28,9 @@ function renderList(filters = {}) {
 function selectPitch(pitch) {
   selectedPitchId = pitch.id;
   document.getElementById('selected-pitch').textContent = `${pitch.name} — ${labels[pitch.status] ?? pitch.status}`;
+  const financeLink = document.getElementById('pitch-finance-link');
+  financeLink.href = `admin-finance.html?${new URLSearchParams({ pitchId: String(pitch.id) })}`;
+  financeLink.hidden = false;
   const reports = listReviewedPitchReports(admin, pitch.id);
   const reportSelect = document.getElementById('reviewed-report');
   reportSelect.replaceChildren(...reports.map(report => {
@@ -48,11 +51,11 @@ async function init() {
   if (!admin) return;
   const filterForm = document.getElementById('filter-form');
   filterForm.addEventListener('submit', event => { event.preventDefault(); renderList(Object.fromEntries(new FormData(filterForm))); });
-  decisionForm.addEventListener('submit', event => {
+  decisionForm.addEventListener('submit', async event => {
     event.preventDefault();
     try {
       const values = Object.fromEntries(new FormData(decisionForm));
-      const updated = moderatePitch(admin, { ...values, pitchId: selectedPitchId, confirmed: values.confirmed === 'on' });
+      const updated = await moderatePitch(admin, { ...values, pitchId: selectedPitchId, confirmed: values.confirmed === 'on' });
       decisionForm.reset();
       selectPitch(updated);
       feedback.textContent = `Đã cập nhật ${updated.name}: ${labels[updated.status]}. Báo cáo đã được kết thúc xử lý.`;

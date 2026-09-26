@@ -1,0 +1,18 @@
+.payment-history-skip-link { position: fixed; z-index: 100; top: var(--sp-3); left: var(--sp-3); padding: var(--sp-2) var(--sp-3); background: var(--c-primary); color: #fff; transform: translateY(-180%); }
+.payment-history-skip-link:focus { transform: translateY(0); }
+.payment-history-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.payment-history-page__heading { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: end; justify-content: space-between; margin-bottom: var(--sp-5); }
+.payment-history-page__heading p { color: var(--c-primary); font-size: .8rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.payment-history-page__heading h1 { margin-block: var(--sp-2); font-size: clamp(2rem, 5vw, 3rem); }
+.payment-history-page__heading span, .payment-history-page__count { color: var(--c-muted); }
+.payment-history-page__balance { display: grid; gap: var(--sp-1); padding: var(--sp-3) var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-surface); }
+.payment-history-page__balance strong { color: var(--c-primary); font-size: 1.4rem; }
+.payment-history-page__filters { padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); }
+.payment-history-page__filters form { display: grid; gap: var(--sp-3); align-items: end; }
+.payment-history-page__count { margin-block: var(--sp-4) var(--sp-2); }
+.payment-history-page__table-wrap { overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius); }
+.payment-history-page table { width: 100%; min-width: 760px; border-collapse: collapse; }
+.payment-history-page th, .payment-history-page td { padding: var(--sp-3); border-bottom: 1px solid var(--c-border); text-align: left; }
+.payment-history-page__type { display: inline-flex; padding: .2rem .6rem; border-radius: 999px; background: var(--c-surface); font-weight: 700; }
+.payment-history-page__amount[data-type="refund"] { color: var(--c-primary); }
+@media (min-width: 48rem) { .payment-history-page__filters form { grid-template-columns: 2fr 1fr auto; } }

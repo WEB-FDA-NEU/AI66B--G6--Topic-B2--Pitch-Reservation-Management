@@ -1,4 +1,6 @@
 import { initializeState, loadState, updateState } from './storage-service.js';
+import { refundBookingInState } from './finance-service.js';
+import { recordActivity } from './content-audit-service.js';
 
 const PITCH_TYPES = new Set(['5-a-side', '7-a-side', '11-a-side']);
 const SORT_OPTIONS = new Set(['recommended', 'rating-desc', 'price-asc', 'price-desc']);
@@ -187,6 +189,8 @@ export function createPitch(user, input) {
       surface: normalizeText(input.surface) || 'Cỏ nhân tạo',
       rating: 0,
       reviewCount: 0,
+      ratingBase: 0,
+      reviewCountBase: 0,
       badge: 'Mới',
       image: 'img/placeholder.svg',
       featured: false,
@@ -256,7 +260,7 @@ export function listReviewedPitchReports(admin, pitchId) {
   )));
 }
 
-export function moderatePitch(admin, input) {
+export async function moderatePitch(admin, input) {
   requireAdmin(admin);
   const pitchId = normalizePitchId(input.pitchId);
   const action = normalizeText(input.action);
@@ -275,12 +279,6 @@ export function moderatePitch(admin, input) {
     && String(item.targetId) === String(pitch.id)
   ));
   if (!report) throw new Error('Báo cáo chưa ở trạng thái đang rà soát.');
-  const affectedBooking = state.bookings.some(booking => (
-    booking.pitchId === pitch.id && booking.status === 'Confirmed'
-  ));
-  if (action.startsWith('suspend') && affectedBooking) {
-    throw new Error('Sân còn lịch đã xác nhận; cần xử lý huỷ và hoàn tiền tại S32 trước khi đình chỉ.');
-  }
   if (action === 'restore' && pitch.status !== 'suspended') {
     throw new Error('Chỉ sân đình chỉ tạm thời mới được khôi phục.');
   }
@@ -291,6 +289,25 @@ export function moderatePitch(admin, input) {
   let updated;
   updateState(current => {
     const target = current.pitches.find(item => item.id === pitch.id);
+    if (action.startsWith('suspend')) {
+      const now = new Date().toISOString();
+      current.bookingDrafts.forEach(draft => {
+        if (draft.pitchId === pitch.id && draft.status === 'Pending') {
+          draft.status = 'Cancelled';
+          draft.paymentStatus = 'Cancelled';
+          draft.cancelReason = 'pitch-suspended';
+          draft.cancelledAt = now;
+        }
+      });
+      current.bookings
+        .filter(booking => booking.pitchId === pitch.id && booking.status === 'Confirmed')
+        .forEach(booking => refundBookingInState(
+          current,
+          booking,
+          `Hoàn tiền do sân bị đình chỉ: ${reason}`,
+          { initiatedBy: admin.id },
+        ));
+    }
     target.status = action === 'restore'
       ? 'active'
       : action === 'suspend-permanent' ? 'permanently-suspended' : 'suspended';
@@ -314,6 +331,14 @@ export function moderatePitch(admin, input) {
       text: `Đã áp dụng quyết định ${action} cho sân #${pitch.id}: ${reason}`,
     });
     updated = target;
+  });
+  await recordActivity({
+    actorId: admin.id,
+    actorName: admin.displayName,
+    actionType: `pitch-${action}`,
+    entityType: 'pitch',
+    entityId: String(pitch.id),
+    reason,
   });
   return structuredClone(updated);
 }

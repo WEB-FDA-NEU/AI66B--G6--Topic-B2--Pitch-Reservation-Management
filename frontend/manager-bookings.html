@@ -113,9 +113,28 @@
         <div><dt>Thanh toán</dt><dd id="panel-payment-status"></dd></div>
         <div><dt>Đặt sân</dt><dd id="panel-booking-status"></dd></div>
       </dl>
-      <button class="btn btn--primary" type="button" id="contact-customer-button" disabled>Liên hệ khách hàng</button>
+      <div class="manager-bookings-page__panel-actions">
+        <button class="btn btn--danger" type="button" id="manager-cancel-button" hidden>Huỷ và hoàn tiền</button>
+        <button class="btn btn--primary" type="button" id="contact-customer-button" disabled>Liên hệ khách hàng</button>
+      </div>
     </aside>
   </main>
+
+  <dialog id="manager-cancel-dialog" aria-labelledby="manager-cancel-title">
+    <form id="manager-cancel-form">
+      <h2 id="manager-cancel-title">Huỷ lượt đặt sân</h2>
+      <p>Chỉ huỷ khi sân không thể phục vụ. Khách hàng sẽ được hoàn lại toàn bộ số dư mô phỏng.</p>
+      <div class="field">
+        <label class="field__label" for="manager-cancel-reason">Lý do huỷ</label>
+        <textarea class="textarea" id="manager-cancel-reason" name="reason" rows="4" minlength="8" maxlength="300" required></textarea>
+      </div>
+      <p id="manager-cancel-feedback" role="status"></p>
+      <div class="dialog__actions">
+        <button class="btn" id="manager-cancel-close" type="button">Quay lại</button>
+        <button class="btn btn--danger" type="submit">Xác nhận huỷ</button>
+      </div>
+    </form>
+  </dialog>
 
   <site-footer></site-footer>
 

@@ -33,7 +33,8 @@ export async function login(email, password) {
     throw new AuthError('INVALID_CREDENTIALS', 'Email hoặc mật khẩu không đúng.');
   }
 
-  if (user.status !== 'active') {
+  const suspendedCustomer = user.role === 'customer' && user.status === 'suspended';
+  if (user.status !== 'active' && !suspendedCustomer) {
     throw new AuthError('ACCOUNT_RESTRICTED', 'Tài khoản này không thể đăng nhập.');
   }
 

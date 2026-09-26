@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lịch sử giao dịch mô phỏng của khách hàng Pitch Point.">
+  <title>Lịch sử thanh toán — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/payment-history.css">
+</head>
+<body>
+  <a class="payment-history-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="index.html">Trang chủ</a></li><li aria-current="page">Lịch sử thanh toán</li></ol></nav>
+  <main class="container payment-history-page" id="main-content" hidden>
+    <header class="payment-history-page__heading"><div><p>Lịch sử tài chính</p><h1>Giao dịch của tôi</h1><span>Theo dõi các khoản thanh toán và hoàn tiền bằng số dư mô phỏng.</span></div><div class="payment-history-page__balance"><span>Số dư hiện tại</span><strong id="current-balance"></strong></div></header>
+    <section class="payment-history-page__filters" aria-label="Bộ lọc giao dịch"><form id="transaction-filter"><div class="field"><label class="field__label" for="transaction-query">Mã giao dịch hoặc đặt sân</label><input class="input" id="transaction-query" name="query" type="search"></div><div class="field"><label class="field__label" for="transaction-type">Loại giao dịch</label><select class="select" id="transaction-type" name="type"><option value="">Tất cả</option><option value="payment">Thanh toán</option><option value="refund">Hoàn tiền</option></select></div><button class="btn" type="reset">Đặt lại</button></form></section>
+    <p class="payment-history-page__count" id="transaction-count" aria-live="polite"></p>
+    <div class="payment-history-page__table-wrap"><table><thead><tr><th scope="col">Giao dịch</th><th scope="col">Thời điểm</th><th scope="col">Sân</th><th scope="col">Loại</th><th scope="col">Số tiền</th><th scope="col">Đặt sân</th></tr></thead><tbody id="transaction-rows"></tbody></table></div>
+    <div class="empty" id="transaction-empty" hidden><p class="empty__title">Chưa có giao dịch phù hợp</p><p class="empty__hint">Các khoản thanh toán hoặc hoàn tiền sẽ xuất hiện tại đây.</p></div>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-customer-transaction"><tr><td class="payment-history-page__id"></td><td><time class="payment-history-page__date"></time></td><td class="payment-history-page__pitch"></td><td><span class="payment-history-page__type"></span></td><td class="payment-history-page__amount"></td><td><a class="btn payment-history-page__booking-link">Xem chi tiết</a></td></tr></template>
+  <script type="module" src="js/pages/payment-history.js"></script>
+</body>
+</html>
