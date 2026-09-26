@@ -402,12 +402,12 @@ body {
   font-weight: 600;
   text-transform: capitalize;
 }
-.badge--primary { background: #e0f2fe; color: #0369a1; }
-.badge--success { background: #e8f5e9; color: #2e7d32; }
+.badge--primary { background: #eff6ff; color: #1d4ed8; }
+.badge--success { background: #ecfdf5; color: #047857; }
 .badge--review { background: #e3f2fd; color: #1565c0; }
-.badge--warning { background: #fff8e1; color: #f57f17; }
+.badge--warning { background: #fff7ed; color: #c2410c; }
 .badge--danger { background: #ffebee; color: #c62828; }
-.badge--neutral { background: var(--c-bg-subtle); color: var(--c-muted); }
+.badge--neutral { background: #f1f5f9; color: #475569; }
 
 .admin-modal .form-group label {
   color: #1f2937;
