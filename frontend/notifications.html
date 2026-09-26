@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thông báo — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/tokens.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/notifications.css">
+</head>
+<body>
+  <site-header></site-header>
+  <main class="container notifications-page" id="main-content">
+    <header class="notifications-heading"><div><p class="notifications-heading__eyebrow">Cập nhật cho bạn</p><h1>Thông báo</h1><p>Những thay đổi mới nhất về đặt sân, tin nhắn và tài khoản.</p></div><button class="btn" type="button" data-mark-all>Đánh dấu tất cả đã đọc</button></header>
+    <section class="notifications-panel" aria-labelledby="notifications-list-title"><div class="notifications-toolbar"><h2 id="notifications-list-title">Danh sách thông báo</h2><div class="notifications-filters" role="group" aria-label="Lọc thông báo"><button class="btn is-active" type="button" data-filter="all" aria-pressed="true">Tất cả</button><button class="btn" type="button" data-filter="unread" aria-pressed="false">Chưa đọc</button></div></div><div class="notifications-list" data-list aria-live="polite"><p class="notifications-state">Đang tải thông báo…</p></div><div class="notifications-error" data-error hidden role="status"><p>Không thể tải thông báo lúc này.</p><button class="btn" type="button" data-retry>Thử lại</button></div></section>
+  </main>
+  <site-footer></site-footer><script type="module" src="js/pages/notifications.js"></script>
+</body>
+</html>
