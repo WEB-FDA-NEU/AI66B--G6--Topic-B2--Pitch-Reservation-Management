@@ -150,6 +150,26 @@
           "text": "Đã xác minh và gửi cảnh báo cho tài khoản quản lý sân."
         }
       ]
+    },
+    {
+      "id": "R004",
+      "summary": "Sân tiếp tục nhận lịch trong thời gian cần kiểm tra",
+      "description": "Báo cáo về tình trạng vận hành của sân đã được Admin tiếp nhận và đưa vào rà soát.",
+      "reporterName": "Demo Customer",
+      "reporterId": "U001",
+      "targetType": "pitch",
+      "targetId": "8",
+      "priority": "high",
+      "status": "under-review",
+      "submittedAt": "2026-09-26T03:00:00.000Z",
+      "notes": [
+        {
+          "authorId": "A001",
+          "authorName": "Demo Admin",
+          "createdAt": "2026-09-26T03:30:00.000Z",
+          "text": "Đã kiểm tra thông tin ban đầu và chuyển sang bước quyết định xử lý sân."
+        }
+      ]
     }
   ],
   "contents": [

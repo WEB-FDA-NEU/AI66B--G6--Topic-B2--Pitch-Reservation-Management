@@ -36,6 +36,7 @@ site-header {
 .site-header__search { flex: 1; min-width: 0; }
 .site-header nav { display: flex; align-items: center; gap: var(--sp-2); }
 .site-header nav > [data-auth] { display: flex; align-items: center; gap: var(--sp-2); }
+.site-header__role-nav { display: flex; align-items: center; gap: var(--sp-1); }
 
 @media (max-width: 640px) {
   .site-header__inner {
@@ -60,6 +61,7 @@ site-header {
   }
   .site-header nav.is-open { display: grid; }
   .site-header nav > [data-auth] { display: grid; grid-template-columns: 1fr 1fr; }
+  .site-header__role-nav { display: grid; grid-column: 1 / -1; }
   .site-header__link { padding: .7rem .75rem; }
   .site-header nav .btn { width: 100%; }
 }

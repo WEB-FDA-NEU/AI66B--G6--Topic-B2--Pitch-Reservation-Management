@@ -1,0 +1,18 @@
+.favorite-pitches-shell .skip-link { position: fixed; z-index: 100; top: var(--sp-3); left: var(--sp-3); padding: .65rem 1rem; border-radius: var(--radius-s); background: var(--c-accent); color: var(--c-text); font-weight: 800; transform: translateY(-180%); }
+.favorite-pitches-shell .skip-link:focus { transform: translateY(0); }
+.favorite-pitches-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.favorite-pitches-page .favorite-heading { display: flex; gap: var(--sp-4); align-items: end; justify-content: space-between; margin-bottom: var(--sp-5); }
+.favorite-pitches-page .favorite-heading p { color: var(--c-primary); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.favorite-pitches-page .favorite-heading h1 { font-size: clamp(2rem, 5vw, 3rem); }
+.favorite-pitches-page .favorite-heading span { color: var(--c-muted); }
+.favorite-pitches-page .favorite-feedback:empty { display: none; }
+.favorite-pitches-page .favorite-feedback { margin-bottom: var(--sp-3); color: var(--c-success); }
+.favorite-pitches-page .favorite-grid { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.favorite-pitches-page .favorite-card { position: relative; overflow: hidden; }
+.favorite-pitches-page .favorite-heart-button { position: absolute; z-index: 2; top: var(--sp-3); right: var(--sp-3); display: grid; width: 42px; aspect-ratio: 1; place-items: center; border: 1px solid var(--c-danger); border-radius: 50%; background: rgba(255,255,255,.94); color: var(--c-danger); font-size: 1.55rem; line-height: 1; box-shadow: 0 6px 18px rgba(12,27,42,.14); }
+.favorite-pitches-page .favorite-heart-button:hover,.favorite-pitches-page .favorite-heart-button:focus-visible { background: #fff1f2; transform: translateY(-1px); }
+.favorite-pitches-page .favorite-status { color: var(--c-warning); font-size: .75rem; font-weight: 800; }
+.favorite-pitches-page .favorite-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
+.favorite-pitches-page .favorite-actions .btn { width: 100%; }
+.favorite-pitches-page .favorite-card[data-unavailable="true"] { opacity: .72; }
+@media (max-width: 560px) { .favorite-pitches-page .favorite-heading { align-items: stretch; flex-direction: column; } .favorite-pitches-page .favorite-actions { flex-direction: column; } }

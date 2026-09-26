@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hồ sơ đơn vị quản lý sân trên Pitch Point.">
+  <title>Hồ sơ chủ sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pitch-owner-profile.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="index.html">Trang chủ</a></li><li aria-current="page">Chủ sân</li></ol></nav>
+  <main class="container pitch-owner-profile-page" id="main-content">
+    <p class="screen-state" id="page-state" role="status">Đang tải hồ sơ…</p>
+    <div id="profile-content" hidden>
+      <header class="owner-hero">
+        <div class="owner-avatar" aria-hidden="true">PP</div>
+        <div><p class="owner-eyebrow">Đơn vị quản lý sân</p><h1 id="owner-name"></h1><p id="owner-description"></p></div>
+        <dl class="owner-stats"><div><dt>Đánh giá</dt><dd id="owner-rating"></dd></div><div><dt>Số sân</dt><dd id="owner-count"></dd></div><div><dt>Trạng thái</dt><dd id="owner-status"></dd></div></dl>
+      </header>
+      <section aria-labelledby="owner-pitches-title">
+        <div class="section-heading"><div><p class="section-heading__eyebrow">Danh mục</p><h2 id="owner-pitches-title">Sân thuộc đơn vị</h2></div></div>
+        <div class="owner-pitch-grid" id="owner-pitches"></div>
+      </section>
+    </div>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-owner-pitch"><article class="card owner-pitch-card"><a class="card__link"><img class="card__img" alt="" loading="lazy"><div class="card__body"><div class="card__heading"><h3 class="card__title"></h3><span class="owner-pitch-status"></span></div><p class="card__meta"></p><p class="card__type"></p><p class="card__price"></p><span class="card__action">Xem chi tiết</span></div></a></article></template>
+  <script type="module" src="js/pages/pitch-owner-profile.js"></script>
+</body>
+</html>

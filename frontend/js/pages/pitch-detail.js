@@ -5,11 +5,14 @@ import {
   getPitchById,
   preparePitchCatalog,
 } from '../services/pitch-service.js';
+import { getCurrentUser } from '../services/auth-service.js';
+import { isFavorite, prepareFavorites, setFavorite } from '../services/favorite-service.js';
 
 const STATUS_META = Object.freeze({
   active: { label: 'Đang hoạt động', message: 'Lịch trống sẽ được kiểm tra tại bước chọn lịch.' },
   deactivated: { label: 'Tạm ngừng nhận lịch', message: 'Sân hiện không tiếp nhận yêu cầu đặt sân mới.' },
   suspended: { label: 'Không khả dụng', message: 'Sân hiện không thể nhận yêu cầu đặt sân.' },
+  'permanently-suspended': { label: 'Đình chỉ vĩnh viễn', message: 'Sân đã ngừng hoạt động vĩnh viễn.' },
 });
 
 const elements = {
@@ -36,7 +39,10 @@ const elements = {
   price: document.getElementById('pitch-price'),
   bookingAvailability: document.getElementById('booking-availability'),
   bookingButton: document.getElementById('booking-button'),
+  favoriteButton: document.getElementById('favorite-button'),
 };
+
+let currentPitch = null;
 
 function showState(title, message) {
   elements.content.hidden = true;
@@ -55,6 +61,7 @@ function renderFacilities(services) {
 }
 
 function renderPitch(pitch) {
+  currentPitch = pitch;
   const status = STATUS_META[pitch.status] ?? STATUS_META.suspended;
   document.title = `${pitch.name} — Pitch Point`;
   elements.title.textContent = pitch.name;
@@ -70,7 +77,7 @@ function renderPitch(pitch) {
   elements.hours.textContent = pitch.operatingHours.label;
   elements.district.textContent = pitch.district;
   elements.ownerTitle.textContent = pitch.ownerName;
-  elements.ownerButton.dataset.ownerId = pitch.ownerProfileId;
+  elements.ownerButton.href = `pitch-owner-profile.html?ownerId=${encodeURIComponent(pitch.ownerProfileId)}`;
   elements.messageButton.dataset.managerId = pitch.managerId;
   elements.reviewSummary.textContent = `${pitch.rating.toFixed(1)} / 5`;
   elements.price.textContent = formatPitchPrice(pitch.price);
@@ -84,8 +91,26 @@ function renderPitch(pitch) {
     elements.bookingButton.setAttribute('aria-disabled', 'true');
   }
   renderFacilities(pitch.services);
+  renderFavoriteControl();
   elements.state.hidden = true;
   elements.content.hidden = false;
+}
+
+function renderFavoriteControl() {
+  const user = getCurrentUser();
+  if (!currentPitch || user?.role !== 'customer' || user.status !== 'active') {
+    elements.favoriteButton.hidden = true;
+    return;
+  }
+  const favorite = isFavorite(user, currentPitch.id);
+  elements.favoriteButton.hidden = false;
+  elements.favoriteButton.classList.toggle('is-favorite', favorite);
+  elements.favoriteButton.querySelector('span').textContent = favorite ? '♥' : '♡';
+  elements.favoriteButton.setAttribute(
+    'aria-label',
+    favorite ? `Bỏ ${currentPitch.name} khỏi danh sách yêu thích` : `Thêm ${currentPitch.name} vào danh sách yêu thích`,
+  );
+  elements.favoriteButton.setAttribute('aria-pressed', String(favorite));
 }
 
 async function init() {
@@ -96,7 +121,7 @@ async function init() {
   }
 
   try {
-    await preparePitchCatalog();
+    await Promise.all([preparePitchCatalog(), prepareFavorites()]);
     const pitch = getPitchById(pitchId);
     if (!pitch) {
       showState('Không tìm thấy sân', 'Mã sân không hợp lệ hoặc sân không còn tồn tại trong dữ liệu hiện tại.');
@@ -107,5 +132,12 @@ async function init() {
     showState('Không thể tải thông tin sân', 'Dữ liệu sân hiện không khả dụng. Hãy thử tải lại trang.');
   }
 }
+
+elements.favoriteButton?.addEventListener('click', () => {
+  const user = getCurrentUser();
+  if (!currentPitch || user?.role !== 'customer' || user.status !== 'active') return;
+  setFavorite(user, currentPitch.id, !isFavorite(user, currentPitch.id));
+  renderFavoriteControl();
+});
 
 init();

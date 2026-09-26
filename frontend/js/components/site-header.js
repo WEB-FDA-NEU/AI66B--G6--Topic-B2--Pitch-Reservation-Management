@@ -29,6 +29,7 @@ const TEMPLATE = /* html */ `
         <a class="btn btn--primary" href="register.html">Đăng ký</a>
       </span>
       <span data-auth="user" hidden>
+        <span class="site-header__role-nav" data-role-nav></span>
         <span data-user-name></span>
         <button class="btn" type="button" data-action="logout">Thoát</button>
       </span>
@@ -81,6 +82,7 @@ class SiteHeader extends HTMLElement {
     const guestControls = this.querySelector('[data-auth="guest"]');
     const userControls = this.querySelector('[data-auth="user"]');
     const userName = this.querySelector('[data-user-name]');
+    const roleNavigation = this.querySelector('[data-role-nav]');
 
     try {
       await initializeState();
@@ -88,6 +90,7 @@ class SiteHeader extends HTMLElement {
       guestControls.hidden = Boolean(user);
       userControls.hidden = !user;
       if (userName) userName.textContent = user?.displayName ?? '';
+      if (roleNavigation) this.renderRoleNavigation(roleNavigation, user?.role);
     } catch {
       guestControls.hidden = false;
       userControls.hidden = true;
@@ -97,6 +100,22 @@ class SiteHeader extends HTMLElement {
       logout();
       location.assign('index.html');
     });
+  }
+
+  renderRoleNavigation(container, role) {
+    const destinations = {
+      customer: [['Sân yêu thích', 'favorite-pitches.html']],
+      manager: [['Tổng quan', 'manager-dashboard.html'], ['Sân của tôi', 'manager-pitches.html']],
+      admin: [['Admin', 'admin-dashboard.html'], ['Kiểm duyệt sân', 'admin-pitch-moderation.html']],
+    };
+    const links = (destinations[role] ?? []).map(([label, href]) => {
+      const anchor = document.createElement('a');
+      anchor.className = 'site-header__link';
+      anchor.href = href;
+      anchor.textContent = label;
+      return anchor;
+    });
+    container.replaceChildren(...links);
   }
 }
 

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Danh sách sân bóng yêu thích của khách hàng.">
+  <title>Sân yêu thích — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/tokens.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/favorite-pitches.css">
+</head>
+<body class="favorite-pitches-shell">
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a><site-header></site-header>
+  <nav class="container breadcrumb" aria-label="Đường dẫn"><ol><li><a href="index.html">Trang chủ</a></li><li aria-current="page">Sân yêu thích</li></ol></nav>
+  <main class="container favorite-pitches-page" id="main-content" hidden>
+    <header class="favorite-heading"><div><p>Sân đã lưu</p><h1>Sân bóng yêu thích</h1><span id="favorite-count"></span></div><a class="btn" href="search.html">Khám phá thêm</a></header>
+    <p class="favorite-feedback" id="favorite-feedback" role="status" aria-live="polite"></p>
+    <div class="favorite-grid" id="favorite-list"></div>
+  </main>
+  <site-footer></site-footer>
+  <template id="tpl-favorite"><article class="card favorite-card"><button class="favorite-heart-button is-favorite" type="button" aria-pressed="true"><span aria-hidden="true">♥</span></button><img class="card__img" alt="" loading="lazy"><div class="card__body"><div class="card__heading"><h2 class="card__title"></h2><span class="favorite-status"></span></div><p class="card__meta"></p><p class="card__price"></p><div class="favorite-actions"><a class="btn btn--primary" href="">Xem chi tiết</a></div></div></article></template>
+  <template id="tpl-empty-state"><div class="empty"><p class="empty__title">Chưa có sân yêu thích</p><p class="empty__hint">Các sân bạn lưu sẽ xuất hiện tại đây.</p><a class="btn btn--primary" href="search.html">Tìm sân</a></div></template>
+  <script type="module" src="js/pages/favorite-pitches.js"></script>
+</body>
+</html>

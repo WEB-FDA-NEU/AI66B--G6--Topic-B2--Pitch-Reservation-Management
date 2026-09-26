@@ -3,6 +3,7 @@ const USERS_URL = new URL('../../mock/users.json', import.meta.url);
 const ADMIN_URL = new URL('../../mock/admin.json', import.meta.url);
 const BOOKINGS_URL = new URL('../../mock/bookings.json', import.meta.url);
 const PITCHES_URL = new URL('../../mock/pitches.json', import.meta.url);
+const PITCH_OPERATIONS_URL = new URL('../../mock/pitch-operations.json', import.meta.url);
 let initializationPromise = null;
 
 function isValidState(state) {
@@ -31,20 +32,22 @@ export function saveState(state) {
 }
 
 async function loadSeedData() {
-  const [usersResponse, adminResponse, bookingsResponse, pitchesResponse] = await Promise.all([
+  const [usersResponse, adminResponse, bookingsResponse, pitchesResponse, pitchOperationsResponse] = await Promise.all([
     fetch(USERS_URL),
     fetch(ADMIN_URL),
     fetch(BOOKINGS_URL),
     fetch(PITCHES_URL),
+    fetch(PITCH_OPERATIONS_URL),
   ]);
-  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok || !pitchesResponse.ok) {
+  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok || !pitchesResponse.ok || !pitchOperationsResponse.ok) {
     throw new Error('Không tải được dữ liệu mô phỏng.');
   }
-  const [demoUsers, adminSeed, bookingSeed, pitchSeed] = await Promise.all([
+  const [demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed] = await Promise.all([
     usersResponse.json(),
     adminResponse.json(),
     bookingsResponse.json(),
     pitchesResponse.json(),
+    pitchOperationsResponse.json(),
   ]);
   if (
     !Array.isArray(demoUsers)
@@ -52,10 +55,12 @@ async function loadSeedData() {
     || !Array.isArray(bookingSeed.bookingDrafts)
     || !Array.isArray(bookingSeed.bookings)
     || !Array.isArray(pitchSeed)
+    || !Array.isArray(pitchOperationsSeed.favorites)
+    || !Array.isArray(pitchOperationsSeed.availability)
   ) {
     throw new Error('Dữ liệu mô phỏng không hợp lệ.');
   }
-  return { demoUsers, adminSeed, bookingSeed, pitchSeed };
+  return { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed };
 }
 
 function mergeUsers(currentUsers, seededUsers) {
@@ -75,22 +80,31 @@ function mergePitches(currentPitches, seededPitches) {
   return [...pitchesById.values()];
 }
 
+function mergeRecordsById(currentRecords, seededRecords) {
+  const recordsById = new Map(seededRecords.map(record => [String(record.id), record]));
+  currentRecords.forEach(record => recordsById.set(String(record.id), record));
+  return [...recordsById.values()];
+}
+
 async function initializeFromSeed(existing = null) {
-  const { demoUsers, adminSeed, bookingSeed, pitchSeed } = await loadSeedData();
+  const { demoUsers, adminSeed, bookingSeed, pitchSeed, pitchOperationsSeed } = await loadSeedData();
   const baseUsers = existing?.users ?? demoUsers;
   return saveState({
     ...adminSeed,
     ...existing,
     version: 1,
+    seedRevision: 2,
     users: mergeUsers(baseUsers, adminSeed.users),
     session: existing?.session ?? null,
-    reports: existing?.reports ?? adminSeed.reports,
-    contents: existing?.contents ?? adminSeed.contents,
-    activities: existing?.activities ?? adminSeed.activities,
+    reports: mergeRecordsById(existing?.reports ?? [], adminSeed.reports),
+    contents: mergeRecordsById(existing?.contents ?? [], adminSeed.contents),
+    activities: mergeRecordsById(existing?.activities ?? [], adminSeed.activities),
     settings: existing?.settings ?? adminSeed.settings,
     pitches: mergePitches(existing?.pitches ?? [], pitchSeed),
     bookingDrafts: existing?.bookingDrafts ?? bookingSeed.bookingDrafts,
     bookings: existing?.bookings ?? bookingSeed.bookings,
+    favorites: existing?.favorites ?? pitchOperationsSeed.favorites,
+    availability: existing?.availability ?? pitchOperationsSeed.availability,
   });
 }
 
@@ -114,7 +128,10 @@ export async function initializeState() {
       && typeof pitch.description === 'string'
       && pitch.operatingHours
     ));
-  if (hasAdminCollections && hasBookingCollections && hasPitchCatalog) return existing;
+  const hasPitchOperations = existing
+    && Array.isArray(existing.favorites)
+    && Array.isArray(existing.availability);
+  if (existing?.seedRevision === 2 && hasAdminCollections && hasBookingCollections && hasPitchCatalog && hasPitchOperations) return existing;
 
   if (!initializationPromise) {
     initializationPromise = initializeFromSeed(existing).finally(() => {

@@ -85,7 +85,7 @@
                 <h2 id="owner-title"></h2>
               </div>
               <div class="pitch-detail-page__owner-actions">
-                <button class="btn" id="view-owner-button" type="button" aria-disabled="true">Xem hồ sơ</button>
+                <a class="btn" id="view-owner-button" href="">Xem hồ sơ</a>
                 <button class="btn" id="message-manager-button" type="button" aria-disabled="true">Nhắn tin</button>
               </div>
             </div>
@@ -107,6 +107,9 @@
         </div>
 
         <aside class="pitch-detail-page__booking" aria-labelledby="booking-title">
+          <button class="favorite-heart-button" id="favorite-button" type="button" aria-pressed="false" hidden>
+            <span aria-hidden="true">♡</span>
+          </button>
           <p class="pitch-detail-page__label">Giá thuê tham khảo</p>
           <p class="pitch-detail-page__price" id="pitch-price"></p>
           <h2 id="booking-title">Sẵn sàng chọn lịch?</h2>
