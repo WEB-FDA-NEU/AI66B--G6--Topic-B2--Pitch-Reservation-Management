@@ -34,6 +34,25 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('banner-form').reportValidity();
       return;
     }
+    
+    const isEdit = document.getElementById('banner-modal-title').textContent.includes('Edit');
+    if (!isEdit) {
+      bannersData.unshift({
+        id: 'B-' + Math.floor(Math.random()*1000),
+        title: document.getElementById('banner-title').value,
+        description: document.getElementById('banner-desc').value,
+        position: document.getElementById('banner-position').value,
+        status: 'Draft',
+        statusClass: 'badge--neutral',
+        startDate: document.getElementById('banner-start').value,
+        endDate: document.getElementById('banner-end').value,
+        imageUrl: document.getElementById('banner-img').value,
+        link: document.getElementById('banner-link').value
+      });
+      renderBanners();
+      updatePagination();
+    }
+    
     closeBannerModal();
   });
 
@@ -42,6 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('ann-form').reportValidity();
       return;
     }
+    
+    const isEdit = document.getElementById('ann-modal-title').textContent.includes('Edit');
+    if (!isEdit) {
+      announcementsData.unshift({
+        id: 'A-' + Math.floor(Math.random()*1000),
+        title: document.getElementById('ann-title').value,
+        content: document.getElementById('ann-content').value,
+        audience: document.getElementById('ann-audience').value,
+        status: 'Draft',
+        statusClass: 'badge--neutral',
+        publishedDate: document.getElementById('ann-pub-date').value,
+        expDate: document.getElementById('ann-exp-date').value
+      });
+      renderAnnouncements();
+      updatePagination();
+    }
+    
     closeAnnModal();
   });
 

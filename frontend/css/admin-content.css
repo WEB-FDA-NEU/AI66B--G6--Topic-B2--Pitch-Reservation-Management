@@ -82,7 +82,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  border-top: 1px solid var(--c-border);
+  /* border-top removed */
 }
 .admin-pagination__info {
   font-size: 0.875rem;
@@ -141,19 +141,19 @@ body {
   background: var(--c-bg-subtle);
 }
 
-.admin-content-page .form-group {
+.form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.admin-content-page .form-group label {
+.form-group label {
   font-weight: 500;
   font-size: 0.875rem;
   color: var(--c-text);
 }
 
-.admin-content-page .form-control {
+.form-control {
   padding: 10px 12px;
   border: 1px solid var(--c-border);
   border-radius: 6px;
@@ -161,7 +161,7 @@ body {
   font-size: 0.9375rem;
 }
 
-.admin-content-page .form-control:focus {
+.form-control:focus {
   outline: none;
   border-color: var(--c-primary);
   box-shadow: 0 0 0 2px rgba(10, 89, 75, 0.1);
@@ -341,7 +341,7 @@ body {
   display: flex;
   justify-content: flex-start;
   gap: var(--sp-3);
-  border-top: 1px solid var(--c-border);
+  /* border-top removed */
   padding-top: var(--sp-4);
   margin-top: var(--sp-2);
 }
@@ -408,3 +408,63 @@ body {
 .badge--warning { background: #fff8e1; color: #f57f17; }
 .badge--danger { background: #ffebee; color: #c62828; }
 .badge--neutral { background: var(--c-bg-subtle); color: var(--c-muted); }
+
+.admin-modal .form-group label {
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.admin-modal .form-control {
+  border: 1px solid #d1d5db;
+  color: #111827;
+  border-radius: 6px;
+  padding: 10px 12px;
+  width: 100%;
+}
+.admin-modal .form-control:focus {
+  border-color: var(--c-primary);
+  outline: none;
+}
+.admin-modal__footer {
+  /* border-top removed */
+  padding-top: 16px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.admin-modal .btn-admin {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+.admin-modal .btn-admin--neutral {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+.admin-modal .btn-admin--primary {
+  background: var(--c-primary);
+  border: 1px solid var(--c-primary);
+  color: #fff;
+}
+
+.admin-modal__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+.admin-modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+.admin-modal__close:hover {
+  color: #111827;
+}
