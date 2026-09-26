@@ -1,4 +1,4 @@
-import '../components/admin-sidebar.js';
+﻿import '../components/admin-sidebar.js';
 
 let isDirty = false;
 
@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = document.querySelectorAll('.settings-section');
   const form = document.getElementById('settings-form');
   const btnSave = document.getElementById('btn-save');
-  const btnCancel = document.getElementById('btn-cancel');
-  const saveStatus = document.getElementById('save-status');
+  
+  const statusDot = document.getElementById('status-dot');
+  const saveStatusText = document.getElementById('save-status-text');
 
   // Tab switching
   tabs.forEach(tab => {
@@ -24,32 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Track changes
-  form.addEventListener('input', () => {
+  const markDirty = () => {
     if (!isDirty) {
       isDirty = true;
-      saveStatus.hidden = false;
-      saveStatus.textContent = 'Unsaved changes';
-      saveStatus.style.color = 'var(--c-warning)';
+      statusDot.className = 'status-dot dirty';
+      saveStatusText.textContent = 'Unsaved changes';
+      
+      btnSave.disabled = false;
+      btnSave.style.opacity = '1';
+      btnSave.style.cursor = 'pointer';
     }
-  });
+  };
 
-  form.addEventListener('change', () => {
-    if (!isDirty) {
-      isDirty = true;
-      saveStatus.hidden = false;
-      saveStatus.textContent = 'Unsaved changes';
-      saveStatus.style.color = 'var(--c-warning)';
-    }
-  });
-
-  // Discard changes
-  btnCancel.addEventListener('click', () => {
-    if (isDirty && confirm('Discard unsaved changes?')) {
-      form.reset();
-      isDirty = false;
-      saveStatus.hidden = true;
-    }
-  });
+  form.addEventListener('input', markDirty);
+  form.addEventListener('change', markDirty);
 
   // Save changes
   form.addEventListener('submit', (e) => {
@@ -57,34 +46,42 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Validate custom
     if (!form.checkValidity()) {
-      saveStatus.textContent = 'Validation error';
-      saveStatus.style.color = 'var(--c-danger)';
+      statusDot.className = 'status-dot dirty';
+      saveStatusText.textContent = 'Form validation error';
       return;
     }
 
     // Simulate saving
     btnSave.disabled = true;
+    btnSave.style.opacity = '0.6';
+    btnSave.style.cursor = 'not-allowed';
     btnSave.textContent = 'Saving...';
-    saveStatus.textContent = 'Saving changes...';
-    saveStatus.style.color = 'var(--c-muted)';
+    
+    statusDot.className = 'status-dot'; // Grey
+    saveStatusText.textContent = 'Saving changes...';
 
     setTimeout(() => {
       // 90% success mock
       if (Math.random() > 0.1) {
-        btnSave.disabled = false;
-        btnSave.textContent = 'Save settings';
-        saveStatus.textContent = 'Save successful!';
-        saveStatus.style.color = 'var(--c-success)';
+        btnSave.textContent = 'Save changes';
+        statusDot.className = 'status-dot saved';
+        saveStatusText.textContent = 'Save successful';
         isDirty = false;
         
         setTimeout(() => {
-          if (!isDirty) saveStatus.hidden = true;
+          if (!isDirty) {
+            statusDot.className = 'status-dot';
+            saveStatusText.textContent = 'No unsaved changes';
+          }
         }, 3000);
       } else {
         btnSave.disabled = false;
-        btnSave.textContent = 'Save settings';
-        saveStatus.textContent = 'Save failed. Please try again.';
-        saveStatus.style.color = 'var(--c-danger)';
+        btnSave.style.opacity = '1';
+        btnSave.style.cursor = 'pointer';
+        btnSave.textContent = 'Save changes';
+        
+        statusDot.className = 'status-dot dirty';
+        saveStatusText.textContent = 'Save failed. Please try again.';
       }
     }, 1000);
   });
