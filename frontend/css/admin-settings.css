@@ -300,3 +300,6 @@ input:checked + .toggle-slider:before {
 
 
 
+
+.btn-admin--primary { background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%); color: #ffffff; border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.btn-admin--primary:hover { opacity: 0.9; transform: translateY(-1px); }

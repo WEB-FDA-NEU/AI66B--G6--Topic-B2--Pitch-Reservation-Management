@@ -441,11 +441,7 @@ body {
   border: 1px solid #d1d5db;
   color: #374151;
 }
-.admin-modal .btn-admin--primary {
-  background: var(--c-primary);
-  border: 1px solid var(--c-primary);
-  color: #fff;
-}
+.admin-modal .btn-admin--primary { background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%); color: #ffffff; border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
 
 .admin-modal__title {
   font-size: 1.25rem;
@@ -465,3 +461,4 @@ body {
 .admin-modal__close:hover {
   color: #111827;
 }
+
