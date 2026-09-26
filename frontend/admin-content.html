@@ -89,11 +89,11 @@
 
   <!-- Banner Modal -->
   <dialog id="banner-modal" class="admin-modal admin-modal--lg">
-    <button class="admin-modal__close" id="banner-modal-close" aria-label="Close modal" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
     <div class="admin-modal__header">
       <h2 class="admin-modal__title" id="banner-modal-title">Create banner</h2>
+      <button class="admin-modal__close" id="banner-modal-close" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="admin-modal__body">
       <form id="banner-form" style="display:flex; flex-direction:column; gap:16px;">
@@ -127,7 +127,8 @@
         <div class="form-group">
           <label>Position <span style="color:var(--c-danger);">*</span></label>
           <select class="form-control" id="banner-position" required>
-            <option value="Homepage hero">Homepage hero</option>
+            <option value="" disabled selected hidden>Select position</option>
+              <option value="Homepage hero">Homepage hero</option>
             <option value="Homepage sidebar">Homepage sidebar</option>
           </select>
         </div>
@@ -141,11 +142,11 @@
 
   <!-- Announcement Modal -->
   <dialog id="announcement-modal" class="admin-modal admin-modal--lg">
-    <button class="admin-modal__close" id="ann-modal-close" aria-label="Close modal" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
     <div class="admin-modal__header">
       <h2 class="admin-modal__title" id="ann-modal-title">Create announcement</h2>
+      <button class="admin-modal__close" id="ann-modal-close" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="admin-modal__body">
       <form id="ann-form" style="display:flex; flex-direction:column; gap:16px;">
@@ -160,7 +161,8 @@
         <div class="form-group">
           <label>Target audience <span style="color:var(--c-danger);">*</span></label>
           <select class="form-control" id="ann-audience" required>
-            <option value="All authenticated users">All authenticated users</option>
+            <option value="" disabled selected hidden>Select audience</option>
+              <option value="All authenticated users">All authenticated users</option>
             <option value="Registered users">Registered users</option>
             <option value="Pitch managers">Pitch managers</option>
           </select>
@@ -208,6 +210,21 @@
           <strong id="preview-meta-value2" style="color:var(--c-text);"></strong>
         </div>
       </div>
+    </div>
+  </dialog>
+
+  
+  <!-- Confirm Modal -->
+  <dialog id="confirm-modal" class="admin-modal" style="max-width: 480px;">
+    <div class="admin-modal__header" style="margin-bottom: 16px;">
+      <h2 class="admin-modal__title" id="confirm-title">Confirm</h2>
+    </div>
+    <div class="admin-modal__body" style="margin-bottom: 24px;">
+      <p id="confirm-text" style="color: var(--c-muted); font-size: 0.9375rem; line-height: 1.5;"></p>
+    </div>
+    <div class="admin-modal__actions" style="display:flex; justify-content:flex-end; gap:12px;">
+      <button type="button" class="btn-admin btn-admin--neutral" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="confirm-ok">Confirm</button>
     </div>
   </dialog>
 

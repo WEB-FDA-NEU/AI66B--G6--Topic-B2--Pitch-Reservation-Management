@@ -288,8 +288,35 @@ function openPreview(item, type) {
   previewModal.showModal();
 }
 
+
+const confirmModal = document.getElementById('confirm-modal');
+const confirmTitle = document.getElementById('confirm-title');
+const confirmText = document.getElementById('confirm-text');
+const btnConfirmOk = document.getElementById('confirm-ok');
+const btnConfirmCancel = document.getElementById('confirm-cancel');
+
+let currentConfirmCallback = null;
+
+btnConfirmCancel?.addEventListener('click', () => {
+  confirmModal.close();
+});
+
+btnConfirmOk?.addEventListener('click', () => {
+  if (currentConfirmCallback) currentConfirmCallback();
+  confirmModal.close();
+});
+
 function deleteItem(item, type) {
-  if (confirm('Are you sure you want to delete this draft?')) {
+  const typeName = type === 'banner' ? 'banner' : 'announcement';
+  confirmTitle.textContent = `Delete ${typeName}`;
+  confirmText.textContent = `Delete draft ${typeName} "${item.title}"? This cannot be undone.`;
+  
+  // Custom styling for delete confirm button
+  btnConfirmOk.className = 'btn-admin btn-admin--danger';
+  btnConfirmOk.style = 'background: var(--c-primary); color: #fff;'; // Use dark green for consistency if requested, but image shows green button for delete? Wait, image 4 shows green 'Confirm' button even for delete. Let's use primary.
+  btnConfirmOk.className = 'btn-admin btn-admin--primary';
+  
+  currentConfirmCallback = () => {
     if (type === 'banner') {
       bannersData = bannersData.filter(b => b.id !== item.id);
       renderBanners();
@@ -298,19 +325,39 @@ function deleteItem(item, type) {
       renderAnnouncements();
     }
     updatePagination();
-  }
+  };
+  confirmModal.showModal();
 }
 
 function toggleStatus(item, type) {
-  if (confirm('Are you sure you want to change the status?')) {
-    // Mock toggle
-    if (item.status === 'Active' || item.status === 'Published') {
-      item.status = 'Inactive';
-      item.statusClass = 'badge--neutral';
-    } else {
+  const typeName = type === 'banner' ? 'banner' : 'announcement';
+  const isActivating = (item.status === 'Draft' || item.status === 'Scheduled' || item.status === 'Inactive' || item.status === 'Unpublished' || item.status === 'Expired');
+  
+  let actionName = '';
+  if (type === 'banner') {
+    actionName = isActivating ? 'Activate' : 'Deactivate';
+  } else {
+    actionName = isActivating ? 'Publish' : 'Unpublish';
+  }
+
+  confirmTitle.textContent = `${actionName} ${typeName}`;
+  if (type === 'announcement' && isActivating) {
+    confirmText.textContent = `${actionName} "${item.title}" to ${item.audience}?`;
+  } else {
+    confirmText.textContent = `Are you sure you want to ${actionName.toLowerCase()} "${item.title}"?`;
+  }
+
+  btnConfirmOk.className = 'btn-admin btn-admin--primary';
+
+  currentConfirmCallback = () => {
+    if (isActivating) {
       item.status = type === 'banner' ? 'Active' : 'Published';
       item.statusClass = 'badge--success';
+    } else {
+      item.status = type === 'banner' ? 'Inactive' : 'Unpublished';
+      item.statusClass = 'badge--neutral';
     }
     type === 'banner' ? renderBanners() : renderAnnouncements();
-  }
+  };
+  confirmModal.showModal();
 }
