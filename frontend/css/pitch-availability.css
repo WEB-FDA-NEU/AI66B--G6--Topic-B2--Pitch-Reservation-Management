@@ -1,0 +1,185 @@
+﻿/* CSS riêng cho S21 - Pitch Availability & Config */
+
+.availability-page {
+  padding-bottom: var(--sp-8);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-6);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--c-border);
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  margin-bottom: var(--sp-1);
+}
+
+/* Layout 2 cột (Khung giờ bên trái, Dịch vụ bên phải) */
+.config-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--sp-8);
+}
+
+.config-section {
+  background: var(--c-surface);
+}
+
+.section-header {
+  margin-bottom: var(--sp-4);
+}
+.section-header h2 {
+  font-size: 1.25rem;
+  margin-bottom: var(--sp-1);
+}
+
+/* Danh sách Khung giờ (Grid table) */
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--c-border);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.slot-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  background: var(--c-surface);
+  align-items: center;
+}
+
+.slot-header {
+  background: var(--c-surface-hover);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--c-text-muted);
+}
+
+.slot-col {
+  padding: var(--sp-3);
+  display: flex;
+  align-items: center;
+}
+
+.slot-time {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.slot-row.disabled {
+  opacity: 0.5;
+  background: var(--c-background);
+}
+
+.input--sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+/* Tags (Giờ vàng / Giờ thường) */
+.tag {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-s);
+  font-weight: 700;
+}
+.tag--normal { background: #e0e0e0; color: #424242; }
+.tag--peak { background: #fff3e0; color: #e65100; }
+
+/* Nút Toggle switch css thuần */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .2s;
+  border-radius: 24px;
+}
+.toggle__slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .2s;
+  border-radius: 50%;
+}
+.toggle input:checked + .toggle__slider {
+  background-color: var(--c-primary);
+}
+.toggle input:focus-visible + .toggle__slider {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+.toggle input:checked + .toggle__slider:before {
+  transform: translateX(20px);
+}
+
+/* Danh sách Dịch vụ */
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.service-item {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  cursor: pointer;
+}
+
+.mt-4 { margin-top: var(--sp-4); }
+.mt-6 { margin-top: var(--sp-6); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .slot-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    padding: var(--sp-2);
+  }
+  .slot-header { display: none; }
+  .slot-col { padding: var(--sp-1); }
+  .slot-row.disabled { opacity: 0.6; }
+}

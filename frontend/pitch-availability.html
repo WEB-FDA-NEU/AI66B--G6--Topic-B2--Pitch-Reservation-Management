@@ -1,0 +1,171 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quản lý Khung giờ và Tiện ích - Pitch Point">
+  <title>Cấu hình Sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pitch-availability.css">
+</head>
+<body>
+  <site-header active="pitches"></site-header>
+
+  <main class="container availability-page" id="main-content" hidden>
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="manager-dashboard.html">Bảng điều khiển</a></li>
+        <li><a href="manager-pitches.html">Sân của tôi</a></li>
+        <li aria-current="page">Giờ & Tiện ích</li>
+      </ol>
+    </nav>
+
+    <header class="page-header">
+      <div>
+        <h1 id="pitch-name-display">Cấu hình Sân</h1>
+        <p class="text-muted">Quản lý giá thuê theo khung giờ và các dịch vụ đi kèm.</p>
+      </div>
+      <button form="config-form" type="submit" class="btn btn--primary" id="btn-save-top">Lưu cấu hình</button>
+    </header>
+
+    <form id="config-form" class="config-grid">
+      
+      <!-- Cột trái: Quản lý khung giờ -->
+      <section class="config-section">
+        <header class="section-header">
+          <h2>Khung giờ & Bảng giá</h2>
+          <p class="text-muted">Thiết lập giá riêng cho giờ vàng (Peak) hoặc giờ thường (Off-peak).</p>
+        </header>
+        
+        <div class="slot-list">
+          <!-- Bảng Header -->
+          <div class="slot-row slot-header" aria-hidden="true">
+            <div class="slot-col">Thời gian</div>
+            <div class="slot-col">Phân loại</div>
+            <div class="slot-col">Giá (VND)</div>
+            <div class="slot-col">Mở/Đóng</div>
+          </div>
+
+          <!-- Dòng 1 -->
+          <div class="slot-row">
+            <div class="slot-col slot-time">06:00 - 07:30</div>
+            <div class="slot-col"><span class="tag tag--normal">Thường</span></div>
+            <div class="slot-col">
+              <input type="number" class="input input--sm" value="300000" min="10000" aria-label="Giá khung giờ 6h">
+            </div>
+            <div class="slot-col">
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="toggle__slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dòng 2 -->
+          <div class="slot-row">
+            <div class="slot-col slot-time">17:30 - 19:00</div>
+            <div class="slot-col"><span class="tag tag--peak">Giờ vàng</span></div>
+            <div class="slot-col">
+              <input type="number" class="input input--sm" value="500000" min="10000" aria-label="Giá khung giờ 17h30">
+            </div>
+            <div class="slot-col">
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="toggle__slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dòng 3 -->
+          <div class="slot-row">
+            <div class="slot-col slot-time">19:00 - 20:30</div>
+            <div class="slot-col"><span class="tag tag--peak">Giờ vàng</span></div>
+            <div class="slot-col">
+              <input type="number" class="input input--sm" value="500000" min="10000" aria-label="Giá khung giờ 19h">
+            </div>
+            <div class="slot-col">
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="toggle__slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dòng 4 (Đóng) -->
+          <div class="slot-row disabled">
+            <div class="slot-col slot-time">22:00 - 23:30</div>
+            <div class="slot-col"><span class="tag tag--normal">Thường</span></div>
+            <div class="slot-col">
+              <input type="number" class="input input--sm" value="250000" disabled aria-label="Giá khung giờ 22h">
+            </div>
+            <div class="slot-col">
+              <label class="toggle">
+                <input type="checkbox">
+                <span class="toggle__slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn--outline btn--full mt-4">➕ Thêm khung giờ khác</button>
+      </section>
+
+      <!-- Cột phải: Dịch vụ tiện ích -->
+      <section class="config-section">
+        <header class="section-header">
+          <h2>Dịch vụ & Tiện ích</h2>
+          <p class="text-muted">Các dịch vụ khách có thể thuê kèm khi đặt sân.</p>
+        </header>
+        
+        <div class="service-list">
+          
+          <div class="service-item">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" name="services" value="ball" checked>
+              <span class="checkbox-text">Thuê bóng trận</span>
+            </label>
+            <input type="number" class="input input--sm" value="30000" placeholder="Giá..." aria-label="Giá thuê bóng">
+          </div>
+          
+          <div class="service-item">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" name="services" value="bibs" checked>
+              <span class="checkbox-text">Thuê áo bíp (10 chiếc)</span>
+            </label>
+            <input type="number" class="input input--sm" value="20000" placeholder="Giá..." aria-label="Giá thuê áo">
+          </div>
+
+          <div class="service-item">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" name="services" value="water">
+              <span class="checkbox-text">Nước suối (Bình 20L)</span>
+            </label>
+            <input type="number" class="input input--sm" value="" placeholder="Nhập giá..." aria-label="Giá nước">
+          </div>
+
+          <div class="service-item">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" name="services" value="referee">
+              <span class="checkbox-text">Thuê Trọng tài</span>
+            </label>
+            <input type="number" class="input input--sm" value="" placeholder="Nhập giá..." aria-label="Giá thuê trọng tài">
+          </div>
+
+        </div>
+        
+        <div class="form-actions mt-6">
+          <button type="submit" class="btn btn--primary" id="btn-save-bottom">Lưu cấu hình</button>
+          <a href="manager-pitches.html" class="btn btn--outline">Quay lại</a>
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/pitch-availability.js"></script>
+</body>
+</html>

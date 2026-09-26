@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 //  Lưu token và cập nhật header cho đúng trạng thái đăng nhập.
 //  LƯU Ý: token để trong localStorage sẽ đọc được nếu trang dính XSS.
 //  Đó là lý do trong render.js ta luôn dùng textContent, không innerHTML.
@@ -44,11 +44,20 @@ export function initHeader() {
   guest.hidden = logged;
   user.hidden  = !logged;
 
+  const currentUser = getUser();
   const nameEl = document.querySelector('[data-user-name]');
-  if (nameEl && logged) nameEl.textContent = getUser()?.display_name ?? '';
+  if (nameEl && logged) nameEl.textContent = currentUser?.display_name ?? '';
+
+  // Ẩn/hiện thanh điều hướng theo Role (Customer, Manager, Admin)
+  const role = currentUser?.role || 'customer';
+  document.querySelectorAll('[data-role-nav]').forEach(el => {
+    el.hidden = el.dataset.roleNav !== role;
+  });
 
   document.querySelector('[data-action="logout"]')?.addEventListener('click', e => {
     e.preventDefault();
     logout();
   });
 }
+
+

@@ -1,0 +1,97 @@
+﻿/* CSS riêng cho S17 - Manager Dashboard */
+
+.manager-dashboard-page {
+  padding-top: var(--sp-6);
+  padding-bottom: var(--sp-8);
+}
+
+.dashboard-header {
+  margin-bottom: var(--sp-6);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  color: var(--c-text);
+  margin-bottom: var(--sp-2);
+}
+
+.dashboard-header p {
+  color: var(--c-text-muted);
+  font-size: 1.125rem;
+}
+
+/* ---- Lưới thống kê tổng quan ---- */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+
+.stat-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card__title {
+  font-size: 0.875rem;
+  color: var(--c-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-2);
+}
+
+.stat-card__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--c-primary);
+}
+
+/* ---- Lưới tính năng (Menu) ---- */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-4);
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: var(--sp-5);
+  text-decoration: none;
+  color: var(--c-text);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-card:hover, .menu-card:focus-visible {
+  border-color: var(--c-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  outline: none;
+}
+
+.menu-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--sp-3);
+}
+
+.menu-card__title {
+  font-size: 1.25rem;
+  margin-bottom: var(--sp-2);
+  color: var(--c-text);
+}
+
+.menu-card__desc {
+  color: var(--c-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
