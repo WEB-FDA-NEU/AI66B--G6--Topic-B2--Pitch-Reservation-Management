@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isDirty) {
       isDirty = true;
       statusDot.className = 'status-dot dirty';
-      saveStatusText.textContent = 'Unsaved changes';
+      saveStatusText.textContent = 'Chưa lưu thay đổi';
       
       btnSave.disabled = false;
       btnSave.style.opacity = '1';
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('input', markDirty);
   form.addEventListener('change', markDirty);
 
-  // Save changes
+  // Lưu thay đổi
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     // Validate custom
     if (!form.checkValidity()) {
       statusDot.className = 'status-dot dirty';
-      saveStatusText.textContent = 'Form validation error';
+      saveStatusText.textContent = 'Lỗi xác thực dữ liệu';
       return;
     }
 
@@ -55,33 +55,33 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSave.disabled = true;
     btnSave.style.opacity = '0.6';
     btnSave.style.cursor = 'not-allowed';
-    btnSave.textContent = 'Saving...';
+    btnSave.textContent = 'Đang lưu...';
     
     statusDot.className = 'status-dot'; // Grey
-    saveStatusText.textContent = 'Saving changes...';
+    saveStatusText.textContent = 'Đang lưu thay đổi...';
 
     setTimeout(() => {
       // 90% success mock
       if (Math.random() > 0.1) {
-        btnSave.textContent = 'Save changes';
+        btnSave.textContent = 'Lưu thay đổi';
         statusDot.className = 'status-dot saved';
-        saveStatusText.textContent = 'Save successful';
+        saveStatusText.textContent = 'Lưu thành công';
         isDirty = false;
         
         setTimeout(() => {
           if (!isDirty) {
             statusDot.className = 'status-dot';
-            saveStatusText.textContent = 'No unsaved changes';
+            saveStatusText.textContent = 'Không có thay đổi nào chưa lưu';
           }
         }, 3000);
       } else {
         btnSave.disabled = false;
         btnSave.style.opacity = '1';
         btnSave.style.cursor = 'pointer';
-        btnSave.textContent = 'Save changes';
+        btnSave.textContent = 'Lưu thay đổi';
         
         statusDot.className = 'status-dot dirty';
-        saveStatusText.textContent = 'Save failed. Please try again.';
+        saveStatusText.textContent = 'Lưu thất bại. Vui lòng thử lại.';
       }
     }, 1000);
   });

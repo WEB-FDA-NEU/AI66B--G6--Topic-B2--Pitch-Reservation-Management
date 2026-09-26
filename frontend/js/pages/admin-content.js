@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title: document.getElementById('banner-title').value,
         description: document.getElementById('banner-desc').value,
         position: document.getElementById('banner-position').value,
-        status: 'Draft',
+        status: 'Bản nháp',
         statusClass: 'badge--neutral',
         startDate: document.getElementById('banner-start').value,
         endDate: document.getElementById('banner-end').value,
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title: document.getElementById('ann-title').value,
         content: document.getElementById('ann-content').value,
         audience: document.getElementById('ann-audience').value,
-        status: 'Draft',
+        status: 'Bản nháp',
         statusClass: 'badge--neutral',
         publishedDate: document.getElementById('ann-pub-date').value,
         expDate: document.getElementById('ann-exp-date').value
@@ -118,13 +118,13 @@ function switchTab(tab) {
     tabAnnouncements.classList.remove('active');
     viewBanners.hidden = false;
     viewAnnouncements.hidden = true;
-    btnCreate.innerHTML = `<svg style="color: #ffffff;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Create banner`;
+    btnCreate.innerHTML = `<svg style="color: #ffffff;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Tạo banner`;
   } else {
     tabBanners.classList.remove('active');
     tabAnnouncements.classList.add('active');
     viewBanners.hidden = true;
     viewAnnouncements.hidden = false;
-    btnCreate.innerHTML = `<svg style="color: #ffffff;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Create announcement`;
+    btnCreate.innerHTML = `<svg style="color: #ffffff;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Tạo thông báo`;
   }
   updatePagination();
 }
@@ -159,10 +159,10 @@ function renderBanners() {
     clone.querySelector('.btn-preview').addEventListener('click', () => openPreview(banner, 'banner'));
     clone.querySelector('.btn-toggle').addEventListener('click', () => toggleStatus(banner, 'banner'));
     
-    const btnDelete = clone.querySelector('.btn-delete');
-    if (banner.status === 'Draft') {
-      btnDelete.style.display = 'inline-flex';
-      btnDelete.addEventListener('click', () => deleteItem(banner, 'banner'));
+    const btnXóa = clone.querySelector('.btn-delete');
+    if (banner.status === 'Bản nháp') {
+      btnXóa.style.display = 'inline-flex';
+      btnXóa.addEventListener('click', () => deleteItem(banner, 'banner'));
     }
 
     
@@ -199,10 +199,10 @@ function renderAnnouncements() {
     clone.querySelector('.btn-preview').addEventListener('click', () => openPreview(ann, 'ann'));
     clone.querySelector('.btn-toggle').addEventListener('click', () => toggleStatus(ann, 'ann'));
     
-    const btnDelete = clone.querySelector('.btn-delete');
-    if (ann.status === 'Draft' || ann.status === 'Scheduled') {
-      btnDelete.style.display = 'inline-flex';
-      btnDelete.addEventListener('click', () => deleteItem(ann, 'ann'));
+    const btnXóa = clone.querySelector('.btn-delete');
+    if (ann.status === 'Bản nháp' || ann.status === 'Đã lên lịch') {
+      btnXóa.style.display = 'inline-flex';
+      btnXóa.addEventListener('click', () => deleteItem(ann, 'ann'));
     }
 
     
@@ -262,8 +262,8 @@ function openBannerModal(banner = null) {
   const saveBtn = document.getElementById('banner-modal-save');
   
   if (banner) {
-    title.textContent = 'Edit banner';
-    saveBtn.textContent = 'Save changes';
+    title.textContent = 'Chỉnh sửa banner';
+    saveBtn.textContent = 'Lưu thay đổi';
     document.getElementById('banner-title').value = banner.title;
     document.getElementById('banner-desc').value = banner.description;
     document.getElementById('banner-img').value = banner.imageUrl || '';
@@ -273,8 +273,8 @@ function openBannerModal(banner = null) {
     document.getElementById('banner-start').value = '2026-09-01';
     document.getElementById('banner-end').value = '2026-10-31';
   } else {
-    title.textContent = 'Create banner';
-    saveBtn.textContent = 'Save banner';
+    title.textContent = 'Tạo banner';
+    saveBtn.textContent = 'Lưu banner';
     form.reset();
   }
   
@@ -292,16 +292,16 @@ function openAnnModal(ann = null) {
   const saveBtn = document.getElementById('ann-modal-save');
   
   if (ann) {
-    title.textContent = 'Edit announcement';
-    saveBtn.textContent = 'Save changes';
+    title.textContent = 'Chỉnh sửa thông báo';
+    saveBtn.textContent = 'Lưu thay đổi';
     document.getElementById('ann-title').value = ann.title;
     document.getElementById('ann-content').value = ann.content;
     document.getElementById('ann-audience').value = ann.audience;
     document.getElementById('ann-pub-date').value = '2026-09-25';
     document.getElementById('ann-exp-date').value = '2026-09-29';
   } else {
-    title.textContent = 'Create announcement';
-    saveBtn.textContent = 'Save announcement';
+    title.textContent = 'Tạo thông báo';
+    saveBtn.textContent = 'Lưu thông báo';
     form.reset();
   }
   
@@ -351,11 +351,11 @@ const confirmModal = document.getElementById('confirm-modal');
 const confirmTitle = document.getElementById('confirm-title');
 const confirmText = document.getElementById('confirm-text');
 const btnConfirmOk = document.getElementById('confirm-ok');
-const btnConfirmCancel = document.getElementById('confirm-cancel');
+const btnConfirmHủy = document.getElementById('confirm-cancel');
 
 let currentConfirmCallback = null;
 
-btnConfirmCancel?.addEventListener('click', () => {
+btnConfirmHủy?.addEventListener('click', () => {
   confirmModal.close();
 });
 
@@ -366,8 +366,8 @@ btnConfirmOk?.addEventListener('click', () => {
 
 function deleteItem(item, type) {
   const typeName = type === 'banner' ? 'banner' : 'announcement';
-  confirmTitle.textContent = `Delete ${typeName}`;
-  confirmText.textContent = `Delete draft ${typeName} "${item.title}"? This cannot be undone.`;
+  confirmTitle.textContent = `Xóa ${typeName}`;
+  confirmText.textContent = `Xóa draft ${typeName} "${item.title}"? This cannot be undone.`;
   
   // Custom styling for delete confirm button
   btnConfirmOk.className = 'btn-admin btn-admin--danger';
@@ -389,7 +389,7 @@ function deleteItem(item, type) {
 
 function toggleStatus(item, type) {
   const typeName = type === 'banner' ? 'banner' : 'announcement';
-  const isActivating = (item.status === 'Draft' || item.status === 'Scheduled' || item.status === 'Inactive' || item.status === 'Unpublished' || item.status === 'Expired');
+  const isActivating = (item.status === 'Bản nháp' || item.status === 'Đã lên lịch' || item.status === 'Ngừng hoạt động' || item.status === 'Unpublished' || item.status === 'Đã hết hạn');
   
   let actionName = '';
   if (type === 'banner') {
@@ -409,10 +409,10 @@ function toggleStatus(item, type) {
 
   currentConfirmCallback = () => {
     if (isActivating) {
-      item.status = type === 'banner' ? 'Active' : 'Published';
+      item.status = type === 'banner' ? 'Hoạt động' : 'Published';
       item.statusClass = 'badge--success';
     } else {
-      item.status = type === 'banner' ? 'Inactive' : 'Unpublished';
+      item.status = type === 'banner' ? 'Ngừng hoạt động' : 'Unpublished';
       item.statusClass = 'badge--neutral';
     }
     type === 'banner' ? renderBanners() : renderAnnouncements();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Content Management — Pitch Point</title>
+  <title>Quản lý Nội dung — Pitch Point</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -16,7 +16,7 @@
   <main class="admin-main admin-content-page">
     <header class="admin-header-hero">
       <div class="admin-header-hero__content">
-        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S33</p>
+        <p class="admin-header-hero__eyebrow">QUẢN TRỊ / S33</p>
         <h1 class="admin-header-hero__title">Announcement & Banner Management</h1>
         <p class="admin-header-hero__desc">Manage website banners and system-wide announcements.</p>
       </div>
@@ -25,12 +25,12 @@
     <div class="admin-board">
       <div class="admin-tabs-container" style="display: flex; justify-content: space-between; align-items: center; padding: 24px 24px 16px;">
         <div class="admin-tabs-pill">
-          <button type="button" class="admin-tab-pill active" id="tab-banners">Banners <span id="banners-count">(6)</span></button>
-          <button type="button" class="admin-tab-pill" id="tab-announcements">Announcements <span id="announcements-count">(6)</span></button>
+          <button type="button" class="admin-tab-pill active" id="tab-banners">Banner <span id="banners-count">(6)</span></button>
+          <button type="button" class="admin-tab-pill" id="tab-announcements">Thông báo <span id="announcements-count">(6)</span></button>
         </div>
         <button type="button" class="btn-admin btn-admin--primary" id="btn-create-content" style="display:flex; align-items:center; border-radius:6px; padding:8px 16px; background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%); border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); color: #ffffff;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Create banner
+          Tạo banner
         </button>
       </div>
 
@@ -40,8 +40,8 @@
           <thead>
             <tr>
               <th>Banner</th>
-              <th>Position</th>
-              <th>Status</th>
+              <th>Vị trí</th>
+              <th>Trạng thái</th>
               <th>Date range</th>
               <th style="text-align: right;">Actions</th>
             </tr>
@@ -59,7 +59,7 @@
             <tr>
               <th>Announcement</th>
               <th>Audience</th>
-              <th>Status</th>
+              <th>Trạng thái</th>
               <th>Published</th>
               <th style="text-align: right;">Actions</th>
             </tr>
@@ -87,7 +87,7 @@
   <!-- Banner Modal -->
   <dialog id="banner-modal" class="admin-modal admin-modal--lg">
     <div class="admin-modal__header">
-      <h2 class="admin-modal__title" id="banner-modal-title">Create banner</h2>
+      <h2 class="admin-modal__title" id="banner-modal-title">Tạo banner</h2>
       <button class="admin-modal__close" id="banner-modal-close" aria-label="Close modal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
@@ -96,16 +96,16 @@
       <form id="banner-form" style="display:flex; flex-direction:column; gap:16px;">
         <div class="form-group">
           <label>Title <span style="color:var(--c-danger);">*</span></label>
-          <input type="text" class="form-control" id="banner-title" placeholder="Banner title" required>
+          <input type="text" class="form-control" id="banner-title" placeholder="Tiêu đề banner" required>
         </div>
         <div class="form-group">
           <label>Description <span style="color:var(--c-danger);">*</span></label>
-          <textarea class="form-control" id="banner-desc" rows="3" placeholder="Banner description" required></textarea>
+          <textarea class="form-control" id="banner-desc" rows="3" placeholder="Mô tả banner" required></textarea>
         </div>
         <div class="form-group">
           <label>Image URL</label>
           <input type="text" class="form-control" id="banner-img" placeholder="https://... (optional)">
-          <p class="help-text" style="font-size:0.8rem; color:var(--c-muted); margin-top:4px;">Leave empty to use a placeholder image.</p>
+          <p class="help-text" style="font-size:0.8rem; color:var(--c-muted); margin-top:4px;">Để trống để dùng ảnh mặc định.</p>
         </div>
         <div class="form-group">
           <label>Destination link <span style="color:var(--c-danger);">*</span></label>
@@ -124,23 +124,23 @@
         <div class="form-group">
           <label>Display position</label>
           <select class="form-control" id="banner-position" required>
-            <option value="" disabled selected hidden>Select position</option>
-              <option value="Homepage hero">Homepage hero</option>
-            <option value="Homepage sidebar">Homepage sidebar</option>
+            <option value="" disabled selected hidden>Chọn vị trí</option>
+              <option value="Màn hình chính (Hero)">Màn hình chính (Hero)</option>
+            <option value="Thanh bên (Sidebar)">Thanh bên (Sidebar)</option>
           </select>
         </div>
       </form>
     </div>
     <div class="admin-modal__footer" style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
-      <button type="button" class="btn-admin btn-admin--neutral" id="banner-modal-cancel">Cancel</button>
-      <button type="button" class="btn-admin btn-admin--primary" id="banner-modal-save">Save banner</button>
+      <button type="button" class="btn-admin btn-admin--neutral" id="banner-modal-cancel">Hủy</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="banner-modal-save">Lưu banner</button>
     </div>
   </dialog>
 
   <!-- Announcement Modal -->
   <dialog id="announcement-modal" class="admin-modal admin-modal--lg">
     <div class="admin-modal__header">
-      <h2 class="admin-modal__title" id="ann-modal-title">Create announcement</h2>
+      <h2 class="admin-modal__title" id="ann-modal-title">Tạo thông báo</h2>
       <button class="admin-modal__close" id="ann-modal-close" aria-label="Close modal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
@@ -149,11 +149,11 @@
       <form id="ann-form" style="display:flex; flex-direction:column; gap:16px;">
         <div class="form-group">
           <label>Title <span style="color:var(--c-danger);">*</span></label>
-          <input type="text" class="form-control" id="ann-title" placeholder="Announcement title" required>
+          <input type="text" class="form-control" id="ann-title" placeholder="Tiêu đề thông báo" required>
         </div>
         <div class="form-group">
           <label>Content <span style="color:var(--c-danger);">*</span></label>
-          <textarea class="form-control" id="ann-content" rows="4" placeholder="Announcement content" required></textarea>
+          <textarea class="form-control" id="ann-content" rows="4" placeholder="Nội dung thông báo" required></textarea>
         </div>
         <div class="form-group">
           <label>Target audience <span style="color:var(--c-danger);">*</span></label>
@@ -177,8 +177,8 @@
       </form>
     </div>
     <div class="admin-modal__footer" style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
-      <button type="button" class="btn-admin btn-admin--neutral" id="ann-modal-cancel">Cancel</button>
-      <button type="button" class="btn-admin btn-admin--primary" id="ann-modal-save">Save announcement</button>
+      <button type="button" class="btn-admin btn-admin--neutral" id="ann-modal-cancel">Hủy</button>
+      <button type="button" class="btn-admin btn-admin--primary" id="ann-modal-save">Lưu thông báo</button>
     </div>
   </dialog>
 
@@ -220,7 +220,7 @@
       <p id="confirm-text" style="color: var(--c-muted); font-size: 0.9375rem; line-height: 1.5;"></p>
     </div>
     <div class="admin-modal__actions" style="display:flex; justify-content:flex-end; gap:12px;">
-      <button type="button" class="btn-admin btn-admin--neutral" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn-admin btn-admin--neutral" id="confirm-cancel">Hủy</button>
       <button type="button" class="btn-admin btn-admin--primary" id="confirm-ok">Confirm</button>
     </div>
   </dialog>

@@ -106,7 +106,7 @@ export const mockUsers = [
     fullName: 'Alex Morgan',
     email: 'alex.morgan@email.com',
     role: 'User',
-    accountStatus: 'Active',
+    accountStatus: 'Hoạt động',
     statusClass: 'badge--success',
     warningCount: 0,
     bookingCount: 12,
@@ -150,7 +150,7 @@ export const mockUsers = [
     fullName: 'Sam Rivera',
     email: 'sam.rivera@email.com',
     role: 'User',
-    accountStatus: 'Active',
+    accountStatus: 'Hoạt động',
     statusClass: 'badge--success',
     warningCount: 0,
     bookingCount: 15,
@@ -182,7 +182,7 @@ export const mockManagers = [
     fullName: 'Northside Arena',
     email: 'manager@northsidearena.com',
     role: 'Manager',
-    accountStatus: 'Active',
+    accountStatus: 'Hoạt động',
     statusClass: 'badge--success',
     managedPitchCount: 3,
     activeBookingCount: '24',
@@ -222,7 +222,7 @@ export const mockManagers = [
     fullName: 'Riverside 5-a-side',
     email: 'info@riverside5aside.com',
     role: 'Manager',
-    accountStatus: 'Active',
+    accountStatus: 'Hoạt động',
     statusClass: 'badge--success',
     managedPitchCount: 4,
     activeBookingCount: '31',
@@ -248,19 +248,19 @@ export const mockManagers = [
 
 
 export const mockBanners = [
-  { id: 'B-001', title: 'Summer Tournament Registration', description: 'Register your team for the summer tournament.', position: 'Homepage hero', status: 'Active', statusClass: 'badge--success', startDate: '01 Sept 2026', endDate: '31 Oct 2026', imageUrl: '', link: '/promos/summer' },
-  { id: 'B-002', title: 'New Pitch Launch at Riverside', description: 'Book the newly opened pitches at Riverside.', position: 'Homepage hero', status: 'Scheduled', statusClass: 'badge--primary', startDate: '01 Oct 2026', endDate: '30 Nov 2026', imageUrl: '', link: '/pitches/riverside' },
-  { id: 'B-003', title: 'Weekend Discount Promo', description: 'Get 20% off weekend bookings at select pitches.', position: 'Homepage sidebar', status: 'Active', statusClass: 'badge--success', startDate: '15 Sept 2026', endDate: '30 Sept 2026', imageUrl: '', link: '/promos/weekend' },
-  { id: 'B-004', title: 'Holiday Special Offer', description: 'Special holiday rates for all 5-a-side pitches.', position: 'Homepage sidebar', status: 'Draft', statusClass: 'badge--neutral', startDate: '01 Dec 2026', endDate: '31 Dec 2026', imageUrl: '', link: '/promos/holiday' },
-  { id: 'B-005', title: 'Partner Spotlight: SportsCo', description: 'Check out our partner SportsCo for pre...', position: 'Footer', status: 'Expired', statusClass: 'badge--warning', startDate: '01 Aug 2026', endDate: '31 Aug 2026', imageUrl: '', link: '' },
-  { id: 'B-006', title: 'Download Our Mobile App', description: 'Book on the go with our mobile app.', position: 'Booking page top', status: 'Inactive', statusClass: 'badge--neutral', startDate: '01 Sept 2026', endDate: '31 Dec 2026', imageUrl: '', link: '' }
+  { id: 'B-001', title: 'Summer Tournament Registration', description: 'Register your team for the summer tournament.', position: 'Màn hình chính (Hero)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '01 Sept 2026', endDate: '31 Oct 2026', imageUrl: '', link: '/promos/summer' },
+  { id: 'B-002', title: 'New Pitch Launch at Riverside', description: 'Book the newly opened pitches at Riverside.', position: 'Màn hình chính (Hero)', status: 'Đã lên lịch', statusClass: 'badge--primary', startDate: '01 Oct 2026', endDate: '30 Nov 2026', imageUrl: '', link: '/pitches/riverside' },
+  { id: 'B-003', title: 'Weekend Discount Promo', description: 'Get 20% off weekend bookings at select pitches.', position: 'Thanh bên (Sidebar)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '15 Sept 2026', endDate: '30 Sept 2026', imageUrl: '', link: '/promos/weekend' },
+  { id: 'B-004', title: 'Holiday Special Offer', description: 'Special holiday rates for all 5-a-side pitches.', position: 'Thanh bên (Sidebar)', status: 'Bản nháp', statusClass: 'badge--neutral', startDate: '01 Dec 2026', endDate: '31 Dec 2026', imageUrl: '', link: '/promos/holiday' },
+  { id: 'B-005', title: 'Partner Spotlight: SportsCo', description: 'Check out our partner SportsCo for pre...', position: 'Footer', status: 'Đã hết hạn', statusClass: 'badge--warning', startDate: '01 Aug 2026', endDate: '31 Aug 2026', imageUrl: '', link: '' },
+  { id: 'B-006', title: 'Download Our Mobile App', description: 'Book on the go with our mobile app.', position: 'Booking page top', status: 'Ngừng hoạt động', statusClass: 'badge--neutral', startDate: '01 Sept 2026', endDate: '31 Dec 2026', imageUrl: '', link: '' }
 ];
 
 export const mockAnnouncements = [
   { id: 'A-001', title: 'Platform Maintenance Notice', content: 'The platform will undergo scheduled maintenance on September 28th from 2:00 AM to 4:00 AM UTC. Some features may be temporarily unavailable.', audience: 'All authenticated users', status: 'Published', statusClass: 'badge--success', publishedDate: '25 Sept 2026', expDate: '29 Sept 2026' },
   { id: 'A-002', title: 'New Feature: Team Chat', content: 'You can now chat with your team members directly on the platform.', audience: 'Registered users', status: 'Published', statusClass: 'badge--success', publishedDate: '22 Sept 2026', expDate: '22 Oct 2026' },
   { id: 'A-003', title: 'Payout Schedule Update', content: 'Manager payouts will now be processed every Monday.', audience: 'Pitch managers', status: 'Published', statusClass: 'badge--success', publishedDate: '20 Sept 2026', expDate: '20 Dec 2026' },
-  { id: 'A-004', title: 'Security Policy Update', content: 'Our security policy has been updated.', audience: 'All authenticated users', status: 'Scheduled', statusClass: 'badge--primary', publishedDate: '01 Oct 2026', expDate: '01 Nov 2026' },
-  { id: 'A-005', title: 'Admin Training Session', content: 'A training session for new admin tools...', audience: 'Administrators', status: 'Draft', statusClass: 'badge--neutral', publishedDate: '05 Oct 2026', expDate: '05 Oct 2026' },
+  { id: 'A-004', title: 'Security Policy Update', content: 'Our security policy has been updated.', audience: 'All authenticated users', status: 'Đã lên lịch', statusClass: 'badge--primary', publishedDate: '01 Oct 2026', expDate: '01 Nov 2026' },
+  { id: 'A-005', title: 'Admin Training Session', content: 'A training session for new admin tools...', audience: 'Administrators', status: 'Bản nháp', statusClass: 'badge--neutral', publishedDate: '05 Oct 2026', expDate: '05 Oct 2026' },
   { id: 'A-006', title: 'Holiday Schedule', content: 'Modified support hours during the holi...', audience: 'All authenticated users', status: 'Unpublished', statusClass: 'badge--neutral', publishedDate: '10 Sept 2026', expDate: '31 Dec 2026' }
 ];
