@@ -112,7 +112,7 @@ function openViewModal(user) {
   const restoBox = document.getElementById('modal-view-restoration-box');
   if (user.accountStatus === 'Đã khôi phục' && user.restoredAt) {
     restoBox.removeAttribute('hidden');
-    document.getElementById('modal-view-restoration-text').textContent = `Account restored on ${user.restoredAt}`;
+    document.getElementById('modal-view-restoration-text').textContent = `Tài khoản được khôi phục vào ${user.restoredAt}`;
   } else {
     restoBox.setAttribute('hidden', '');
   }
@@ -132,7 +132,7 @@ function openViewModal(user) {
       reportsList.innerHTML += `<div class="modal-list-item"><span><strong>${rep.id}</strong> ${rep.type}</span><span class="modal-list-item-meta">${rep.date}</span></div>`;
     });
   } else {
-    reportsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">No related reports.</span>`;
+    reportsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">Không có báo cáo liên quan.</span>`;
   }
 
   const bookingsList = document.getElementById('modal-view-bookings-list');
@@ -142,7 +142,7 @@ function openViewModal(user) {
       bookingsList.innerHTML += `<div class="modal-list-item"><span><strong>${bk.id}</strong> ${bk.venue}</span><span class="modal-list-item-meta">${bk.date} - ${bk.status}</span></div>`;
     });
   } else {
-    bookingsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">No recent bookings.</span>`;
+    bookingsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">Không có lượt đặt gần đây.</span>`;
   }
 
   if (user.accountStatus === 'Đình chỉ') {
@@ -178,25 +178,25 @@ function openActionState(actionType) {
   btnConfirmAction.className = 'btn-admin';
 
   if (actionType === 'warn') {
-    titleEl.textContent = 'Issue warning';
+    titleEl.textContent = 'Đưa ra cảnh báo';
     effectsEl.innerHTML = `Effects of this action<br>A warning will be recorded on this account. The user will be notified of the warning.`;
     btnConfirmAction.classList.add('btn-admin--warning');
-    btnConfirmAction.textContent = 'Issue warning';
+    btnConfirmAction.textContent = 'Đưa ra cảnh báo';
   } else if (actionType === 'suspend') {
-    titleEl.textContent = 'Suspend account';
+    titleEl.textContent = 'Đình chỉ tài khoản';
     effectsEl.innerHTML = `Effects of this action<br>Once suspended, this user:<ul><li>Cannot create new bookings</li><li>Cannot reschedule existing bookings</li><li>Cannot perform restricted actions that create new commitments</li><li>May retain access to booking history</li><li>Keeps existing confirmed bookings unless separately cancelled under an applicable policy</li></ul>`;
     btnConfirmAction.classList.add('btn-admin--danger');
-    btnConfirmAction.textContent = 'Suspend account';
+    btnConfirmAction.textContent = 'Đình chỉ tài khoản';
   } else if (actionType === 'restore') {
-    titleEl.textContent = 'Restore account';
+    titleEl.textContent = 'Khôi phục tài khoản';
     effectsEl.innerHTML = `Effects of this action<br>The user's account will be reactivated. They will regain the ability to create and manage bookings.`;
     btnConfirmAction.classList.add('btn-admin--blue');
-    btnConfirmAction.textContent = 'Restore account';
+    btnConfirmAction.textContent = 'Khôi phục tài khoản';
   } else if (actionType === 'note') {
-    titleEl.textContent = 'Add note';
+    titleEl.textContent = 'Thêm ghi chú';
     effectsEl.innerHTML = `Effects of this action<br>An internal administrative note will be added to this user's profile.`;
     btnConfirmAction.classList.add('btn-admin--blue');
-    btnConfirmAction.textContent = 'Add note';
+    btnConfirmAction.textContent = 'Thêm ghi chú';
   }
 }
 

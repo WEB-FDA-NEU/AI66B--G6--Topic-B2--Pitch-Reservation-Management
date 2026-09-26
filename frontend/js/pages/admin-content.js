@@ -367,7 +367,7 @@ btnConfirmOk?.addEventListener('click', () => {
 function deleteItem(item, type) {
   const typeName = type === 'banner' ? 'banner' : 'announcement';
   confirmTitle.textContent = `Xóa ${typeName}`;
-  confirmText.textContent = `Xóa draft ${typeName} "${item.title}"? This cannot be undone.`;
+  confirmText.textContent = `Xóa bản nháp ${typeName} "${item.title}"? Thao tác này không thể hoàn tác.`;
   
   // Custom styling for delete confirm button
   btnConfirmOk.className = 'btn-admin btn-admin--danger';
