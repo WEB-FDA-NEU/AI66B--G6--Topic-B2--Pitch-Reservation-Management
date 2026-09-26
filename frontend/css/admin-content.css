@@ -4,28 +4,25 @@
 }
 .admin-tabs-pill {
   display: inline-flex;
-  /* background: var(--c-bg-subtle); removed for white theme */
+  background: #f1f5f9;
   padding: 4px;
   border-radius: 8px;
 }
 .admin-tab-pill {
-  padding: 8px 16px;
-  background: transparent;
   border: none;
+  background: transparent;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--c-muted);
+  color: #4b5563;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.875rem;
-  border-radius: 6px;
-}
-.admin-tab-pill:hover {
-  color: var(--c-text);
 }
 .admin-tab-pill.active {
-  background: var(--c-bg);
-  color: var(--c-text);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
 }
 .admin-tab-pill span {
   font-weight: normal;
@@ -66,7 +63,7 @@ body {
   font-weight: 600;
   color: var(--c-muted);
   border-bottom: 1px solid var(--c-border);
-  background: var(--c-bg-subtle);
+  background: #ffffff;
   white-space: nowrap;
 }
 .admin-table td {
