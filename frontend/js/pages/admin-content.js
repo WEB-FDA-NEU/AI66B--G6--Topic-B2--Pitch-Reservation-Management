@@ -28,6 +28,23 @@ const annModal = document.getElementById('announcement-modal');
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
+
+  document.getElementById('banner-modal-save')?.addEventListener('click', () => {
+    if (!document.getElementById('banner-form').checkValidity()) {
+      document.getElementById('banner-form').reportValidity();
+      return;
+    }
+    closeBannerModal();
+  });
+
+  document.getElementById('ann-modal-save')?.addEventListener('click', () => {
+    if (!document.getElementById('ann-form').checkValidity()) {
+      document.getElementById('ann-form').reportValidity();
+      return;
+    }
+    closeAnnModal();
+  });
+
   document.getElementById('banners-count').textContent = `(${bannersData.length})`;
   document.getElementById('announcements-count').textContent = `(${announcementsData.length})`;
   
@@ -273,6 +290,11 @@ function openPreview(item, type) {
   if (type === 'banner') {
     document.getElementById('preview-link').textContent = item.link;
     document.getElementById('preview-link').hidden = false;
+    if (item.imageUrl) {
+      document.getElementById('preview-hero').style.background = 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(' + item.imageUrl + ') center/cover no-repeat';
+    } else {
+      document.getElementById('preview-hero').style.background = 'linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%)';
+    }
     document.getElementById('preview-meta-label1').textContent = 'Position';
     document.getElementById('preview-meta-value1').textContent = item.position;
     document.getElementById('preview-meta-label2').textContent = 'Date range';

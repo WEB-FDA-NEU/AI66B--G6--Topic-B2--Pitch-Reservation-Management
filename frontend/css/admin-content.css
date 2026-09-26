@@ -4,7 +4,7 @@
 }
 .admin-tabs-pill {
   display: inline-flex;
-  background: var(--c-bg-subtle);
+  /* background: var(--c-bg-subtle); removed for white theme */
   padding: 4px;
   border-radius: 8px;
 }
@@ -135,9 +135,7 @@ body {
   color: var(--c-primary);
 }
 
-.admin-content-page .admin-table tr {
-  cursor: pointer;
-}
+
 
 .admin-content-page .admin-table tr:hover td {
   background: var(--c-bg-subtle);
@@ -404,6 +402,7 @@ body {
   font-weight: 600;
   text-transform: capitalize;
 }
+.badge--primary { background: #e0f2fe; color: #0369a1; }
 .badge--success { background: #e8f5e9; color: #2e7d32; }
 .badge--review { background: #e3f2fd; color: #1565c0; }
 .badge--warning { background: #fff8e1; color: #f57f17; }
