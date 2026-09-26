@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'pitch-point:state:v1';
 const USERS_URL = new URL('../../mock/users.json', import.meta.url);
 const ADMIN_URL = new URL('../../mock/admin.json', import.meta.url);
+const BOOKINGS_URL = new URL('../../mock/bookings.json', import.meta.url);
 let initializationPromise = null;
 
 function isValidState(state) {
@@ -29,16 +30,29 @@ export function saveState(state) {
 }
 
 async function loadSeedData() {
-  const [usersResponse, adminResponse] = await Promise.all([
+  const [usersResponse, adminResponse, bookingsResponse] = await Promise.all([
     fetch(USERS_URL),
     fetch(ADMIN_URL),
+    fetch(BOOKINGS_URL),
   ]);
-  if (!usersResponse.ok || !adminResponse.ok) throw new Error('Không tải được dữ liệu mô phỏng.');
-  const [demoUsers, adminSeed] = await Promise.all([usersResponse.json(), adminResponse.json()]);
-  if (!Array.isArray(demoUsers) || !Array.isArray(adminSeed.users)) {
+  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok) {
+    throw new Error('Không tải được dữ liệu mô phỏng.');
+  }
+  const [demoUsers, adminSeed, bookingSeed] = await Promise.all([
+    usersResponse.json(),
+    adminResponse.json(),
+    bookingsResponse.json(),
+  ]);
+  if (
+    !Array.isArray(demoUsers)
+    || !Array.isArray(adminSeed.users)
+    || !Array.isArray(bookingSeed.pitches)
+    || !Array.isArray(bookingSeed.bookingDrafts)
+    || !Array.isArray(bookingSeed.bookings)
+  ) {
     throw new Error('Dữ liệu mô phỏng không hợp lệ.');
   }
-  return { demoUsers, adminSeed };
+  return { demoUsers, adminSeed, bookingSeed };
 }
 
 function mergeUsers(currentUsers, seededUsers) {
@@ -50,7 +64,7 @@ function mergeUsers(currentUsers, seededUsers) {
 }
 
 async function initializeFromSeed(existing = null) {
-  const { demoUsers, adminSeed } = await loadSeedData();
+  const { demoUsers, adminSeed, bookingSeed } = await loadSeedData();
   const baseUsers = existing?.users ?? demoUsers;
   return saveState({
     ...adminSeed,
@@ -62,6 +76,9 @@ async function initializeFromSeed(existing = null) {
     contents: existing?.contents ?? adminSeed.contents,
     activities: existing?.activities ?? adminSeed.activities,
     settings: existing?.settings ?? adminSeed.settings,
+    pitches: existing?.pitches ?? bookingSeed.pitches,
+    bookingDrafts: existing?.bookingDrafts ?? bookingSeed.bookingDrafts,
+    bookings: existing?.bookings ?? bookingSeed.bookings,
   });
 }
 
@@ -72,7 +89,11 @@ export async function initializeState() {
     && Array.isArray(existing.contents)
     && Array.isArray(existing.activities)
     && existing.settings?.admin;
-  if (hasAdminCollections) return existing;
+  const hasBookingCollections = existing
+    && Array.isArray(existing.pitches)
+    && Array.isArray(existing.bookingDrafts)
+    && Array.isArray(existing.bookings);
+  if (hasAdminCollections && hasBookingCollections) return existing;
 
   if (!initializationPromise) {
     initializationPromise = initializeFromSeed(existing).finally(() => {

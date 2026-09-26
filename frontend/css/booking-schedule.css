@@ -1,0 +1,136 @@
+.booking-schedule-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+
+.booking-schedule-skip-link:focus { transform: translateY(0); }
+
+.booking-schedule-page {
+  min-height: 65vh;
+  padding-block: var(--sp-5) var(--sp-7);
+}
+
+.booking-schedule-page > * + *,
+.booking-schedule-page__content > * + * { margin-top: var(--sp-5); }
+
+.booking-schedule-page__eyebrow {
+  color: var(--c-primary);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.booking-schedule-page__heading h1 { margin-top: var(--sp-2); }
+.booking-schedule-page__heading p:last-child { margin-top: var(--sp-2); color: var(--c-muted); }
+
+.booking-schedule-page__pitch {
+  display: grid;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.booking-schedule-page__pitch img {
+  width: 100%;
+  height: 150px;
+  border-radius: var(--radius-s);
+  object-fit: cover;
+}
+
+.booking-schedule-page__pitch p { margin-top: var(--sp-2); color: var(--c-muted); }
+.booking-schedule-page__pitch p:last-child { color: var(--c-primary); font-weight: 800; }
+
+.booking-schedule-page__hold,
+.booking-schedule-page__notice {
+  padding: var(--sp-4);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--radius-s);
+  background: color-mix(in srgb, var(--c-primary) 8%, var(--c-bg));
+}
+
+.booking-schedule-page__hold { display: flex; flex-direction: column; gap: var(--sp-3); }
+.booking-schedule-page__hold p { margin-top: var(--sp-1); color: var(--c-muted); }
+.booking-schedule-page__hold > p { color: var(--c-primary); font-size: 1.35rem; font-weight: 800; }
+.booking-schedule-page__notice { border-color: var(--c-danger); }
+.booking-schedule-page__notice p { margin-top: var(--sp-1); color: var(--c-muted); }
+
+.booking-schedule-page__panel {
+  padding: var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-bg);
+}
+
+.booking-schedule-page__panel header p { margin-top: var(--sp-1); color: var(--c-muted); }
+
+.booking-schedule-page__dates {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  overflow-x: auto;
+  padding-bottom: var(--sp-1);
+}
+
+.booking-schedule-page__date {
+  flex: 0 0 82px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-bg);
+}
+
+.booking-schedule-page__date.is-selected {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: var(--c-bg);
+}
+
+.booking-schedule-page__weekday { display: block; color: var(--c-muted); font-size: .75rem; }
+.booking-schedule-page__date.is-selected .booking-schedule-page__weekday { color: var(--c-bg); }
+.booking-schedule-page__day { display: block; margin-top: var(--sp-1); font-weight: 800; }
+
+.booking-schedule-page__slots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+
+.booking-schedule-page__slot {
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-bg);
+}
+
+.booking-schedule-page__slot.is-selected {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: var(--c-bg);
+}
+
+.booking-schedule-page__slot-time { display: block; font-weight: 800; }
+.booking-schedule-page__slot-status { display: block; margin-top: var(--sp-1); color: var(--c-muted); font-size: .75rem; }
+.booking-schedule-page__slot.is-selected .booking-schedule-page__slot-status { color: var(--c-bg); }
+.booking-schedule-page__slot:disabled { background: var(--c-surface); opacity: .65; }
+
+.booking-schedule-page__actions { display: flex; flex-direction: column-reverse; gap: var(--sp-2); }
+
+@media (min-width: 640px) {
+  .booking-schedule-page__pitch { grid-template-columns: 180px minmax(0, 1fr); align-items: center; }
+  .booking-schedule-page__pitch img { height: 120px; }
+  .booking-schedule-page__hold { flex-direction: row; align-items: center; justify-content: space-between; }
+  .booking-schedule-page__slots { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .booking-schedule-page__actions { flex-direction: row; justify-content: flex-end; }
+}

@@ -1,0 +1,84 @@
+.manager-bookings-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+
+.manager-bookings-skip-link:focus { transform: translateY(0); }
+
+.manager-bookings-page { min-width: 0; min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.manager-bookings-page > * + *,
+.manager-bookings-page__content > * + * { margin-top: var(--sp-5); }
+
+.manager-bookings-page__eyebrow {
+  color: var(--c-primary);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.manager-bookings-page__heading h1 { margin-top: var(--sp-2); }
+.manager-bookings-page__heading p:last-child { margin-top: var(--sp-2); color: var(--c-muted); }
+
+.manager-bookings-page__counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+.manager-bookings-page__counts article { display: grid; gap: var(--sp-1); padding: var(--sp-3); border: 1px solid var(--c-border); border-radius: var(--radius); text-align: center; }
+.manager-bookings-page__counts strong { color: var(--c-primary); font-size: 1.5rem; }
+.manager-bookings-page__counts span { color: var(--c-muted); font-size: .82rem; }
+
+.manager-bookings-page__filters { padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); }
+.manager-bookings-page__filters form { display: grid; gap: var(--sp-3); }
+.manager-bookings-page__summary { color: var(--c-muted); }
+
+.manager-bookings-page__table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+
+.manager-bookings-page__table-wrap table { width: 100%; min-width: 760px; border-collapse: collapse; }
+.manager-bookings-page__table-wrap th,
+.manager-bookings-page__table-wrap td { padding: var(--sp-3); border-bottom: 1px solid var(--c-border); text-align: left; font-size: .9rem; }
+.manager-bookings-page__table-wrap th { background: var(--c-surface); color: var(--c-muted); font-size: .78rem; text-transform: uppercase; }
+.manager-bookings-page__payment-status,
+.manager-bookings-page__booking-status { display: inline-flex; padding: .3rem .6rem; border-radius: 999px; background: var(--c-surface); font-size: .76rem; font-weight: 800; white-space: nowrap; }
+.manager-bookings-page__booking-status.status-badge--pending { color: var(--c-warning); }
+.manager-bookings-page__booking-status.status-badge--confirmed { color: var(--c-success); }
+.manager-bookings-page__booking-status.status-badge--completed { color: var(--c-primary); }
+.manager-bookings-page__booking-status.status-badge--cancelled { color: var(--c-danger); }
+
+.manager-bookings-page__panel {
+  position: fixed;
+  z-index: 70;
+  inset: 0 0 0 auto;
+  width: min(100%, 390px);
+  overflow-y: auto;
+  padding: var(--sp-5);
+  border-left: 1px solid var(--c-border);
+  background: var(--c-bg);
+  box-shadow: var(--shadow);
+}
+
+.manager-bookings-page__panel header { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.manager-bookings-page__details { display: grid; gap: var(--sp-3); margin-block: var(--sp-5); }
+.manager-bookings-page__details dt { color: var(--c-muted); }
+.manager-bookings-page__details dd { font-weight: 700; overflow-wrap: anywhere; }
+
+@media (min-width: 640px) {
+  .manager-bookings-page__counts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .manager-bookings-page__filters form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 960px) {
+  .manager-bookings-page__counts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .manager-bookings-page__filters form { grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); }
+}

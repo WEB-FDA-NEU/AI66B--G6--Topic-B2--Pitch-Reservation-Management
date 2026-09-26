@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quản lý lượt đặt của một sân thuộc tài khoản quản lý trên Pitch Point.">
+  <title>Quản lý đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/manager-bookings.css">
+</head>
+<body>
+  <a class="manager-bookings-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header active="manager"></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><span>Tổng quan quản lý</span></li>
+      <li aria-current="page">Quản lý đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container manager-bookings-page" id="main-content">
+    <header class="manager-bookings-page__heading">
+      <p class="manager-bookings-page__eyebrow">Quản lý sân</p>
+      <h1>Đặt sân của khách hàng</h1>
+      <p id="managed-pitch-name">Dữ liệu chỉ hiển thị cho sân thuộc tài khoản quản lý hiện tại.</p>
+    </header>
+
+    <section class="manager-bookings-page__state empty" id="page-state" hidden aria-live="polite">
+      <p class="empty__title" id="page-state-title"></p>
+      <p class="empty__hint" id="page-state-message"></p>
+    </section>
+
+    <div class="manager-bookings-page__content" id="manager-content" hidden>
+      <section class="manager-bookings-page__counts" aria-label="Tổng quan đặt sân">
+        <article><strong id="count-total">0</strong><span>Tổng lượt đặt</span></article>
+        <article><strong id="count-upcoming">0</strong><span>Sắp tới</span></article>
+        <article><strong id="count-confirmed">0</strong><span>Đã xác nhận</span></article>
+        <article><strong id="count-completed">0</strong><span>Hoàn tất</span></article>
+        <article><strong id="count-cancelled">0</strong><span>Đã huỷ</span></article>
+      </section>
+
+      <section class="manager-bookings-page__filters" aria-label="Bộ lọc đặt sân">
+        <form id="filter-form">
+          <div class="field">
+            <label class="field__label" for="q">Mã đặt sân hoặc khách hàng</label>
+            <input class="input" id="q" name="q" type="search">
+          </div>
+          <div class="field">
+            <label class="field__label" for="status-filter">Trạng thái đặt sân</label>
+            <select class="select" id="status-filter" name="status">
+              <option value="">Tất cả</option>
+              <option value="Pending">Đang chờ</option>
+              <option value="Confirmed">Đã xác nhận</option>
+              <option value="Completed">Hoàn tất</option>
+              <option value="Cancelled">Đã huỷ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="payment-filter">Thanh toán</label>
+            <select class="select" id="payment-filter" name="paymentStatus">
+              <option value="">Tất cả</option>
+              <option value="Pending">Chờ thanh toán</option>
+              <option value="Paid">Đã thanh toán</option>
+              <option value="Refunded">Đã hoàn tiền</option>
+              <option value="Cancelled">Đã huỷ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="date-filter">Ngày chơi</label>
+            <input class="input" id="date-filter" name="date" type="date">
+          </div>
+        </form>
+      </section>
+
+      <p class="manager-bookings-page__summary" id="result-summary" aria-live="polite"></p>
+      <div class="manager-bookings-page__table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Mã</th>
+              <th scope="col">Khách hàng</th>
+              <th scope="col">Ngày và giờ</th>
+              <th scope="col">Số tiền</th>
+              <th scope="col">Thanh toán</th>
+              <th scope="col">Đặt sân</th>
+              <th scope="col">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty-state" hidden>
+        <p class="empty__title">Không có lượt đặt sân phù hợp</p>
+        <p class="empty__hint">Hãy thử thay đổi bộ lọc.</p>
+      </div>
+    </div>
+
+    <aside class="manager-bookings-page__panel" id="detail-panel" hidden aria-labelledby="detail-panel-title">
+      <header>
+        <h2 id="detail-panel-title">Chi tiết đặt sân</h2>
+        <button class="btn" type="button" id="detail-panel-close" aria-label="Đóng chi tiết">Đóng</button>
+      </header>
+      <dl class="manager-bookings-page__details">
+        <div><dt>Mã đặt sân</dt><dd id="panel-ref"></dd></div>
+        <div><dt>Khách hàng</dt><dd id="panel-customer"></dd></div>
+        <div><dt>Số điện thoại</dt><dd id="panel-phone"></dd></div>
+        <div><dt>Ngày và giờ</dt><dd id="panel-datetime"></dd></div>
+        <div><dt>Số tiền</dt><dd id="panel-amount"></dd></div>
+        <div><dt>Thanh toán</dt><dd id="panel-payment-status"></dd></div>
+        <div><dt>Đặt sân</dt><dd id="panel-booking-status"></dd></div>
+      </dl>
+      <button class="btn btn--primary" type="button" id="contact-customer-button" disabled>Liên hệ khách hàng</button>
+    </aside>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-manager-booking-row">
+    <tr>
+      <td class="manager-bookings-page__booking-id"></td>
+      <td class="manager-bookings-page__customer"></td>
+      <td class="manager-bookings-page__datetime"></td>
+      <td class="manager-bookings-page__amount"></td>
+      <td><span class="manager-bookings-page__payment-status"></span></td>
+      <td><span class="manager-bookings-page__booking-status"></span></td>
+      <td><button class="btn manager-bookings-page__view" type="button">Xem</button></td>
+    </tr>
+  </template>
+
+  <script type="module" src="js/pages/manager-bookings.js"></script>
+</body>
+</html>

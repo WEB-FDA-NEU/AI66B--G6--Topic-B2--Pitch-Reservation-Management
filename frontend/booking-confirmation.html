@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Xác nhận thông tin giữ chỗ trước bước thanh toán mô phỏng.">
+  <title>Xác nhận đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-confirmation.css">
+</head>
+<body>
+  <a class="booking-confirmation-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page">Xác nhận đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-confirmation-page" id="main-content">
+    <header class="booking-confirmation-page__heading">
+      <p class="booking-confirmation-page__eyebrow">Đặt sân</p>
+      <h1>Xác nhận thông tin đặt sân</h1>
+      <p>Kiểm tra dữ liệu đã được giữ trước khi chuyển sang bước thanh toán.</p>
+    </header>
+
+    <section class="booking-confirmation-page__state empty" id="page-state" hidden aria-live="polite">
+      <p class="empty__title" id="page-state-title"></p>
+      <p class="empty__hint" id="page-state-message"></p>
+      <a class="btn empty__action" href="search.html">Về trang tìm sân</a>
+    </section>
+
+    <div class="booking-confirmation-page__content" id="confirmation-content" hidden>
+      <section class="booking-confirmation-page__hold" aria-live="polite">
+        <h2>Thời gian giữ chỗ còn lại</h2>
+        <p id="hold-banner-timer"></p>
+      </section>
+
+      <section class="booking-confirmation-page__panel" aria-labelledby="booking-summary-title">
+        <h2 id="booking-summary-title">Thông tin đặt sân</h2>
+        <dl class="booking-confirmation-page__summary">
+          <div><dt>Sân bóng</dt><dd id="summary-pitch-name"></dd></div>
+          <div><dt>Địa điểm</dt><dd id="summary-pitch-location"></dd></div>
+          <div><dt>Loại sân</dt><dd id="summary-pitch-type"></dd></div>
+          <div><dt>Ngày chơi</dt><dd id="summary-date"></dd></div>
+          <div><dt>Khung giờ</dt><dd id="summary-time"></dd></div>
+          <div><dt>Khách hàng</dt><dd id="summary-customer-name"></dd></div>
+          <div><dt>Số điện thoại</dt><dd id="summary-customer-phone"></dd></div>
+        </dl>
+      </section>
+
+      <section class="booking-confirmation-page__panel" aria-labelledby="price-title">
+        <h2 id="price-title">Giá đặt sân</h2>
+        <dl class="booking-confirmation-page__summary">
+          <div><dt>Giá đã giữ</dt><dd id="price-total"></dd></div>
+        </dl>
+        <h3>Dịch vụ đi kèm</h3>
+        <ul id="included-services"></ul>
+      </section>
+
+      <section class="booking-confirmation-page__panel" aria-labelledby="terms-title">
+        <h2 id="terms-title">Điều khoản</h2>
+        <label class="booking-confirmation-page__terms">
+          <input id="accept-terms" type="checkbox">
+          <span>Tôi đã kiểm tra sân, thời gian, giá và dịch vụ đi kèm.</span>
+        </label>
+      </section>
+
+      <div class="booking-confirmation-page__actions">
+        <a class="btn" id="back-link" href="search.html">Quay lại</a>
+        <button class="btn btn--primary" type="button" id="proceed-button" disabled>Tiến hành thanh toán</button>
+      </div>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/booking-confirmation.js"></script>
+</body>
+</html>

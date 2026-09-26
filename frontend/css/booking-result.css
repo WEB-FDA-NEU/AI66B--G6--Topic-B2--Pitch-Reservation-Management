@@ -1,0 +1,61 @@
+.booking-result-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+
+.booking-result-skip-link:focus { transform: translateY(0); }
+
+.booking-result-page {
+  display: grid;
+  place-items: center;
+  min-height: 65vh;
+  padding-block: var(--sp-7);
+}
+
+.booking-result-page > h1 { width: min(100%, 560px); }
+
+.booking-result-page__card,
+.booking-result-page__state {
+  width: min(100%, 560px);
+  margin-top: var(--sp-5);
+  padding: var(--sp-5);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.booking-result-page__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-inline: auto;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c-success) 12%, var(--c-bg));
+  color: var(--c-success);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.booking-result-page__eyebrow { margin-top: var(--sp-3); color: var(--c-muted); font-weight: 800; }
+.booking-result-page__card h2 { margin-top: var(--sp-2); }
+.booking-result-page__summary { display: grid; gap: var(--sp-3); margin-top: var(--sp-5); text-align: left; }
+.booking-result-page__summary div { display: flex; flex-direction: column; gap: var(--sp-1); padding-bottom: var(--sp-2); border-bottom: 1px dashed var(--c-border); }
+.booking-result-page__summary dt { color: var(--c-muted); }
+.booking-result-page__summary dd { font-weight: 700; overflow-wrap: anywhere; }
+.booking-result-page__actions { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-6); }
+
+@media (min-width: 560px) {
+  .booking-result-page__summary div { flex-direction: row; justify-content: space-between; gap: var(--sp-4); }
+  .booking-result-page__summary dd { text-align: right; }
+  .booking-result-page__actions { flex-direction: row; justify-content: center; }
+}

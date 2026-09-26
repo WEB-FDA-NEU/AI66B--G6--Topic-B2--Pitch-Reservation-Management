@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lịch sử đặt sân của khách hàng trên Pitch Point.">
+  <title>Lịch sử đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-history.css">
+</head>
+<body>
+  <a class="booking-history-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header active="bookings"></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li aria-current="page">Lịch sử đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-history-page" id="main-content">
+    <header class="booking-history-page__heading">
+      <p class="booking-history-page__eyebrow">Tài khoản khách hàng</p>
+      <h1>Lịch sử đặt sân</h1>
+      <p>Danh sách chỉ bao gồm các lượt đặt thuộc tài khoản hiện tại.</p>
+    </header>
+
+    <div id="history-content" hidden>
+      <section class="booking-history-page__filters" aria-label="Bộ lọc lịch sử đặt sân">
+        <form id="filter-form">
+          <div class="field">
+            <label class="field__label" for="q">Mã đặt sân hoặc tên sân</label>
+            <input class="input" id="q" name="q" type="search">
+          </div>
+          <div class="field">
+            <label class="field__label" for="date">Ngày chơi</label>
+            <input class="input" id="date" name="date" type="date">
+          </div>
+        </form>
+        <div class="booking-history-page__tabs" id="status-tabs" role="tablist" aria-label="Trạng thái đặt sân">
+          <button class="btn is-active" type="button" data-status="all" role="tab" aria-selected="true">Tất cả</button>
+          <button class="btn" type="button" data-status="upcoming" role="tab" aria-selected="false">Sắp tới</button>
+          <button class="btn" type="button" data-status="Completed" role="tab" aria-selected="false">Hoàn tất</button>
+          <button class="btn" type="button" data-status="Cancelled" role="tab" aria-selected="false">Đã huỷ</button>
+        </div>
+      </section>
+
+      <p class="booking-history-page__summary" id="result-summary" aria-live="polite"></p>
+      <div class="booking-history-page__list" id="booking-list" aria-live="polite"></div>
+      <div class="empty" id="empty-state" hidden>
+        <p class="empty__title">Không có lượt đặt sân phù hợp</p>
+        <p class="empty__hint">Hãy thử thay đổi bộ lọc.</p>
+      </div>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-booking-row">
+    <article class="booking-history-page__item">
+      <img class="booking-history-page__image" src="img/placeholder.svg" alt="" width="112" height="84" loading="lazy">
+      <div class="booking-history-page__item-content">
+        <a class="booking-history-page__item-title" href="booking-details.html"></a>
+        <p class="booking-history-page__pitch"></p>
+        <p class="booking-history-page__datetime"></p>
+      </div>
+      <div class="booking-history-page__item-aside">
+        <p class="booking-history-page__price"></p>
+        <span class="booking-history-page__status"></span>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="js/pages/booking-history.js"></script>
+</body>
+</html>

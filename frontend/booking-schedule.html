@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chọn ngày và khung giờ để đặt sân trên Pitch Point.">
+  <title>Chọn lịch đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-schedule.css">
+</head>
+<body>
+  <a class="booking-schedule-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page">Chọn lịch</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-schedule-page" id="main-content">
+    <header class="booking-schedule-page__heading">
+      <p class="booking-schedule-page__eyebrow">Đặt sân</p>
+      <h1>Chọn ngày và khung giờ</h1>
+      <p id="pitch-summary-hint">Chọn một khung giờ trống trong 7 ngày tới.</p>
+    </header>
+
+    <section class="booking-schedule-page__state empty" id="page-state" hidden aria-live="polite">
+      <p class="empty__title" id="page-state-title"></p>
+      <p class="empty__hint" id="page-state-message"></p>
+      <a class="btn empty__action" href="search.html">Về trang tìm sân</a>
+    </section>
+
+    <div class="booking-schedule-page__content" id="booking-content" hidden>
+      <section class="booking-schedule-page__pitch" aria-labelledby="pitch-summary-title">
+        <img id="pitch-summary-img" src="img/placeholder.svg" alt="" width="180" height="120">
+        <div>
+          <h2 id="pitch-summary-title"></h2>
+          <p id="pitch-summary-meta"></p>
+          <p id="pitch-summary-price"></p>
+        </div>
+      </section>
+
+      <section class="booking-schedule-page__hold" id="hold-banner" hidden aria-live="polite">
+        <div>
+          <h2>Đang giữ khung giờ</h2>
+          <p id="hold-banner-slot"></p>
+        </div>
+        <p id="hold-banner-timer" aria-label="Thời gian giữ chỗ còn lại"></p>
+      </section>
+
+      <section class="booking-schedule-page__notice" id="schedule-notice" hidden aria-live="polite">
+        <h2 id="schedule-notice-title"></h2>
+        <p id="schedule-notice-message"></p>
+      </section>
+
+      <section class="booking-schedule-page__panel" aria-labelledby="date-select-title">
+        <header>
+          <h2 id="date-select-title">Ngày chơi</h2>
+          <p>Ngày và giờ đã qua sẽ không thể chọn.</p>
+        </header>
+        <div class="booking-schedule-page__dates" id="date-chip-row" role="tablist" aria-label="Chọn ngày"></div>
+      </section>
+
+      <section class="booking-schedule-page__panel" aria-labelledby="slot-select-title">
+        <header>
+          <h2 id="slot-select-title">Khung giờ</h2>
+          <p>Các khung giờ đã được giữ hoặc xác nhận sẽ bị khóa.</p>
+        </header>
+        <div class="booking-schedule-page__slots" id="slot-grid" aria-live="polite"></div>
+        <div class="empty" id="slot-empty-state" hidden>
+          <p class="empty__title">Không có khung giờ khả dụng</p>
+          <p class="empty__hint">Hãy chọn một ngày khác.</p>
+        </div>
+      </section>
+
+      <div class="booking-schedule-page__actions">
+        <button class="btn" type="button" id="cancel-button" disabled>Huỷ chọn</button>
+        <button class="btn btn--primary" type="button" id="continue-button" disabled>Tiếp tục</button>
+      </div>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-date-chip">
+    <button class="booking-schedule-page__date" type="button" role="tab">
+      <span class="booking-schedule-page__weekday"></span>
+      <span class="booking-schedule-page__day"></span>
+    </button>
+  </template>
+
+  <template id="tpl-slot-button">
+    <button class="booking-schedule-page__slot" type="button">
+      <span class="booking-schedule-page__slot-time"></span>
+      <span class="booking-schedule-page__slot-status"></span>
+    </button>
+  </template>
+
+  <script type="module" src="js/pages/booking-schedule.js"></script>
+</body>
+</html>

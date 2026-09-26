@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kết quả đặt sân đã được xác nhận trên Pitch Point.">
+  <title>Kết quả đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-result.css">
+</head>
+<body>
+  <a class="booking-result-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header></site-header>
+
+  <main class="container booking-result-page" id="main-content">
+    <h1>Kết quả đặt sân</h1>
+
+    <section class="booking-result-page__state empty" id="page-state" hidden aria-live="polite">
+      <p class="empty__title" id="page-state-title"></p>
+      <p class="empty__hint" id="page-state-message"></p>
+      <a class="btn empty__action" href="booking-history.html">Xem lịch sử đặt sân</a>
+    </section>
+
+    <section class="booking-result-page__card" id="result-content" hidden aria-labelledby="result-title">
+      <div class="booking-result-page__icon" aria-hidden="true">✓</div>
+      <p class="booking-result-page__eyebrow">Đặt sân thành công</p>
+      <h2 id="result-title">Lượt đặt sân đã được xác nhận</h2>
+      <dl class="booking-result-page__summary">
+        <div><dt>Mã đặt sân</dt><dd id="result-booking-id"></dd></div>
+        <div><dt>Sân bóng</dt><dd id="result-pitch-name"></dd></div>
+        <div><dt>Ngày và giờ chơi</dt><dd id="result-datetime"></dd></div>
+        <div><dt>Số tiền mô phỏng</dt><dd id="result-amount"></dd></div>
+        <div><dt>Trạng thái</dt><dd id="result-status"></dd></div>
+        <div id="result-transaction-row"><dt>Mã giao dịch</dt><dd id="result-transaction-id"></dd></div>
+      </dl>
+      <div class="booking-result-page__actions">
+        <a class="btn btn--primary" id="booking-details-link" href="booking-history.html">Xem chi tiết</a>
+        <a class="btn" href="booking-history.html">Lịch sử đặt sân</a>
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/booking-result.js"></script>
+</body>
+</html>

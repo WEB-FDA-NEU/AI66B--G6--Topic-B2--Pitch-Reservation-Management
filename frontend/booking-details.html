@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chi tiết lượt đặt sân của khách hàng trên Pitch Point.">
+  <title>Chi tiết đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking-details.css">
+</head>
+<body>
+  <a class="booking-details-skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <site-header active="bookings"></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="booking-history.html">Lịch sử đặt sân</a></li>
+      <li aria-current="page">Chi tiết đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-details-page" id="main-content">
+    <header class="booking-details-page__heading">
+      <p class="booking-details-page__eyebrow">Đặt sân</p>
+      <h1>Chi tiết đặt sân</h1>
+      <p id="booking-reference"></p>
+    </header>
+
+    <section class="booking-details-page__state empty" id="page-state" hidden aria-live="polite">
+      <p class="empty__title" id="page-state-title"></p>
+      <p class="empty__hint" id="page-state-message"></p>
+      <a class="btn empty__action" href="booking-history.html">Về lịch sử đặt sân</a>
+    </section>
+
+    <div class="booking-details-page__content" id="details-content" hidden>
+      <section class="booking-details-page__panel" aria-labelledby="pitch-title">
+        <header class="booking-details-page__panel-heading">
+          <h2 id="pitch-title">Thông tin lượt đặt</h2>
+          <span class="booking-details-page__status" id="booking-status"></span>
+        </header>
+        <div class="booking-details-page__pitch">
+          <img id="pitch-image" src="img/placeholder.svg" alt="" width="180" height="120">
+          <dl class="booking-details-page__summary">
+            <div><dt>Sân bóng</dt><dd id="pitch-name"></dd></div>
+            <div><dt>Địa điểm</dt><dd id="pitch-location"></dd></div>
+            <div><dt>Ngày chơi</dt><dd id="booking-date"></dd></div>
+            <div><dt>Khung giờ</dt><dd id="booking-time"></dd></div>
+            <div><dt>Số tiền mô phỏng</dt><dd id="booking-amount"></dd></div>
+            <div><dt>Thanh toán</dt><dd id="payment-status"></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="booking-details-page__panel" aria-labelledby="services-title">
+        <h2 id="services-title">Dịch vụ đã xác nhận</h2>
+        <ul id="booking-services"></ul>
+      </section>
+
+      <section class="booking-details-page__panel" aria-labelledby="history-title">
+        <h2 id="history-title">Lịch sử trạng thái</h2>
+        <ol class="booking-details-page__history" id="status-history"></ol>
+      </section>
+
+      <section class="booking-details-page__panel" aria-labelledby="actions-title">
+        <h2 id="actions-title">Thao tác</h2>
+        <div class="booking-details-page__actions">
+          <button class="btn btn--danger" type="button" id="cancel-button" disabled>Huỷ đặt sân</button>
+          <button class="btn btn--primary" type="button" id="reschedule-button" disabled>Đổi lịch đá</button>
+          <button class="btn" type="button" id="review-button" disabled>Viết đánh giá</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/booking-details.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+{
+  "pitches": [
+    {
+      "id": 1,
+      "ownerId": "M001",
+      "name": "Sân bóng Bách Khoa",
+      "location": "Hai Bà Trưng, Hà Nội",
+      "typeLabel": "Sân 7 người",
+      "price": 420000,
+      "status": "active",
+      "image": "img/placeholder.svg",
+      "services": ["Đèn chiếu sáng", "Nước uống", "Phòng thay đồ"]
+    },
+    {
+      "id": 2,
+      "ownerId": "M001",
+      "name": "Green Field Minh Khai",
+      "location": "Bắc Từ Liêm, Hà Nội",
+      "typeLabel": "Sân 5 người",
+      "price": 300000,
+      "status": "active",
+      "image": "img/placeholder.svg",
+      "services": ["Đèn chiếu sáng", "Chỗ gửi xe"]
+    },
+    {
+      "id": 3,
+      "ownerId": "M101",
+      "name": "Arena Tây Hồ",
+      "location": "Tây Hồ, Hà Nội",
+      "typeLabel": "Sân 7 người",
+      "price": 500000,
+      "status": "active",
+      "image": "img/placeholder.svg",
+      "services": ["Đèn chiếu sáng", "Phòng thay đồ"]
+    }
+  ],
+  "bookingDrafts": [],
+  "bookings": [
+    {
+      "id": "BK-2026-0001",
+      "customerId": "U001",
+      "managerId": "M001",
+      "pitchId": 1,
+      "status": "Confirmed",
+      "paymentStatus": "Paid",
+      "amount": 420000,
+      "slotStart": "2026-09-28T18:00:00+07:00",
+      "slotEnd": "2026-09-28T19:00:00+07:00",
+      "createdAt": "2026-09-26T09:00:00+07:00",
+      "confirmedAt": "2026-09-26T09:03:00+07:00",
+      "transactionId": "TX-2026-0001",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Sân bóng Bách Khoa",
+        "pitchLocation": "Hai Bà Trưng, Hà Nội",
+        "pitchTypeLabel": "Sân 7 người",
+        "price": 420000,
+        "services": ["Đèn chiếu sáng", "Nước uống", "Phòng thay đồ"]
+      }
+    },
+    {
+      "id": "BK-2026-0002",
+      "customerId": "U001",
+      "managerId": "M001",
+      "pitchId": 2,
+      "status": "Completed",
+      "paymentStatus": "Paid",
+      "amount": 300000,
+      "slotStart": "2026-09-20T20:00:00+07:00",
+      "slotEnd": "2026-09-20T21:00:00+07:00",
+      "createdAt": "2026-09-18T08:15:00+07:00",
+      "confirmedAt": "2026-09-18T08:18:00+07:00",
+      "completedAt": "2026-09-20T21:00:00+07:00",
+      "transactionId": "TX-2026-0002",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Green Field Minh Khai",
+        "pitchLocation": "Bắc Từ Liêm, Hà Nội",
+        "pitchTypeLabel": "Sân 5 người",
+        "price": 300000,
+        "services": ["Đèn chiếu sáng", "Chỗ gửi xe"]
+      }
+    },
+    {
+      "id": "BK-2026-0003",
+      "customerId": "U001",
+      "managerId": "M001",
+      "pitchId": 1,
+      "status": "Cancelled",
+      "paymentStatus": "Refunded",
+      "amount": 420000,
+      "slotStart": "2026-09-24T16:00:00+07:00",
+      "slotEnd": "2026-09-24T17:00:00+07:00",
+      "createdAt": "2026-09-22T10:00:00+07:00",
+      "confirmedAt": "2026-09-22T10:02:00+07:00",
+      "cancelledAt": "2026-09-23T08:00:00+07:00",
+      "transactionId": "TX-2026-0003",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Sân bóng Bách Khoa",
+        "pitchLocation": "Hai Bà Trưng, Hà Nội",
+        "pitchTypeLabel": "Sân 7 người",
+        "price": 420000,
+        "services": ["Đèn chiếu sáng", "Nước uống", "Phòng thay đồ"]
+      }
+    },
+    {
+      "id": "BK-2026-0101",
+      "customerId": "U101",
+      "managerId": "M001",
+      "pitchId": 1,
+      "status": "Confirmed",
+      "paymentStatus": "Paid",
+      "amount": 420000,
+      "slotStart": "2026-09-29T20:00:00+07:00",
+      "slotEnd": "2026-09-29T21:00:00+07:00",
+      "createdAt": "2026-09-26T10:00:00+07:00",
+      "confirmedAt": "2026-09-26T10:03:00+07:00",
+      "transactionId": "TX-2026-0101",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Sân bóng Bách Khoa",
+        "pitchLocation": "Hai Bà Trưng, Hà Nội",
+        "pitchTypeLabel": "Sân 7 người",
+        "price": 420000,
+        "services": ["Đèn chiếu sáng", "Nước uống", "Phòng thay đồ"]
+      }
+    },
+    {
+      "id": "BK-2026-0102",
+      "customerId": "U102",
+      "managerId": "M001",
+      "pitchId": 2,
+      "status": "Confirmed",
+      "paymentStatus": "Paid",
+      "amount": 300000,
+      "slotStart": "2026-09-30T18:00:00+07:00",
+      "slotEnd": "2026-09-30T19:00:00+07:00",
+      "createdAt": "2026-09-26T11:00:00+07:00",
+      "confirmedAt": "2026-09-26T11:03:00+07:00",
+      "transactionId": "TX-2026-0102",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Green Field Minh Khai",
+        "pitchLocation": "Bắc Từ Liêm, Hà Nội",
+        "pitchTypeLabel": "Sân 5 người",
+        "price": 300000,
+        "services": ["Đèn chiếu sáng", "Chỗ gửi xe"]
+      }
+    },
+    {
+      "id": "BK-2026-0201",
+      "customerId": "U101",
+      "managerId": "M101",
+      "pitchId": 3,
+      "status": "Confirmed",
+      "paymentStatus": "Paid",
+      "amount": 500000,
+      "slotStart": "2026-10-01T18:00:00+07:00",
+      "slotEnd": "2026-10-01T19:00:00+07:00",
+      "createdAt": "2026-09-26T12:00:00+07:00",
+      "confirmedAt": "2026-09-26T12:04:00+07:00",
+      "transactionId": "TX-2026-0201",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Arena Tây Hồ",
+        "pitchLocation": "Tây Hồ, Hà Nội",
+        "pitchTypeLabel": "Sân 7 người",
+        "price": 500000,
+        "services": ["Đèn chiếu sáng", "Phòng thay đồ"]
+      }
+    }
+  ]
+}
