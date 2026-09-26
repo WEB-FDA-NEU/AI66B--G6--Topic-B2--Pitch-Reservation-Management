@@ -11,7 +11,7 @@ function renderUsers() {
   const countLabel = document.getElementById('users-count');
 
   tbody.innerHTML = '';
-  countLabel.textContent = `${usersData.length} user${usersData.length !== 1 ? 's' : ''}`;
+  countLabel.textContent = `${usersData.length} người dùng`;
 
   if (usersData.length === 0) {
     const emptyRow = document.createElement('tr');
@@ -110,7 +110,7 @@ function openViewModal(user) {
   document.getElementById('modal-view-processed').textContent = user.processedBy || '--';
 
   const restoBox = document.getElementById('modal-view-restoration-box');
-  if (user.accountStatus === 'Restored' && user.restoredAt) {
+  if (user.accountStatus === 'Đã khôi phục' && user.restoredAt) {
     restoBox.removeAttribute('hidden');
     document.getElementById('modal-view-restoration-text').textContent = `Account restored on ${user.restoredAt}`;
   } else {
@@ -145,7 +145,7 @@ function openViewModal(user) {
     bookingsList.innerHTML = `<span style="font-size:0.875rem; color:var(--c-muted);">No recent bookings.</span>`;
   }
 
-  if (user.accountStatus === 'Suspended') {
+  if (user.accountStatus === 'Đình chỉ') {
     btnWarn.setAttribute('hidden', '');
     btnSuspend.setAttribute('hidden', '');
     btnRestore.removeAttribute('hidden');
@@ -221,14 +221,14 @@ btnConfirmAction.addEventListener('click', () => {
   currentUser.processedBy = 'Admin (You)';
   
   if (currentAction === 'warn') {
-    currentUser.accountStatus = 'Warned';
+    currentUser.accountStatus = 'Cảnh báo';
     currentUser.statusClass = 'badge--warning';
     currentUser.warningCount += 1;
   } else if (currentAction === 'suspend') {
-    currentUser.accountStatus = 'Suspended';
+    currentUser.accountStatus = 'Đình chỉ';
     currentUser.statusClass = 'badge--danger';
   } else if (currentAction === 'restore') {
-    currentUser.accountStatus = 'Restored';
+    currentUser.accountStatus = 'Đã khôi phục';
     currentUser.statusClass = 'badge--info';
     const today = new Date();
     currentUser.restoredAt = today.toLocaleDateString('vi-VN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + today.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });

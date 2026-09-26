@@ -19,7 +19,7 @@ const reasonInput = document.getElementById('admin-reason');
 
 function renderManagers() {
   tbody.innerHTML = '';
-  document.getElementById('managers-count').textContent = `${managersData.length} manager${managersData.length !== 1 ? 's' : ''}`;
+  document.getElementById('managers-count').textContent = `${managersData.length} chủ sân`;
 
   if (managersData.length === 0) {
     const emptyRow = document.createElement('tr');
@@ -111,7 +111,7 @@ let currentManager = null;
     document.getElementById('modal-view-name').textContent = mgr.fullName || mgr.name;
     const badge = document.getElementById('modal-view-badge');
     badge.textContent = mgr.accountStatus;
-    badge.className = 'badge ' + (mgr.accountStatus === 'Active' ? 'badge--success' : (mgr.accountStatus === 'Warned' ? 'badge--warning' : 'badge--danger'));
+    badge.className = 'badge ' + (mgr.accountStatus === 'Hoạt động' ? 'badge--success' : (mgr.accountStatus === 'Cảnh báo' ? 'badge--warning' : 'badge--danger'));
     
     document.getElementById('modal-view-subtitle').textContent = mgr.email + ' · ' + mgr.id;
     
@@ -150,7 +150,7 @@ let currentManager = null;
     document.getElementById('modal-action-name').textContent = currentManager.fullName || currentManager.name;
     const badge = document.getElementById('modal-action-badge');
     badge.textContent = currentManager.accountStatus;
-    badge.className = 'badge ' + (currentManager.accountStatus === 'Active' ? 'badge--success' : (currentManager.accountStatus === 'Warned' ? 'badge--warning' : 'badge--danger'));
+    badge.className = 'badge ' + (currentManager.accountStatus === 'Hoạt động' ? 'badge--success' : (currentManager.accountStatus === 'Cảnh báo' ? 'badge--warning' : 'badge--danger'));
     
     document.getElementById('modal-action-subtitle').textContent = currentManager.email + ' · ' + currentManager.id;
     

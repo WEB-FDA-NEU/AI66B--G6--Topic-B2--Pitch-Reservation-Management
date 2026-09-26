@@ -71,7 +71,7 @@ function updatePagination(totalPages, totalItems) {
   const btnNext = document.querySelector('.btn-next');
   
   if (resultCount) {
-    resultCount.textContent = `${totalItems} activit${totalItems !== 1 ? 'ies' : 'y'}`;
+    resultCount.textContent = `${totalItems} hoạt động`;
   }
 
   if (!info || !btnPrev || !btnNext) return;
@@ -83,7 +83,7 @@ function updatePagination(totalPages, totalItems) {
     return;
   }
 
-  info.textContent = `Trang  / `;
+  info.textContent = `Trang ${currentPage} / ${totalPages}`;
   btnPrev.disabled = currentPage === 1;
   btnNext.disabled = currentPage === totalPages;
 }
@@ -97,7 +97,7 @@ function openActionModal(act) {
   resultBadge.className = `badge ${act.resultClass}`;
   
   document.getElementById('modalActivityAction').textContent = act.actionType;
-  document.getElementById('modalActivityDetails').textContent = act.details || 'No additional details provided.';
+  document.getElementById('modalActivityDetails').textContent = act.details || 'Không có chi tiết bổ sung.';
   
   document.getElementById('modalActorName').textContent = act.actorName;
   document.getElementById('modalActorRole').textContent = act.actorRole;
@@ -140,7 +140,7 @@ function applyFilters() {
       act.actionType.toLowerCase().includes(q);
     const matchRole = role === 'all' || act.actorRole === role;
     const matchAction = action === 'all' || act.actionType === action;
-    const matchResult = result === 'all' || act.result === result;
+    const matchResult = result === 'all' || act.result === ({ 'Success':'Thành công', 'Failed':'Thất bại' }[result] || result);
     return matchQ && matchRole && matchAction && matchResult;
   });
   

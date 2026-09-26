@@ -9,9 +9,9 @@ export const mockReports = [
     reportedEntityType: 'Pitch',
     reportedEntityId: 'PITCH-552',
     reportType: 'Báo cáo sân',
-    priority: 'High',
+    priority: 'Cao',
     priorityClass: 'badge--danger',
-    reportStatus: 'Submitted',
+    reportStatus: 'Đã gửi',
     statusClass: 'badge--pending',
     submittedAt: '25 Tháng 9 2026',
     assignedAdmin: null,
@@ -20,19 +20,19 @@ export const mockReports = [
   {
     reportId: 'RPT-1047',
     summary: 'Bị trừ tiền 2 lần cho cùng một đặt sân',
-    description: 'My credit card shows two separate charges for the booking BK-8829 on Saturday. Please refund the duplicate charge.',
+    description: 'Thẻ tín dụng của tôi hiển thị hai lần trừ tiền cho đặt sân BK-8829 vào thứ Bảy. Vui lòng hoàn lại khoản trừ trùng lặp.',
     reporterName: 'Jamie Lee',
     reporterId: 'USR-1002',
     reportedEntityType: 'Booking',
     reportedEntityId: 'BK-8829',
     reportType: 'Báo cáo đặt sân',
-    priority: 'Medium',
+    priority: 'Trung bình',
     priorityClass: 'badge--review',
-    reportStatus: 'Under review',
+    reportStatus: 'Đang xem xét',
     statusClass: 'badge--review',
     submittedAt: '24 Tháng 9 2026',
     assignedAdmin: 'Morgan Chen',
-    investigationNotes: ['Checking payment gateway logs for duplicate transactions.']
+    investigationNotes: ['Đang kiểm tra nhật ký cổng thanh toán về giao dịch trùng lặp.']
   },
   {
     reportId: 'RPT-1046',
@@ -43,13 +43,13 @@ export const mockReports = [
     reportedEntityType: 'Pitch Manager',
     reportedEntityId: 'MGR-2002',
     reportType: 'Báo cáo quản lý sân',
-    priority: 'High',
+    priority: 'Cao',
     priorityClass: 'badge--danger',
-    reportStatus: 'Investigation required',
+    reportStatus: 'Cần điều tra',
     statusClass: 'badge--danger',
     submittedAt: '24 Tháng 9 2026',
     assignedAdmin: 'Jordan Park',
-    investigationNotes: ['Reached out to manager for their side of the story.']
+    investigationNotes: ['Đã liên hệ quản lý sân để nghe phía họ.']
   }
 ];
 
@@ -60,21 +60,21 @@ export const mockActivities = [
     actorName: 'Morgan Chen',
     actionType: 'Cảnh cáo người dùng',
     targetId: 'Jamie Lee',
-    result: 'Success',
+    result: 'Thành công',
     resultClass: 'badge--success',
     createdAt: '25 Tháng 9 2026, 10:12',
-    details: 'Issued formal warning for late cancellations.'
+    details: 'Đã đưa ra cảnh cáo chính thức vì hủy sân muộn.'
   },
   {
     activityId: 'ACT-206',
     actorRole: 'Quản trị viên',
     actorName: 'Jordan Park',
     actionType: 'Đình chỉ sân',
-    targetId: 'Hillcrest Pitch 2',
-    result: 'Success',
+    targetId: 'Hillcrest Sân 2',
+    result: 'Thành công',
     resultClass: 'badge--success',
     createdAt: '25 Tháng 9 2026, 08:35',
-    details: 'Suspended pitch pending maintenance review.'
+    details: 'Đình chỉ sân đang chờ kiểm tra bảo trì.'
   },
   {
     activityId: 'ACT-205',
@@ -82,10 +82,10 @@ export const mockActivities = [
     actorName: 'Morgan Chen',
     actionType: 'Cập nhật báo cáo',
     targetId: 'RPT-1044',
-    result: 'Success',
+    result: 'Thành công',
     resultClass: 'badge--success',
     createdAt: '24 Tháng 9 2026, 16:48',
-    details: 'Status changed from Investigation required to Resolved.'
+    details: 'Trạng thái thay đổi từ Cần điều tra sang Đã giải quyết.'
   },
   {
     activityId: 'ACT-204',
@@ -93,10 +93,10 @@ export const mockActivities = [
     actorName: 'Casey Tran',
     actionType: 'Đăng nhập',
     targetId: 'Phiên web',
-    result: 'Success',
+    result: 'Thành công',
     resultClass: 'badge--success',
     createdAt: '24 Tháng 9 2026, 13:26',
-    details: 'Successful authentication from new IP.'
+    details: 'Xác thực thành công từ IP mới.'
   }
 ];
 
@@ -121,14 +121,14 @@ export const mockUsers = [
     fullName: 'Jamie Lee',
     email: 'jamie.lee@email.com',
     role: 'Người dùng',
-    accountStatus: 'Warned',
+    accountStatus: 'Cảnh báo',
     statusClass: 'badge--pending',
     warningCount: 1,
     bookingCount: 8,
     createdAt: '22 Tháng 5 2025',
     lastActivityAt: '24 Tháng 9 2026, 14:20',
       processedBy: 'Morgan Chen',
-      adminNote: 'Reported for late cancellation.',
+      adminNote: 'Bị báo cáo vì hủy sân muộn.',
       recentBookings: [{id: 'BK-8000', venue: 'Northside Arena', date: '2026-09-20', status: 'Đã xác nhận'}],
       relatedReports: [{id: 'RPT-1002', type: 'Hành vi người dùng', date: '24 Tháng 9 2026'}]
   },
@@ -143,7 +143,7 @@ export const mockUsers = [
     bookingCount: 5,
     createdAt: '10 Tháng 1 2025',
     lastActivityAt: '20 Tháng 9 2026, 16:45',
-    suspensionReason: 'Repeated no-shows'
+    suspensionReason: 'Nhiều lần không đến sân'
   },
   {
     id: 'USR-1004',
@@ -162,14 +162,14 @@ export const mockUsers = [
     fullName: 'Morgan Chen',
     email: 'morgan.chen@email.com',
     role: 'Người dùng',
-    accountStatus: 'Restored',
+    accountStatus: 'Đã khôi phục',
     statusClass: 'badge--review',
     warningCount: 1,
     bookingCount: 7,
     createdAt: '14 Tháng 2 2025',
     lastActivityAt: '25 Tháng 9 2026, 08:00',
       processedBy: 'Jordan Park',
-      adminNote: 'Account restored after review period.',
+      adminNote: 'Tài khoản được khôi phục sau thời gian xem xét.',
       restoredAt: '01 Tháng 9 2026, 10:00',
       recentBookings: [],
       relatedReports: [{id: 'RPT-1006', type: 'Hành vi người dùng', date: '25 Tháng 9 2026'}]
@@ -195,7 +195,7 @@ export const mockManagers = [
     fullName: 'Eastfield Sports',
     email: 'admin@eastfieldsports.com',
     role: 'Quản lý sân',
-    accountStatus: 'Warned',
+    accountStatus: 'Cảnh báo',
     statusClass: 'badge--pending',
     managedPitchCount: 2,
     activeBookingCount: '18',
@@ -215,7 +215,7 @@ export const mockManagers = [
     simulatedBalance: '$3,100',
     createdAt: '10 Tháng 5 2024',
     lastActivityAt: '20 Tháng 9 2026, 17:00',
-    suspensionReason: 'Unresponsive to reports'
+    suspensionReason: 'Không phản hồi báo cáo'
   },
   {
     id: 'MGR-2004',
@@ -235,7 +235,7 @@ export const mockManagers = [
     fullName: 'Westgate Sports',
     email: 'manager@westgatesports.com',
     role: 'Quản lý sân',
-    accountStatus: 'Restored',
+    accountStatus: 'Đã khôi phục',
     statusClass: 'badge--review',
     managedPitchCount: 2,
     activeBookingCount: '12',
@@ -252,12 +252,12 @@ export const mockBanners = [
   { id: 'B-002', title: 'Khai trương Sân mới tại Riverside', description: 'Đặt sân mới khai trương tại Riverside.', position: 'Màn hình chính (Hero)', status: 'Đã lên lịch', statusClass: 'badge--primary', startDate: '01 Tháng 10 2026', endDate: '30 Tháng 11 2026', imageUrl: '', link: '/pitches/riverside' },
   { id: 'B-003', title: 'Khuyến mãi Giảm giá Cuối tuần', description: 'Giảm giá 20% cho các đặt sân cuối tuần tại một số sân.', position: 'Thanh bên (Sidebar)', status: 'Hoạt động', statusClass: 'badge--success', startDate: '15 Tháng 9 2026', endDate: '30 Tháng 9 2026', imageUrl: '', link: '/promos/weekend' },
   { id: 'B-004', title: 'Ưu đãi Đặc biệt Ngày lễ', description: 'Giá ưu đãi ngày lễ cho tất cả các sân 5 người.', position: 'Thanh bên (Sidebar)', status: 'Bản nháp', statusClass: 'badge--neutral', startDate: '01 Tháng 12 2026', endDate: '31 Tháng 12 2026', imageUrl: '', link: '/promos/holiday' },
-  { id: 'B-005', title: 'Partner Spotlight: SportsCo', description: 'Check out our partner SportsCo for pre...', position: 'Chân trang (Footer)', status: 'Đã hết hạn', statusClass: 'badge--warning', startDate: '01 Tháng 8 2026', endDate: '31 Tháng 8 2026', imageUrl: '', link: '' },
+  { id: 'B-005', title: 'Đối tác Nổi bật: SportsCo', description: 'Xem đối tác SportsCo của chúng tôi để...', position: 'Chân trang (Footer)', status: 'Đã hết hạn', statusClass: 'badge--warning', startDate: '01 Tháng 8 2026', endDate: '31 Tháng 8 2026', imageUrl: '', link: '' },
   { id: 'B-006', title: 'Tải Ứng dụng Di động', description: 'Đặt sân nhanh chóng mọi lúc mọi nơi.', position: 'Đầu trang Đặt sân', status: 'Ngừng hoạt động', statusClass: 'badge--neutral', startDate: '01 Tháng 9 2026', endDate: '31 Tháng 12 2026', imageUrl: '', link: '' }
 ];
 
 export const mockAnnouncements = [
-  { id: 'A-001', title: 'Thông báo Bảo trì Hệ thống', content: 'The platform will undergo scheduled maintenance on Tháng 9ember 28th from 2:00 AM to 4:00 AM UTC. Some features may be temporarily unavailable.', audience: 'Tất cả người dùng đã đăng nhập', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '25 Tháng 9 2026', expDate: '29 Tháng 9 2026' },
+  { id: 'A-001', title: 'Thông báo Bảo trì Hệ thống', content: 'Hệ thống sẽ được bảo trì định kỳ vào ngày 28 tháng 9, từ 2:00 đến 4:00 sáng (UTC). Một số tính năng có thể tạm thời không khả dụng.', audience: 'Tất cả người dùng đã đăng nhập', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '25 Tháng 9 2026', expDate: '29 Tháng 9 2026' },
   { id: 'A-002', title: 'Tính năng mới: Chat Nhóm', content: 'Bây giờ bạn có thể chat trực tiếp với đội của mình trên hệ thống.', audience: 'Người dùng đăng ký', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '22 Tháng 9 2026', expDate: '22 Tháng 10 2026' },
   { id: 'A-003', title: 'Cập nhật Lịch Chi trả', content: 'Việc chi trả cho chủ sân sẽ được xử lý vào mỗi thứ Hai.', audience: 'Quản lý sân', status: 'Đã phát hành', statusClass: 'badge--success', publishedDate: '20 Tháng 9 2026', expDate: '20 Tháng 12 2026' },
   { id: 'A-004', title: 'Cập nhật Chính sách Bảo mật', content: 'Chính sách bảo mật của chúng tôi đã được cập nhật.', audience: 'Tất cả người dùng đã đăng nhập', status: 'Đã lên lịch', statusClass: 'badge--primary', publishedDate: '01 Tháng 10 2026', expDate: '01 Tháng 11 2026' },

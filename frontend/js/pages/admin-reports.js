@@ -75,7 +75,7 @@ function updatePagination(totalPages, totalItems) {
   const btnNext = document.querySelector('.btn-next');
   
   if (resultCount) {
-    resultCount.textContent = `${totalItems} report${totalItems !== 1 ? 's' : ''}`;
+    resultCount.textContent = `${totalItems} báo cáo`;
   }
 
   if (!info || !btnPrev || !btnNext) return;
@@ -87,7 +87,7 @@ function updatePagination(totalPages, totalItems) {
     return;
   }
 
-  info.textContent = `Trang  / `;
+  info.textContent = `Trang ${currentPage} / ${totalPages}`;
   btnPrev.disabled = currentPage === 1;
   btnNext.disabled = currentPage === totalPages;
 }

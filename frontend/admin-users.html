@@ -24,7 +24,7 @@
         
         <div class="admin-hero-search">
           <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="search" id="user-search" class="admin-hero-search__input" placeholder="Search by name, email, or ID..." aria-label="Search users">
+          <input type="search" id="user-search" class="admin-hero-search__input" placeholder="Tìm theo tên, email hoặc mã..." aria-label="Tìm kiếm người dùng">
         </div>
       </div>
     </header>
@@ -35,11 +35,11 @@
           <div class="filter-field">
             <label for="filter-status">Trạng thái</label>
             <select id="filter-status">
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="warned">Warned</option>
-              <option value="suspended">Suspended</option>
-              <option value="restored">Restored</option>
+              <option value="all">Tất cả trạng thái</option>
+              <option value="active">Hoạt động</option>
+              <option value="warned">Cảnh báo</option>
+              <option value="suspended">Đình chỉ</option>
+              <option value="restored">Đã khôi phục</option>
             </select>
           </div>
           <div class="filter-field">
@@ -51,7 +51,7 @@
             <input type="date" id="filter-date-to">
           </div>
         </div>
-        <div class="admin-filters__count" id="users-count">0 users</div>
+        <div class="admin-filters__count" id="users-count">0 người dùng</div>
       </div>
 
       <div class="admin-table-container">
@@ -109,23 +109,23 @@
             <span class="modal-grid-val" id="modal-view-role">User</span>
           </div>
           <div>
-            <span class="modal-grid-label">Warnings</span>
+            <span class="modal-grid-label">Cảnh báo</span>
             <span class="modal-grid-val" id="modal-view-warnings">0</span>
           </div>
           <div>
-            <span class="modal-grid-label">Bookings</span>
+            <span class="modal-grid-label">Lượt đặt</span>
             <span class="modal-grid-val" id="modal-view-bookings">0</span>
           </div>
           <div>
-            <span class="modal-grid-label">Registered</span>
+            <span class="modal-grid-label">Ngày đăng ký</span>
             <span class="modal-grid-val" id="modal-view-registered">--</span>
           </div>
           <div>
-            <span class="modal-grid-label">Last activity</span>
+            <span class="modal-grid-label">Hoạt động cuối</span>
             <span class="modal-grid-val" id="modal-view-activity">--</span>
           </div>
           <div>
-            <span class="modal-grid-label">Processed by</span>
+            <span class="modal-grid-label">Xử lý bởi</span>
             <span class="modal-grid-val" id="modal-view-processed">--</span>
           </div>
         </div>
@@ -196,7 +196,7 @@
 
         <div class="field">
           <label class="field__label" for="admin-reason">Lý do / ghi chú quản trị <span class="required" style="color:red">*</span></label>
-          <textarea id="admin-reason" class="textarea" rows="3" placeholder="Provide a reason for this action..."></textarea>
+          <textarea id="admin-reason" class="textarea" rows="3" placeholder="Cung cấp lý do cho hành động này..."></textarea>
         </div>
 
         <div class="admin-modal__actions--right">

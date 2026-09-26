@@ -20,11 +20,11 @@
       <div class="admin-header-hero__content">
         <p class="admin-header-hero__eyebrow">QUẢN TRỊ / S28</p>
         <h1 class="admin-header-hero__title">Quản lý Chủ sân</h1>
-        <p class="admin-header-hero__desc">Review pitch manager accounts and manage suspensions.</p>
+        <p class="admin-header-hero__desc">Xem xét tài khoản quản lý sân và xử lý đình chỉ.</p>
         
         <div class="admin-hero-search">
           <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="search" id="manager-search" class="admin-hero-search__input" placeholder="Search by name, email, or ID..." aria-label="Search managers">
+          <input type="search" id="manager-search" class="admin-hero-search__input" placeholder="Tìm theo tên, email hoặc mã..." aria-label="Tìm kiếm chủ sân">
         </div>
       </div>
     </header>
@@ -35,24 +35,24 @@
           <div class="filter-field">
             <label for="filter-status">Trạng thái</label>
             <select id="filter-status">
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="warned">Warned</option>
-              <option value="suspended">Suspended</option>
-              <option value="restored">Restored</option>
+              <option value="all">Tất cả trạng thái</option>
+              <option value="active">Hoạt động</option>
+              <option value="warned">Cảnh báo</option>
+              <option value="suspended">Đình chỉ</option>
+              <option value="restored">Đã khôi phục</option>
             </select>
           </div>
           <div class="filter-field">
-            <label for="filter-pitches">Pitches managed</label>
+            <label for="filter-pitches">Số sân quản lý</label>
             <select id="filter-pitches">
-              <option value="any">Any count</option>
-              <option value="1">1 pitch</option>
-              <option value="2-5">2 - 5 pitches</option>
-              <option value="5+">More than 5</option>
+              <option value="any">Tất cả</option>
+              <option value="1">1 sân</option>
+              <option value="2-5">2 - 5 sân</option>
+              <option value="5+">Hơn 5 sân</option>
             </select>
           </div>
         </div>
-        <div class="admin-filters__count" id="managers-count">0 managers</div>
+        <div class="admin-filters__count" id="managers-count">0 chủ sân</div>
       </div>
 
       <div class="admin-table-container">
@@ -62,7 +62,7 @@
               <th>Chủ sân</th>
               <th>Số sân</th>
               <th>Lượt đặt đang hoạt động</th>
-              <th>Balance</th>
+              <th>Số dư</th>
               <th>Trạng thái</th>
               <th>Hoạt động cuối</th>
               <th></th>
@@ -100,7 +100,7 @@
       <div id="modal-view-state">
         <div class="modal-header-user">
           <h2 id="modal-view-name">Northside Arena</h2>
-          <span id="modal-view-badge" class="badge">Active</span>
+          <span id="modal-view-badge" class="badge">Hoạt động</span>
         </div>
         <div class="modal-subtitle" id="modal-view-subtitle" style="color: var(--c-muted); font-size: 0.875rem; margin-top: 4px; margin-bottom: 24px;">manager@northsidearena.com · MGR-2001</div>
 
@@ -169,15 +169,15 @@
           <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
             <div style="padding: 12px 16px; border-bottom: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
               <div><strong>P-301</strong> <span style="color: var(--c-muted);">Northside Arena — Pitch 1</span></div>
-              <span class="badge badge--success">Active</span>
+              <span class="badge badge--success">Hoạt động</span>
             </div>
             <div style="padding: 12px 16px; border-bottom: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
               <div><strong>P-302</strong> <span style="color: var(--c-muted);">Northside Arena — Pitch 2</span></div>
-              <span class="badge badge--success">Active</span>
+              <span class="badge badge--success">Hoạt động</span>
             </div>
             <div style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
               <div><strong>P-303</strong> <span style="color: var(--c-muted);">Northside Arena — Pitch 3</span></div>
-              <span class="badge badge--success">Active</span>
+              <span class="badge badge--success">Hoạt động</span>
             </div>
           </div>
         </div>
@@ -190,15 +190,15 @@
           <div style="border: 1px solid var(--c-border); border-radius: 8px; overflow: hidden;">
             <div style="padding: 12px 16px; border-bottom: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
               <div><strong>BK-7000</strong> <span style="color: var(--c-primary);">P-301</span></div>
-              <span style="color: var(--c-muted); font-size: 0.875rem;">2026-09-25 - Confirmed</span>
+              <span style="color: var(--c-muted); font-size: 0.875rem;">25/09/2026 - Đã xác nhận</span>
             </div>
             <div style="padding: 12px 16px; border-bottom: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
               <div><strong>BK-7001</strong> <span style="color: var(--c-primary);">P-302</span></div>
-              <span style="color: var(--c-muted); font-size: 0.875rem;">2026-09-24 - Confirmed</span>
+              <span style="color: var(--c-muted); font-size: 0.875rem;">24/09/2026 - Đã xác nhận</span>
             </div>
             <div style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
               <div><strong>BK-7002</strong> <span style="color: var(--c-primary);">P-303</span></div>
-              <span style="color: var(--c-muted); font-size: 0.875rem;">2026-09-23 - Confirmed</span>
+              <span style="color: var(--c-muted); font-size: 0.875rem;">23/09/2026 - Đã xác nhận</span>
             </div>
           </div>
         </div>
@@ -228,21 +228,21 @@
         <div style="border: 1px solid var(--c-border); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
             <strong id="modal-action-name">Northside Arena</strong>
-            <span id="modal-action-badge" class="badge">Active</span>
+            <span id="modal-action-badge" class="badge">Hoạt động</span>
           </div>
           <div id="modal-action-subtitle" style="color: var(--c-muted); font-size: 0.875rem;">manager@... · MGR-2001</div>
         </div>
 
         <div class="form-group" style="margin-bottom: 24px;">
-          <label style="font-weight: 600; display: block; margin-bottom: 8px;">Effects of this action</label>
+          <label style="font-weight: 600; display: block; margin-bottom: 8px;">Tác động của hành động này</label>
           <div id="modal-action-effects" style="color: var(--c-text); font-size: 0.875rem; line-height: 1.5;">
-            A warning will be recorded on this manager account. The manager will be notified.
+            Một cảnh báo sẽ được ghi nhận vào tài khoản quản lý sân này. Quản lý sân sẽ được thông báo.
           </div>
         </div>
 
         <div class="form-group" style="margin-bottom: 24px;">
           <label for="admin-reason">Lý do / ghi chú quản trị <span class="required">*</span></label>
-          <textarea id="admin-reason" class="form-control" rows="3" placeholder="Provide a reason for this action..."></textarea>
+          <textarea id="admin-reason" class="form-control" rows="3" placeholder="Cung cấp lý do cho hành động này..."></textarea>
         </div>
         
         <div class="admin-modal__actions" style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--c-border); padding-top: 24px;">

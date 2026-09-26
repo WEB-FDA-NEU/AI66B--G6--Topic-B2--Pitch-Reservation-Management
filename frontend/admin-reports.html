@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
         
         <div class="admin-hero-search">
           <svg class="admin-hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="search" class="admin-hero-search__input" id="searchInput" placeholder="Search by ID, summary, reporter...">
+          <input type="search" class="admin-hero-search__input" id="searchInput" placeholder="Tìm theo mã, nội dung, người báo cáo...">
         </div>
       </div>
     </header>
@@ -39,54 +39,54 @@
       <div class="admin-filters">
         <div class="admin-filters__group">
           <div class="filter-field">
-            <label for="filterType">Type</label>
+            <label for="filterType">Loại</label>
             <select id="filterType">
               <option value="all">Tất cả loại</option>
-              <option value="User report">User report</option>
-              <option value="Pitch manager report">Pitch manager report</option>
-              <option value="Pitch report">Pitch report</option>
-              <option value="Booking-related report">Booking-related report</option>
+              <option value="Báo cáo người dùng">Báo cáo người dùng</option>
+              <option value="Báo cáo quản lý sân">Báo cáo quản lý sân</option>
+              <option value="Báo cáo sân">Báo cáo sân</option>
+              <option value="Báo cáo đặt sân">Báo cáo liên quan đặt sân</option>
             </select>
           </div>
           <div class="filter-field">
-            <label for="filterStatus">Status</label>
+            <label for="filterStatus">Trạng thái</label>
             <select id="filterStatus">
               <option value="all">Tất cả trạng thái</option>
-              <option value="Gửited">Gửited</option>
-              <option value="Under review">Under review</option>
-              <option value="Investigation required">Investigation required</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Dismissed">Dismissed</option>
+              <option value="Đã gửi">Đã gửi</option>
+              <option value="Đang xem xét">Đang xem xét</option>
+              <option value="Cần điều tra">Cần điều tra</option>
+              <option value="Đã giải quyết">Đã giải quyết</option>
+              <option value="Bác bỏ">Bác bỏ</option>
             </select>
           </div>
           <div class="filter-field">
-            <label for="filterPriority">Priority</label>
+            <label for="filterPriority">Ưu tiên</label>
             <select id="filterPriority">
               <option value="all">Tất cả mức ưu tiên</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option value="Cao">Cao</option>
+              <option value="Trung bình">Trung bình</option>
+              <option value="Thấp">Thấp</option>
             </select>
           </div>
         </div>
         <div class="admin-filters__group">
           <div class="filter-field">
-            <label for="filterReporter">Reporter</label>
+            <label for="filterReporter">Người báo cáo</label>
             <input type="text" id="filterReporter" placeholder="Lọc theo tên...">
           </div>
           <div class="filter-field">
-            <label for="filterDateFrom">From</label>
+            <label for="filterDateFrom">Từ ngày</label>
             <input type="date" id="filterDateFrom">
           </div>
           <div class="filter-field">
-            <label for="filterDateTo">To</label>
+            <label for="filterDateTo">Đến ngày</label>
             <input type="date" id="filterDateTo">
           </div>
         </div>
       </div>
       
       <div class="admin-board-meta">
-        <span id="resultCount">0 reports</span>
+        <span id="resultCount">0 báo cáo</span>
       </div>
 
       <!-- Table -->
@@ -177,15 +177,15 @@
       <div class="form-group">
         <select id="adminAction" class="form-control">
           <option value="">-- Chọn một hành động --</option>
-          <option value="investigate">Start investigation</option>
-          <option value="note">Add investigation note</option>
-          <option value="resolve">Resolve without enforcement</option>
-          <option value="dismiss">Dismiss report</option>
+          <option value="investigate">Bắt đầu điều tra</option>
+          <option value="note">Thêm ghi chú điều tra</option>
+          <option value="resolve">Giải quyết không xử phạt</option>
+          <option value="dismiss">Bác bỏ báo cáo</option>
         </select>
       </div>
       <div class="form-group" id="reasonGroup" hidden>
-        <label for="actionReason">Note / Reason <span class="required">*</span></label>
-        <textarea id="actionReason" class="form-control" rows="3" placeholder="Enter investigation notes or resolution reason..."></textarea>
+        <label for="actionReason">Ghi chú / Lý do <span class="required">*</span></label>
+        <textarea id="actionReason" class="form-control" rows="3" placeholder="Nhập ghi chú điều tra hoặc lý do xử lý..."></textarea>
       </div>
       
       <div class="admin-modal__actions--right">
