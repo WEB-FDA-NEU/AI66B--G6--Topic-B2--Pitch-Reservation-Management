@@ -2,6 +2,7 @@ const STORAGE_KEY = 'pitch-point:state:v1';
 const USERS_URL = new URL('../../mock/users.json', import.meta.url);
 const ADMIN_URL = new URL('../../mock/admin.json', import.meta.url);
 const BOOKINGS_URL = new URL('../../mock/bookings.json', import.meta.url);
+const PITCHES_URL = new URL('../../mock/pitches.json', import.meta.url);
 let initializationPromise = null;
 
 function isValidState(state) {
@@ -30,29 +31,31 @@ export function saveState(state) {
 }
 
 async function loadSeedData() {
-  const [usersResponse, adminResponse, bookingsResponse] = await Promise.all([
+  const [usersResponse, adminResponse, bookingsResponse, pitchesResponse] = await Promise.all([
     fetch(USERS_URL),
     fetch(ADMIN_URL),
     fetch(BOOKINGS_URL),
+    fetch(PITCHES_URL),
   ]);
-  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok) {
+  if (!usersResponse.ok || !adminResponse.ok || !bookingsResponse.ok || !pitchesResponse.ok) {
     throw new Error('Không tải được dữ liệu mô phỏng.');
   }
-  const [demoUsers, adminSeed, bookingSeed] = await Promise.all([
+  const [demoUsers, adminSeed, bookingSeed, pitchSeed] = await Promise.all([
     usersResponse.json(),
     adminResponse.json(),
     bookingsResponse.json(),
+    pitchesResponse.json(),
   ]);
   if (
     !Array.isArray(demoUsers)
     || !Array.isArray(adminSeed.users)
-    || !Array.isArray(bookingSeed.pitches)
     || !Array.isArray(bookingSeed.bookingDrafts)
     || !Array.isArray(bookingSeed.bookings)
+    || !Array.isArray(pitchSeed)
   ) {
     throw new Error('Dữ liệu mô phỏng không hợp lệ.');
   }
-  return { demoUsers, adminSeed, bookingSeed };
+  return { demoUsers, adminSeed, bookingSeed, pitchSeed };
 }
 
 function mergeUsers(currentUsers, seededUsers) {
@@ -63,8 +66,17 @@ function mergeUsers(currentUsers, seededUsers) {
   ];
 }
 
+function mergePitches(currentPitches, seededPitches) {
+  const pitchesById = new Map(seededPitches.map(pitch => [String(pitch.id), pitch]));
+  currentPitches.forEach(pitch => {
+    const seededPitch = pitchesById.get(String(pitch.id)) ?? {};
+    pitchesById.set(String(pitch.id), { ...seededPitch, ...pitch });
+  });
+  return [...pitchesById.values()];
+}
+
 async function initializeFromSeed(existing = null) {
-  const { demoUsers, adminSeed, bookingSeed } = await loadSeedData();
+  const { demoUsers, adminSeed, bookingSeed, pitchSeed } = await loadSeedData();
   const baseUsers = existing?.users ?? demoUsers;
   return saveState({
     ...adminSeed,
@@ -76,7 +88,7 @@ async function initializeFromSeed(existing = null) {
     contents: existing?.contents ?? adminSeed.contents,
     activities: existing?.activities ?? adminSeed.activities,
     settings: existing?.settings ?? adminSeed.settings,
-    pitches: existing?.pitches ?? bookingSeed.pitches,
+    pitches: mergePitches(existing?.pitches ?? [], pitchSeed),
     bookingDrafts: existing?.bookingDrafts ?? bookingSeed.bookingDrafts,
     bookings: existing?.bookings ?? bookingSeed.bookings,
   });
@@ -93,7 +105,16 @@ export async function initializeState() {
     && Array.isArray(existing.pitches)
     && Array.isArray(existing.bookingDrafts)
     && Array.isArray(existing.bookings);
-  if (hasAdminCollections && hasBookingCollections) return existing;
+  const hasPitchCatalog = hasBookingCollections
+    && existing.pitches.length > 0
+    && existing.pitches.every(pitch => (
+      typeof pitch.type === 'string'
+      && typeof pitch.rating === 'number'
+      && typeof pitch.featured === 'boolean'
+      && typeof pitch.description === 'string'
+      && pitch.operatingHours
+    ));
+  if (hasAdminCollections && hasBookingCollections && hasPitchCatalog) return existing;
 
   if (!initializationPromise) {
     initializationPromise = initializeFromSeed(existing).finally(() => {

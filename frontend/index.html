@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/home.css">
 </head>
 
-<body>
+<body class="home-shell">
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
 
   <site-header active="home"></site-header>
@@ -29,17 +29,17 @@
             So sánh sân, kiểm tra lịch trống và giữ khung giờ phù hợp chỉ trong vài bước.
           </p>
           <div class="home-hero__actions">
-            <button class="btn btn--accent" type="button">Tìm sân ngay</button>
-            <button class="home-hero__text-link" type="button">
+            <a class="btn btn--accent" href="search.html">Tìm sân ngay</a>
+            <a class="home-hero__text-link" href="search.html">
               Khám phá tất cả sân <span aria-hidden="true">→</span>
-            </button>
+            </a>
             <a id="admin-dashboard-link" class="btn home-hero__admin-link" href="admin-dashboard.html" hidden>Quản trị hệ thống</a>
           </div>
         </div>
 
         <div class="home-hero__spotlight" aria-label="Thông tin nổi bật của Pitch Point">
           <p class="home-hero__spotlight-label">Sẵn sàng ra sân</p>
-          <strong>120+</strong>
+          <strong id="available-slot-count">—</strong>
           <span>khung giờ đang mở hôm nay</span>
           <ul>
             <li>Giá rõ ràng</li>
@@ -56,10 +56,10 @@
           <p class="section-heading__eyebrow">Bắt đầu trận đấu</p>
           <h2 id="quick-search-title">Bạn muốn đá ở đâu?</h2>
         </div>
-        <button type="button">Tìm kiếm nâng cao</button>
+        <a href="search.html">Tìm kiếm nâng cao</a>
       </div>
 
-      <form class="quick-search" id="quick-search-form" action="search.html" method="GET">
+      <form class="quick-search" id="quick-search-form" action="search.html" method="get">
         <div class="field quick-search__location">
           <label class="field__label" for="search-location">Khu vực hoặc tên sân</label>
           <input
@@ -152,37 +152,13 @@
       </form>
     </section>
 
-    <section class="container home-section" id="upcoming-booking" aria-labelledby="upcoming-booking-title">
-      <div class="section-heading">
-        <div>
-          <p class="section-heading__eyebrow">Lịch của bạn</p>
-          <h2 id="upcoming-booking-title">Trận đấu sắp tới</h2>
-        </div>
-        <button type="button">Xem tất cả lịch đặt</button>
-      </div>
-
-      <article class="booking-summary" id="upcoming-booking-card">
-        <div class="booking-summary__date" aria-label="Ngày 26 tháng 9">
-          <span>Tháng 9</span>
-          <strong>26</strong>
-        </div>
-        <div class="booking-summary__content">
-          <h3>Sân bóng Bách Khoa</h3>
-          <p>18:00 – 19:30 · Sân 7 người</p>
-          <p>Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
-        </div>
-        <span class="badge badge--success">Đã xác nhận</span>
-        <button class="btn" type="button">Xem chi tiết</button>
-      </article>
-    </section>
-
     <section class="container home-section" aria-labelledby="featured-pitches-title">
       <div class="section-heading">
         <div>
           <p class="section-heading__eyebrow">Gợi ý cho bạn</p>
           <h2 id="featured-pitches-title">Sân bóng nổi bật</h2>
         </div>
-        <button type="button">Xem tất cả sân</button>
+        <a href="search.html">Xem tất cả sân</a>
       </div>
 
       <p class="field__hint" id="result-summary" aria-live="polite">Đang tải sân nổi bật…</p>
@@ -228,11 +204,7 @@
 
   <template id="tpl-card">
     <article class="card pitch-card">
-      <button class="card__favorite" type="button">
-        <span aria-hidden="true">♡</span>
-      </button>
-
-      <a class="card__link">
+      <a class="card__link" href="">
         <img class="card__img" src="" alt="" loading="lazy">
         <div class="card__body">
           <div class="card__heading">

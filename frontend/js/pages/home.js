@@ -1,47 +1,12 @@
-import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
 import { getCurrentUser } from '../services/auth-service.js';
-import { initializeState } from '../services/storage-service.js';
-
-const FEATURED_PITCHES = [
-  {
-    name: 'Sân bóng Bách Khoa',
-    location: 'Hai Bà Trưng, Hà Nội',
-    typeLabel: 'Sân 7 người',
-    price: 420000,
-    rating: 4.9,
-    badge: 'Đặt nhiều',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Green Field Minh Khai',
-    location: 'Bắc Từ Liêm, Hà Nội',
-    typeLabel: 'Sân 5 người',
-    price: 300000,
-    rating: 4.8,
-    badge: 'Còn giờ đẹp',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Arena Tây Hồ',
-    location: 'Tây Hồ, Hà Nội',
-    typeLabel: 'Sân 7 người',
-    price: 500000,
-    rating: 4.7,
-    badge: 'Mới',
-    image: 'img/placeholder.svg',
-  },
-  {
-    name: 'Sân bóng Thành Công',
-    location: 'Ba Đình, Hà Nội',
-    typeLabel: 'Sân 11 người',
-    price: 900000,
-    rating: 4.8,
-    badge: 'Đánh giá cao',
-    image: 'img/placeholder.svg',
-  },
-];
+import {
+  formatPitchPrice,
+  listFeaturedPitches,
+  listPublicPitches,
+  preparePitchCatalog,
+} from '../services/pitch-service.js';
 
 const elements = {
   form: document.getElementById('quick-search-form'),
@@ -62,6 +27,9 @@ const elements = {
   featuredSection: document.getElementById('results')?.closest('section'),
   footer: document.querySelector('site-footer'),
   adminDashboardLink: document.getElementById('admin-dashboard-link'),
+  availableSlotCount: document.getElementById('available-slot-count'),
+  cardTemplate: document.getElementById('tpl-card'),
+  emptyTemplate: document.getElementById('tpl-empty-state'),
 };
 
 const today = startOfDay(new Date());
@@ -98,7 +66,6 @@ function togglePicker(button, panel) {
 
 function renderCalendar() {
   if (!elements.calendarDays || !elements.calendarMonth) return;
-
   elements.calendarMonth.textContent = new Intl.DateTimeFormat('vi-VN', {
     month: 'long',
     year: 'numeric',
@@ -108,12 +75,11 @@ function renderCalendar() {
   const mondayOffset = (monthStart.getDay() + 6) % 7;
   const gridStart = new Date(monthStart);
   gridStart.setDate(monthStart.getDate() - mondayOffset);
-
   const fragment = document.createDocumentFragment();
+
   for (let index = 0; index < 42; index += 1) {
     const date = new Date(gridStart);
     date.setDate(gridStart.getDate() + index);
-
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = String(date.getDate());
@@ -126,15 +92,12 @@ function renderCalendar() {
       year: 'numeric',
     }).format(date));
 
-    const isOutsideMonth = date.getMonth() !== visibleMonth.getMonth();
-    const isPast = startOfDay(date) < today;
-    const isSelected = selectedDate && toDateValue(date) === toDateValue(selectedDate);
-    if (isOutsideMonth) button.classList.add('is-outside-month');
-    if (isSelected) {
-      button.classList.add('is-selected');
-      button.setAttribute('aria-selected', 'true');
-    }
-    button.disabled = isPast;
+    const outsideMonth = date.getMonth() !== visibleMonth.getMonth();
+    const selected = selectedDate && toDateValue(date) === toDateValue(selectedDate);
+    button.disabled = startOfDay(date) < today;
+    button.classList.toggle('is-outside-month', outsideMonth);
+    button.classList.toggle('is-selected', Boolean(selected));
+    if (selected) button.setAttribute('aria-selected', 'true');
     button.addEventListener('click', () => selectDate(date));
     fragment.append(button);
   }
@@ -173,11 +136,10 @@ function changeMonth(offset) {
 function selectTime(button) {
   const value = button.dataset.time;
   if (!value || !elements.timePanel) return;
-
   elements.timePanel.querySelectorAll('[data-time]').forEach(slot => {
-    const active = slot === button;
-    slot.classList.toggle('is-selected', active);
-    slot.setAttribute('aria-pressed', String(active));
+    const selected = slot === button;
+    slot.classList.toggle('is-selected', selected);
+    slot.setAttribute('aria-pressed', String(selected));
   });
   if (elements.timeInput) elements.timeInput.value = value;
   if (elements.timeValue) elements.timeValue.textContent = value;
@@ -185,74 +147,38 @@ function selectTime(button) {
   elements.timeButton?.focus();
 }
 
-function renderFeaturedPitches() {
-  if (!elements.results || !elements.resultSummary) return;
-  const template = document.getElementById('tpl-card');
-  const emptyTemplate = document.getElementById('tpl-empty-state');
-  if (!template || !emptyTemplate) return;
-
-  // Lọc ra các sân được đánh dấu featured (nổi bật) từ file data dùng chung
-  const items = MOCK_PITCHES.filter(p => p.featured);
-
-  if (items.length === 0) {
-    elements.results.replaceChildren(emptyTemplate.content.cloneNode(true));
-    elements.resultSummary.textContent = 'Chưa có sân mẫu để hiển thị.';
+function renderFeaturedPitches(items) {
+  if (!elements.results || !elements.resultSummary || !elements.cardTemplate || !elements.emptyTemplate) return;
+  if (!items.length) {
+    elements.results.replaceChildren(elements.emptyTemplate.content.cloneNode(true));
+    elements.resultSummary.textContent = 'Chưa có sân nổi bật để hiển thị.';
     elements.results.setAttribute('aria-busy', 'false');
     return;
   }
 
   const cards = items.map(pitch => {
-    const node = template.content.cloneNode(true);
-    const link = node.querySelector('.card__link');
+    const node = elements.cardTemplate.content.cloneNode(true);
+    const control = node.querySelector('.card__link');
     const image = node.querySelector('.card__img');
-    const favoriteButton = node.querySelector('.card__favorite');
     const rating = node.querySelector('.card__rating');
-
-    // Thiết lập đường dẫn sang trang S03 (Chi tiết sân) kèm tham số chuẩn pitchId (IC-02)
-    link.href = `pitch-detail.html?pitchId=${pitch.id}`;
-    link.setAttribute('aria-label', `Xem chi tiết ${pitch.name}`);
-    
+    control.dataset.pitchId = String(pitch.id);
+    control.href = `pitch-detail.html?pitchId=${encodeURIComponent(pitch.id)}`;
+    control.setAttribute('aria-label', `Xem chi tiết ${pitch.name}`);
     image.src = pitch.image;
     image.alt = `Hình ảnh minh họa ${pitch.name}`;
-    
     node.querySelector('.card__title').textContent = pitch.name;
     node.querySelector('.card__meta').textContent = pitch.location;
     node.querySelector('.card__type').textContent = pitch.typeLabel;
     node.querySelector('.card__price').textContent = formatPitchPrice(pitch.price);
-    
     rating.textContent = `★ ${pitch.rating.toFixed(1)}`;
     rating.setAttribute('aria-label', `${pitch.rating.toFixed(1)} trên 5 sao`);
-    
     node.querySelector('.card__badge').textContent = pitch.badge;
-    favoriteButton.setAttribute('aria-label', `Thêm ${pitch.name} vào danh sách yêu thích`);
-    
     return node;
   });
 
   elements.results.replaceChildren(...cards);
   elements.resultSummary.textContent = `${items.length} sân nổi bật được đề xuất cho bạn.`;
   elements.results.setAttribute('aria-busy', 'false');
-}
-
-function disableSharedNavigation() {
-  const header = document.querySelector('site-header');
-  const footer = document.querySelector('site-footer');
-
-  [
-    header?.querySelector('[data-nav="search"]'),
-    header?.querySelector('a[href="login.html"]'),
-    header?.querySelector('a[href="register.html"]'),
-    footer?.querySelector('a[href="search.html"]'),
-  ].filter(Boolean).forEach(link => {
-    link.removeAttribute('href');
-    link.setAttribute('aria-disabled', 'true');
-  });
-
-  const headerSearch = header?.querySelector('.site-header__search');
-  if (headerSearch) {
-    headerSearch.removeAttribute('action');
-    headerSearch.addEventListener('submit', event => event.preventDefault());
-  }
 }
 
 function protectMobileControlsFromMessageBubble() {
@@ -269,43 +195,37 @@ function protectMobileControlsFromMessageBubble() {
     });
     update();
   }, { threshold: 0.08 });
-
   [elements.quickSearch, elements.featuredSection, elements.footer]
     .filter(Boolean)
     .forEach(target => observer.observe(target));
   media.addEventListener('change', update);
 }
 
-async function showAdminDashboardLink() {
+function showAdminDashboardLink() {
   if (!elements.adminDashboardLink) return;
-  try {
-    await initializeState();
-    const user = getCurrentUser();
-    elements.adminDashboardLink.hidden = user?.role !== 'admin' || user.status !== 'active';
-  } catch {
-    elements.adminDashboardLink.hidden = true;
-  }
+  const user = getCurrentUser();
+  elements.adminDashboardLink.hidden = user?.role !== 'admin' || user.status !== 'active';
 }
 
 function bindEvents() {
+  elements.form?.addEventListener('formdata', event => {
+    [...event.formData.entries()].forEach(([key, value]) => {
+      if (!String(value).trim()) event.formData.delete(key);
+    });
+  });
   elements.dateButton?.addEventListener('click', () => togglePicker(elements.dateButton, elements.datePanel));
   elements.timeButton?.addEventListener('click', () => togglePicker(elements.timeButton, elements.timePanel));
   elements.datePanel?.querySelector('[data-calendar-action="previous"]')
     ?.addEventListener('click', () => changeMonth(-1));
   elements.datePanel?.querySelector('[data-calendar-action="next"]')
     ?.addEventListener('click', () => changeMonth(1));
-
   elements.timePanel?.querySelectorAll('[data-time]').forEach(button => {
     button.setAttribute('aria-pressed', 'false');
     button.addEventListener('click', () => selectTime(button));
   });
-
-  // Ghi chú: Xóa e.preventDefault() ở đây để form submit tự nhiên bằng GET url params sang search.html
-
   document.addEventListener('click', event => {
     const target = event.target;
     if (!(target instanceof Element)) return;
-
     const clickedPicker = elements.datePanel?.contains(target)
       || elements.dateButton?.contains(target)
       || elements.timePanel?.contains(target)
@@ -323,9 +243,25 @@ function bindEvents() {
   });
 }
 
-renderCalendar();
-renderFeaturedPitches(FEATURED_PITCHES);
-disableSharedNavigation();
-protectMobileControlsFromMessageBubble();
-bindEvents();
-showAdminDashboardLink();
+async function init() {
+  renderCalendar();
+  protectMobileControlsFromMessageBubble();
+  bindEvents();
+
+  try {
+    await preparePitchCatalog();
+    renderFeaturedPitches(listFeaturedPitches(4));
+    if (elements.availableSlotCount) {
+      const availableSlots = listPublicPitches()
+        .reduce((sum, pitch) => sum + Number(pitch.availableSlotsToday ?? 0), 0);
+      elements.availableSlotCount.textContent = `${availableSlots}+`;
+    }
+  } catch {
+    elements.results?.setAttribute('aria-busy', 'false');
+    if (elements.resultSummary) elements.resultSummary.textContent = 'Không thể tải danh sách sân nổi bật.';
+  }
+
+  showAdminDashboardLink();
+}
+
+init();

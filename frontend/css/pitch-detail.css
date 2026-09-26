@@ -1,0 +1,216 @@
+.pitch-detail-shell .skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+
+.pitch-detail-shell .skip-link:focus { transform: translateY(0); }
+
+.pitch-detail-page {
+  min-height: 65vh;
+  padding-block: var(--sp-5) var(--sp-7);
+}
+
+.pitch-detail-page .pitch-detail-page__heading { margin-bottom: var(--sp-5); }
+
+.pitch-detail-page .pitch-detail-page__eyebrow,
+.pitch-detail-page .pitch-detail-page__label {
+  margin-bottom: var(--sp-2);
+  color: var(--c-primary);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.pitch-detail-page .pitch-detail-page__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+}
+
+.pitch-detail-page .pitch-detail-page__title-row h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.04;
+  letter-spacing: -.045em;
+}
+
+.pitch-detail-page .pitch-detail-page__status {
+  display: inline-flex;
+  padding: .25rem .65rem;
+  border-radius: 999px;
+  background: #e6f6ec;
+  color: var(--c-success);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.pitch-detail-page .pitch-detail-page__status[data-status="deactivated"],
+.pitch-detail-page .pitch-detail-page__status[data-status="suspended"] {
+  background: #fff2d9;
+  color: var(--c-warning);
+}
+
+.pitch-detail-page .pitch-detail-page__location {
+  margin-top: var(--sp-3);
+  color: var(--c-muted);
+}
+
+.pitch-detail-page .pitch-detail-page__rating {
+  margin-top: var(--sp-2);
+  color: var(--c-warning);
+  font-weight: 800;
+}
+
+.pitch-detail-page .pitch-detail-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+.pitch-detail-page .pitch-detail-page__main {
+  display: grid;
+  min-width: 0;
+  gap: var(--sp-4);
+}
+
+.pitch-detail-page .pitch-detail-page__cover {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  box-shadow: var(--shadow);
+}
+
+.pitch-detail-page .pitch-detail-page__cover img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.pitch-detail-page .pitch-detail-page__panel,
+.pitch-detail-page .pitch-detail-page__booking {
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-bg);
+  box-shadow: 0 10px 30px rgba(12, 27, 42, .06);
+}
+
+.pitch-detail-page .pitch-detail-page__panel > p { margin-top: var(--sp-3); color: var(--c-muted); }
+
+.pitch-detail-page .pitch-detail-page__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.pitch-detail-page .pitch-detail-page__facts div {
+  padding: var(--sp-3);
+  border-radius: var(--radius-s);
+  background: var(--c-surface);
+}
+
+.pitch-detail-page .pitch-detail-page__facts dt { color: var(--c-muted); font-size: .78rem; }
+.pitch-detail-page .pitch-detail-page__facts dd { margin-top: var(--sp-1); font-weight: 700; }
+
+.pitch-detail-page .pitch-detail-page__facilities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+
+.pitch-detail-page .pitch-detail-page__facilities li {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  padding: var(--sp-3);
+  border-radius: var(--radius-s);
+  background: var(--c-surface);
+}
+
+.pitch-detail-page .pitch-detail-page__facilities li > span:first-child {
+  color: var(--c-success);
+  font-weight: 900;
+}
+
+.pitch-detail-page .pitch-detail-page__panel-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.pitch-detail-page .pitch-detail-page__owner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.pitch-detail-page .pitch-detail-page__owner-actions [aria-disabled="true"] { cursor: default; }
+
+.pitch-detail-page .pitch-detail-page__review-empty {
+  padding: var(--sp-5) 0 0;
+  text-align: left;
+}
+
+.pitch-detail-page .pitch-detail-page__booking {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.pitch-detail-page .pitch-detail-page__price {
+  color: var(--c-primary);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 850;
+  letter-spacing: -.03em;
+}
+
+.pitch-detail-page .pitch-detail-page__booking > p:not(.pitch-detail-page__label):not(.pitch-detail-page__price),
+.pitch-detail-page .pitch-detail-page__booking li {
+  color: var(--c-muted);
+}
+
+.pitch-detail-page .pitch-detail-page__booking .btn { width: 100%; }
+
+.pitch-detail-page .pitch-detail-page__booking ul {
+  display: grid;
+  gap: var(--sp-2);
+  padding-left: 1.1rem;
+  font-size: .88rem;
+}
+
+@media (min-width: 700px) {
+  .pitch-detail-page .pitch-detail-page__panel-heading {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 980px) {
+  .pitch-detail-page .pitch-detail-page__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  }
+
+  .pitch-detail-page .pitch-detail-page__booking {
+    position: sticky;
+    top: 92px;
+  }
+}
+
+@media (max-width: 520px) {
+  .pitch-detail-page .pitch-detail-page__facts,
+  .pitch-detail-page .pitch-detail-page__facilities {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

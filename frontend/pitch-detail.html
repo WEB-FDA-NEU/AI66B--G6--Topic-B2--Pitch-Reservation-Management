@@ -3,99 +3,131 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Thông tin chi tiết sân bóng trên Pitch Point.">
+  <meta name="description" content="Xem thông tin, tiện ích và trạng thái đặt sân trên Pitch Point.">
+  <link rel="icon" href="data:,">
   <title>Chi tiết sân bóng — Pitch Point</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pitch-detail.css">
 </head>
-<body>
+<body class="pitch-detail-shell">
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
   <site-header></site-header>
 
   <nav class="container breadcrumb" aria-label="Đường dẫn">
     <ol>
-      <li>Pitch Point</li>
-      <li aria-current="page">Chi tiết sân bóng</li>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="search.html">Tìm sân</a></li>
+      <li aria-current="page">Chi tiết sân</li>
     </ol>
   </nav>
 
-  <main class="container page" id="main-content">
-    <article id="detail" class="stack">
-      <header class="stack">
-        <p class="field__hint">Sân bóng đang hoạt động</p>
-        <h1 id="title">Tên sân bóng</h1>
-        <p id="pitch-location">Địa chỉ sân bóng</p>
-        <p id="pitch-rating" aria-label="Đánh giá của sân">Chưa có đánh giá</p>
+  <main class="container pitch-detail-page" id="main-content">
+    <section class="pitch-detail-page__state empty" id="pitch-state" hidden aria-live="polite">
+      <p class="empty__title" id="pitch-state-title"></p>
+      <p class="empty__hint" id="pitch-state-message"></p>
+      <a class="btn empty__action" href="search.html">Quay lại tìm sân</a>
+    </section>
+
+    <article id="pitch-content" hidden>
+      <header class="pitch-detail-page__heading">
+        <div>
+          <p class="pitch-detail-page__eyebrow">Chi tiết sân bóng</p>
+          <div class="pitch-detail-page__title-row">
+            <h1 id="pitch-title"></h1>
+            <span class="pitch-detail-page__status" id="pitch-status"></span>
+          </div>
+          <p class="pitch-detail-page__location" id="pitch-location"></p>
+          <p class="pitch-detail-page__rating" id="pitch-rating"></p>
+        </div>
       </header>
 
-      <section class="card" aria-labelledby="overview-title">
-        <div class="card__body stack">
-          <h2 id="overview-title">Thông tin sân</h2>
-          <dl>
-            <div><dt>Loại sân</dt><dd id="pitch-type">Đang cập nhật</dd></div>
-            <div><dt>Giá thuê</dt><dd id="pitch-price">Đang cập nhật</dd></div>
-            <div><dt>Giờ hoạt động</dt><dd id="pitch-hours">Đang cập nhật</dd></div>
-          </dl>
-          <p id="pitch-description">Mô tả sân bóng sẽ được hiển thị tại đây.</p>
-        </div>
-      </section>
+      <div class="pitch-detail-page__layout">
+        <div class="pitch-detail-page__main">
+          <figure class="pitch-detail-page__cover">
+            <img id="pitch-image" src="img/placeholder.svg" alt="" width="960" height="600">
+          </figure>
 
-      <section class="card" aria-labelledby="facilities-title">
-        <div class="card__body stack">
-          <h2 id="facilities-title">Tiện ích</h2>
-          <ul id="pitch-facilities">
-            <li>Bãi đỗ xe</li>
-            <li>Phòng thay đồ</li>
-            <li>Nước uống</li>
+          <section class="pitch-detail-page__panel" aria-labelledby="overview-title">
+            <h2 id="overview-title">Thông tin sân</h2>
+            <p id="pitch-description"></p>
+            <dl class="pitch-detail-page__facts">
+              <div>
+                <dt>Loại sân</dt>
+                <dd id="pitch-type"></dd>
+              </div>
+              <div>
+                <dt>Mặt sân</dt>
+                <dd id="pitch-surface"></dd>
+              </div>
+              <div>
+                <dt>Giờ hoạt động</dt>
+                <dd id="pitch-hours"></dd>
+              </div>
+              <div>
+                <dt>Khu vực</dt>
+                <dd id="pitch-district"></dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="pitch-detail-page__panel" aria-labelledby="facilities-title">
+            <h2 id="facilities-title">Tiện ích đi kèm</h2>
+            <ul class="pitch-detail-page__facilities" id="pitch-facilities"></ul>
+          </section>
+
+          <section class="pitch-detail-page__panel" aria-labelledby="owner-title">
+            <div class="pitch-detail-page__panel-heading">
+              <div>
+                <p class="pitch-detail-page__label">Đơn vị quản lý</p>
+                <h2 id="owner-title"></h2>
+              </div>
+              <div class="pitch-detail-page__owner-actions">
+                <button class="btn" id="view-owner-button" type="button" aria-disabled="true">Xem hồ sơ</button>
+                <button class="btn" id="message-manager-button" type="button" aria-disabled="true">Nhắn tin</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="pitch-detail-page__panel" aria-labelledby="reviews-title">
+            <div class="pitch-detail-page__panel-heading">
+              <div>
+                <p class="pitch-detail-page__label">Đánh giá đã xác minh</p>
+                <h2 id="reviews-title">Đánh giá từ người chơi</h2>
+              </div>
+              <strong id="review-summary"></strong>
+            </div>
+            <div class="empty pitch-detail-page__review-empty">
+              <p class="empty__title">Chưa có nội dung đánh giá để hiển thị</p>
+              <p class="empty__hint">Đánh giá chỉ được đồng bộ từ các lượt đặt sân đã hoàn tất.</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="pitch-detail-page__booking" aria-labelledby="booking-title">
+          <p class="pitch-detail-page__label">Giá thuê tham khảo</p>
+          <p class="pitch-detail-page__price" id="pitch-price"></p>
+          <h2 id="booking-title">Sẵn sàng chọn lịch?</h2>
+          <p id="booking-availability">Lịch trống và điều kiện đặt sân sẽ được kiểm tra tại bước chọn lịch.</p>
+          <a class="btn btn--primary" id="booking-button" href="">Chọn ngày và giờ</a>
+          <ul>
+            <li>Chỉ đặt khung giờ trong 7 ngày tới</li>
+            <li>Giữ chỗ tạm thời trong 10 phút</li>
+            <li>Thanh toán bằng số dư mô phỏng</li>
           </ul>
-        </div>
-      </section>
-
-      <section class="card" aria-labelledby="schedule-title">
-        <div class="card__body stack">
-          <h2 id="schedule-title">Chọn lịch đá</h2>
-          <form id="booking-preview-form">
-            <div class="field">
-              <label class="field__label" for="booking-date">Ngày chơi</label>
-              <input class="input" id="booking-date" name="date" type="date">
-            </div>
-            <div class="field">
-              <label class="field__label" for="booking-time">Giờ bắt đầu</label>
-              <input class="input" id="booking-time" name="time" type="time">
-            </div>
-            <div class="field">
-              <label class="field__label" for="booking-pitch-type">Loại sân</label>
-              <select class="select" id="booking-pitch-type" name="pitchType">
-                <option value="">Chọn loại sân</option>
-                <option value="5">Sân 5 người</option>
-                <option value="7">Sân 7 người</option>
-                <option value="11">Sân 11 người</option>
-              </select>
-            </div>
-            <button class="btn btn--primary" type="button">Kiểm tra lịch trống</button>
-          </form>
-        </div>
-      </section>
-
-      <section class="card" aria-labelledby="owner-title">
-        <div class="card__body stack">
-          <h2 id="owner-title">Đơn vị quản lý sân</h2>
-          <p id="pitch-owner">Thông tin đơn vị quản lý sẽ được hiển thị tại đây.</p>
-        </div>
-      </section>
-
-      <section class="card" aria-labelledby="reviews-title">
-        <div class="card__body stack">
-          <h2 id="reviews-title">Đánh giá từ người chơi</h2>
-          <div id="pitch-reviews"><p class="empty__hint">Sân chưa có đánh giá.</p></div>
-        </div>
-      </section>
+        </aside>
+      </div>
     </article>
   </main>
 
   <site-footer></site-footer>
 
-  <script type="module" src="js/pages/pitch_detail.js"></script>
+  <template id="tpl-facility">
+    <li><span aria-hidden="true">✓</span><span class="pitch-detail-page__facility-name"></span></li>
+  </template>
+
+  <script type="module" src="js/pages/pitch-detail.js"></script>
 </body>
 </html>

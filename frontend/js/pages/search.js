@@ -1,186 +1,200 @@
-import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
 import '../components/site-header.js';
 import '../components/site-footer.js';
+import {
+  formatPitchPrice,
+  normalizePitchSearch,
+  preparePitchCatalog,
+  searchPitches,
+} from '../services/pitch-service.js';
 
 const PAGE_SIZE = 6;
-const favoriteIds = new Set();
+const FILTER_KEYS = ['q', 'location', 'date', 'time', 'pitchType', 'sort'];
 
 const elements = {
-  grid: document.getElementById('results'),
   form: document.getElementById('filter-form'),
-  sort: document.getElementById('sort'),
+  sort: document.getElementById('search-sort'),
   summary: document.getElementById('result-summary'),
+  results: document.getElementById('results'),
   pagination: document.getElementById('pagination'),
   sidebar: document.getElementById('search-sidebar'),
   toggle: document.getElementById('filter-toggle'),
+  cardTemplate: document.getElementById('tpl-card'),
+  emptyTemplate: document.getElementById('tpl-empty-state'),
 };
+
+let currentPage = 1;
 
 function readFilters() {
   const params = new URLSearchParams(location.search);
-  return {
-    q: params.get('q') ?? '',
-    pitchType: params.get('pitchType') ?? '',
-    date: params.get('date') ?? '',
-    time: params.get('time') ?? '',
-    min_price: params.get('min_price') ?? '',
-    max_price: params.get('max_price') ?? '',
-    sort: params.get('sort') ?? 'recommended',
-    page: Math.max(1, Number(params.get('page') ?? 1)),
-  };
+  return normalizePitchSearch(Object.fromEntries(FILTER_KEYS.map(key => [key, params.get(key) ?? ''])));
 }
 
 function syncControls(filters) {
+  if (!elements.form || !elements.sort) return;
   elements.form.elements.q.value = filters.q;
+  elements.form.elements.location.value = filters.location;
   elements.form.elements.date.value = filters.date;
   elements.form.elements.time.value = filters.time;
-  elements.form.elements.min_price.value = filters.min_price;
-  elements.form.elements.max_price.value = filters.max_price;
   elements.sort.value = filters.sort;
-  const typeControl = [...elements.form.elements.pitchType]
+  const pitchTypeControl = [...elements.form.elements.pitchType]
     .find(input => input.value === filters.pitchType);
-  if (typeControl) typeControl.checked = true;
+  if (pitchTypeControl) pitchTypeControl.checked = true;
 }
 
-function writeFilters(patch = {}) {
-  const next = { ...readFilters(), ...patch };
-  if (!Object.hasOwn(patch, 'page')) next.page = 1;
+function writeFilters(input) {
+  const filters = normalizePitchSearch(input);
   const params = new URLSearchParams();
-  Object.entries(next).forEach(([key, value]) => {
-    if (value !== '' && value != null && !(key === 'page' && value === 1)) {
-      params.set(key, String(value));
-    }
+  FILTER_KEYS.forEach(key => {
+    const value = filters[key];
+    if (value && !(key === 'sort' && value === 'recommended')) params.set(key, value);
   });
-  history.pushState({}, '', params.size ? `?${params}` : location.pathname);
+  history.pushState({}, '', params.size ? `?${params.toString()}` : location.pathname);
+  currentPage = 1;
   renderResults();
 }
 
-function getFilteredPitches(filters) {
-  const query = filters.q.trim().toLocaleLowerCase('vi');
-  let items = MOCK_PITCHES.filter(pitch => {
-    const matchesText = !query
-      || pitch.name.toLocaleLowerCase('vi').includes(query)
-      || pitch.location.toLocaleLowerCase('vi').includes(query);
-    const matchesType = !filters.pitchType || pitch.type === filters.pitchType;
-    const matchesMin = !filters.min_price || pitch.price >= Number(filters.min_price);
-    const matchesMax = !filters.max_price || pitch.price <= Number(filters.max_price);
-    return matchesText && matchesType && matchesMin && matchesMax;
-  });
-
-  if (filters.sort === 'rating_desc') items = [...items].sort((a, b) => b.rating - a.rating);
-  if (filters.sort === 'price_asc') items = [...items].sort((a, b) => a.price - b.price);
-  if (filters.sort === 'price_desc') items = [...items].sort((a, b) => b.price - a.price);
-  if (filters.sort === 'recommended') {
-    items = [...items].sort((a, b) => Number(b.featured) - Number(a.featured) || b.rating - a.rating);
-  }
-  return items;
-}
-
 function createPitchCard(pitch) {
-  const node = document.getElementById('tpl-card').content.cloneNode(true);
-  const link = node.querySelector('.card__link');
+  const node = elements.cardTemplate.content.cloneNode(true);
+  const cardControl = node.querySelector('.search-page__card-link');
   const image = node.querySelector('.card__img');
-  const favoriteButton = node.querySelector('.card__favorite');
-  const rating = node.querySelector('.card__rating');
-
-  link.href = `pitch-detail.html?pitchId=${pitch.id}`;
   image.src = pitch.image;
   image.alt = `Hình ảnh ${pitch.name}`;
   node.querySelector('.card__title').textContent = pitch.name;
   node.querySelector('.card__meta').textContent = pitch.location;
-  node.querySelector('.card__type').textContent = pitch.typeLabel;
+  node.querySelector('.search-page__type').textContent = `${pitch.typeLabel} · ${pitch.surface}`;
   node.querySelector('.card__price').textContent = formatPitchPrice(pitch.price);
   node.querySelector('.card__badge').textContent = pitch.badge;
-  rating.textContent = `★ ${pitch.rating.toFixed(1)}`;
-  rating.setAttribute('aria-label', `${pitch.rating.toFixed(1)} trên 5 sao`);
-  favoriteButton.setAttribute('aria-label', `Thêm ${pitch.name} vào danh sách yêu thích`);
-  favoriteButton.addEventListener('click', () => toggleFavorite(pitch, favoriteButton));
+  node.querySelector('.search-page__rating').textContent = `★ ${pitch.rating.toFixed(1)}`;
+  cardControl.setAttribute('aria-label', `Xem chi tiết ${pitch.name}`);
+  cardControl.dataset.pitchId = String(pitch.id);
+  cardControl.href = `pitch-detail.html?pitchId=${encodeURIComponent(pitch.id)}`;
   return node;
 }
 
-function toggleFavorite(pitch, button) {
-  const active = !favoriteIds.has(pitch.id);
-  if (active) favoriteIds.add(pitch.id);
-  else favoriteIds.delete(pitch.id);
-  button.classList.toggle('is-active', active);
-  button.setAttribute('aria-pressed', String(active));
-  button.setAttribute('aria-label', active
-    ? `Bỏ ${pitch.name} khỏi danh sách yêu thích`
-    : `Thêm ${pitch.name} vào danh sách yêu thích`);
-  button.querySelector('[aria-hidden="true"]').textContent = active ? '♥' : '♡';
-}
-
-function renderPagination(total, currentPage) {
+function renderPagination(total) {
   const pageCount = Math.ceil(total / PAGE_SIZE);
   elements.pagination.replaceChildren();
   if (pageCount <= 1) return;
 
-  const createButton = (label, page, options = {}) => {
+  const createButton = (label, page, disabled = false) => {
     const button = document.createElement('button');
-    button.className = `btn${options.active ? ' is-active' : ''}`;
+    button.className = `btn${page === currentPage ? ' is-active' : ''}`;
     button.type = 'button';
     button.textContent = label;
-    button.disabled = options.disabled ?? false;
-    if (options.active) button.setAttribute('aria-current', 'page');
-    if (!button.disabled) button.addEventListener('click', () => writeFilters({ page }));
+    button.disabled = disabled;
+    if (page === currentPage) button.setAttribute('aria-current', 'page');
+    if (!disabled) button.addEventListener('click', () => {
+      currentPage = page;
+      renderResults();
+      elements.summary?.focus({ preventScroll: true });
+    });
     return button;
   };
 
-  elements.pagination.append(createButton('‹ Trước', currentPage - 1, { disabled: currentPage === 1 }));
+  elements.pagination.append(createButton('‹ Trước', currentPage - 1, currentPage === 1));
   for (let page = 1; page <= pageCount; page += 1) {
-    elements.pagination.append(createButton(String(page), page, { active: page === currentPage }));
+    elements.pagination.append(createButton(String(page), page));
   }
-  elements.pagination.append(createButton('Sau ›', currentPage + 1, { disabled: currentPage === pageCount }));
+  elements.pagination.append(createButton('Sau ›', currentPage + 1, currentPage === pageCount));
+}
+
+function renderEmptyState() {
+  const node = elements.emptyTemplate.content.cloneNode(true);
+  node.querySelector('#clear-search-button')?.addEventListener('click', clearFilters);
+  elements.results.replaceChildren(node);
+  elements.pagination.replaceChildren();
 }
 
 function renderResults() {
+  if (!elements.results || !elements.summary) return;
   const filters = readFilters();
   syncControls(filters);
-  const filtered = getFilteredPitches(filters);
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const page = Math.min(filters.page, pageCount);
-  const start = (page - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+  const pitches = searchPitches(filters);
+  const pageCount = Math.max(1, Math.ceil(pitches.length / PAGE_SIZE));
+  currentPage = Math.min(currentPage, pageCount);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const visiblePitches = pitches.slice(start, start + PAGE_SIZE);
 
-  if (pageItems.length === 0) {
-    const emptyState = document.getElementById('tpl-empty-state').content.cloneNode(true);
-    elements.grid.replaceChildren(emptyState);
-    elements.summary.textContent = 'Không tìm thấy sân phù hợp.';
-    elements.pagination.replaceChildren();
+  if (!visiblePitches.length) {
+    renderEmptyState();
+    elements.summary.textContent = 'Không có sân đang hoạt động phù hợp với bộ lọc.';
+    elements.results.setAttribute('aria-busy', 'false');
     return;
   }
 
-  elements.grid.replaceChildren(...pageItems.map(createPitchCard));
+  elements.results.replaceChildren(...visiblePitches.map(createPitchCard));
   const schedule = filters.date && filters.time ? ` · ${filters.date} lúc ${filters.time}` : '';
-  elements.summary.textContent = `${filtered.length} sân phù hợp${schedule}`;
-  renderPagination(filtered.length, page);
+  elements.summary.textContent = `${pitches.length} sân phù hợp${schedule}`;
+  elements.results.setAttribute('aria-busy', 'false');
+  renderPagination(pitches.length);
 }
 
-elements.form.addEventListener('submit', event => {
-  event.preventDefault();
-  const data = new FormData(elements.form);
-  writeFilters({
-    q: data.get('q') ?? '',
-    pitchType: data.get('pitchType') ?? '',
-    date: data.get('date') ?? '',
-    time: data.get('time') ?? '',
-    min_price: data.get('min_price') ?? '',
-    max_price: data.get('max_price') ?? '',
+function clearFilters() {
+  elements.form?.reset();
+  writeFilters({});
+  elements.sidebar?.classList.remove('is-open');
+  elements.toggle?.setAttribute('aria-expanded', 'false');
+}
+
+function configureDateRange() {
+  const dateInput = elements.form?.elements.date;
+  if (!dateInput) return;
+  const today = new Date();
+  const limit = new Date(today);
+  limit.setDate(today.getDate() + 7);
+  const toValue = date => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  dateInput.min = toValue(today);
+  dateInput.max = toValue(limit);
+}
+
+function bindEvents() {
+  elements.form?.addEventListener('submit', event => {
+    event.preventDefault();
+    const data = new FormData(elements.form);
+    writeFilters(Object.fromEntries(FILTER_KEYS.map(key => [
+      key,
+      key === 'sort' ? elements.sort?.value ?? 'recommended' : data.get(key) ?? '',
+    ])));
+    elements.sidebar?.classList.remove('is-open');
+    elements.toggle?.setAttribute('aria-expanded', 'false');
   });
-  elements.sidebar.classList.remove('is-open');
-  elements.toggle.setAttribute('aria-expanded', 'false');
-});
 
-elements.form.addEventListener('reset', event => {
-  event.preventDefault();
-  history.pushState({}, '', location.pathname);
-  renderResults();
-});
+  elements.form?.addEventListener('reset', event => {
+    event.preventDefault();
+    clearFilters();
+  });
 
-elements.sort.addEventListener('change', () => writeFilters({ sort: elements.sort.value }));
-elements.toggle.addEventListener('click', () => {
-  const open = elements.sidebar.classList.toggle('is-open');
-  elements.toggle.setAttribute('aria-expanded', String(open));
-});
-window.addEventListener('popstate', renderResults);
+  elements.sort?.addEventListener('change', () => {
+    writeFilters({ ...readFilters(), sort: elements.sort.value });
+  });
 
-renderResults();
+  elements.toggle?.addEventListener('click', () => {
+    const open = elements.sidebar?.classList.toggle('is-open') ?? false;
+    elements.toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  window.addEventListener('popstate', () => {
+    currentPage = 1;
+    renderResults();
+  });
+}
+
+async function init() {
+  try {
+    await preparePitchCatalog();
+    configureDateRange();
+    bindEvents();
+    renderResults();
+  } catch {
+    elements.results?.replaceChildren();
+    if (elements.summary) elements.summary.textContent = 'Không thể tải danh sách sân.';
+    elements.results?.setAttribute('aria-busy', 'false');
+  }
+}
+
+init();

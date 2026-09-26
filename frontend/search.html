@@ -1,10 +1,10 @@
-﻿
 <!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Tìm kiếm và so sánh sân bóng trên Pitch Point.">
+  <meta name="description" content="Tìm kiếm và so sánh sân bóng đang hoạt động trên Pitch Point.">
+  <link rel="icon" href="data:,">
   <title>Tìm sân bóng — Pitch Point</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
@@ -12,112 +12,118 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/search.css">
 </head>
-<body>
+<body class="search-shell">
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
   <site-header active="search"></site-header>
 
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li aria-current="page">Tìm sân</li>
+    </ol>
+  </nav>
+
   <main class="container search-page" id="main-content">
-    <nav class="breadcrumb" aria-label="Đường dẫn">
-      <ol>
-        <li><a href="index.html">Trang chủ</a></li>
-        <li aria-current="page" id="crumb-current">Tìm sân</li>
-      </ol>
-    </nav>
+    <header class="search-page__heading">
+      <p class="search-page__eyebrow">Khám phá sân bóng</p>
+      <h1>Tìm sân phù hợp với trận đấu của bạn</h1>
+      <p>Chọn khu vực, loại sân và thời gian dự kiến để thu hẹp danh sách sân đang hoạt động.</p>
+    </header>
 
     <div class="search-layout">
-
-    <aside class="search-sidebar" id="search-sidebar" aria-label="Bộ lọc sân bóng">
-      <form id="filter-form">
-        <div class="filter-group">
-          <h2 class="filter-group__title">Từ khóa</h2>
-          <label class="visually-hidden" for="q">Tên sân hoặc khu vực</label>
-          <input class="input" id="q" name="q" type="search" placeholder="Tên sân hoặc khu vực">
-        </div>
-
-        <fieldset class="filter-group">
-          <legend class="filter-group__title">Loại sân</legend>
-          <div class="filter-list">
-            <label class="filter-option"><input type="radio" name="pitchType" value="" checked> Tất cả</label>
-            <label class="filter-option"><input type="radio" name="pitchType" value="5"> Sân 5 người</label>
-            <label class="filter-option"><input type="radio" name="pitchType" value="7"> Sân 7 người</label>
-            <label class="filter-option"><input type="radio" name="pitchType" value="11"> Sân 11 người</label>
+      <aside class="search-sidebar" id="search-sidebar" aria-label="Bộ lọc sân bóng">
+        <form id="filter-form">
+          <div class="filter-group">
+            <label class="filter-group__title" for="search-query">Từ khóa</label>
+            <input class="input" id="search-query" name="q" type="search" placeholder="Tên sân hoặc địa chỉ">
           </div>
-        </fieldset>
 
-        <div class="filter-group">
-          <h2 class="filter-group__title">Thời gian chơi</h2>
-          <div class="filter-datetime">
-            <div class="field">
-              <label class="field__label" for="date">Ngày</label>
-              <input class="input" id="date" name="date" type="date">
+          <div class="filter-group">
+            <label class="filter-group__title" for="search-location">Khu vực</label>
+            <select class="select" id="search-location" name="location">
+              <option value="">Tất cả khu vực</option>
+              <option value="Ba Đình">Ba Đình</option>
+              <option value="Bắc Từ Liêm">Bắc Từ Liêm</option>
+              <option value="Cầu Giấy">Cầu Giấy</option>
+              <option value="Hai Bà Trưng">Hai Bà Trưng</option>
+              <option value="Hoàng Mai">Hoàng Mai</option>
+              <option value="Tây Hồ">Tây Hồ</option>
+            </select>
+          </div>
+
+          <fieldset class="filter-group">
+            <legend class="filter-group__title">Loại sân</legend>
+            <div class="filter-list">
+              <label class="filter-option"><input type="radio" name="pitchType" value="" checked> Tất cả</label>
+              <label class="filter-option"><input type="radio" name="pitchType" value="5-a-side"> Sân 5 người</label>
+              <label class="filter-option"><input type="radio" name="pitchType" value="7-a-side"> Sân 7 người</label>
+              <label class="filter-option"><input type="radio" name="pitchType" value="11-a-side"> Sân 11 người</label>
             </div>
-            <div class="field">
-              <label class="field__label" for="time">Giờ bắt đầu</label>
-              <input class="input" id="time" name="time" type="time">
+          </fieldset>
+
+          <fieldset class="filter-group">
+            <legend class="filter-group__title">Thời gian dự kiến</legend>
+            <div class="search-page__datetime">
+              <div class="field">
+                <label class="field__label" for="search-date">Ngày</label>
+                <input class="input" id="search-date" name="date" type="date">
+              </div>
+              <div class="field">
+                <label class="field__label" for="search-time">Giờ bắt đầu</label>
+                <input class="input" id="search-time" name="time" type="time" step="1800">
+              </div>
             </div>
+          </fieldset>
+
+          <div class="search-page__filter-actions">
+            <button class="btn btn--primary" type="submit">Áp dụng bộ lọc</button>
+            <button class="btn" type="reset">Xóa bộ lọc</button>
           </div>
-        </div>
+        </form>
+      </aside>
 
-        <div class="filter-group">
-          <h2 class="filter-group__title">Giá thuê mỗi giờ</h2>
-          <div class="price-range">
-            <input class="input" name="min_price" type="number" min="0" step="10000" placeholder="Từ" aria-label="Giá thuê từ">
-            <span aria-hidden="true">—</span>
-            <input class="input" name="max_price" type="number" min="0" step="10000" placeholder="Đến" aria-label="Giá thuê đến">
+      <section class="search-page__results" aria-labelledby="search-results-title">
+        <button class="btn filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="search-sidebar">
+          Bộ lọc
+        </button>
+
+        <header class="search-page__results-heading">
+          <div>
+            <h2 id="search-results-title">Sân bóng phù hợp</h2>
+            <p id="result-summary" aria-live="polite">Đang tải danh sách sân…</p>
           </div>
-        </div>
+          <div class="search-page__sort">
+            <label for="search-sort">Sắp xếp</label>
+            <select class="select" id="search-sort" name="sort">
+              <option value="recommended">Phù hợp nhất</option>
+              <option value="rating-desc">Đánh giá cao</option>
+              <option value="price-asc">Giá thấp đến cao</option>
+              <option value="price-desc">Giá cao đến thấp</option>
+            </select>
+          </div>
+        </header>
 
-        <div class="filter-actions">
-          <button class="btn btn--primary" type="submit">Áp dụng</button>
-          <button class="btn" type="reset">Xóa bộ lọc</button>
-        </div>
-
-        <input type="hidden" name="sort" id="sort-mirror">
-      </form>
-    </aside>
-
-    <section aria-labelledby="search-results-title" class="search-results">
-      <button class="btn filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="search-sidebar">Bộ lọc</button>
-
-      <header class="toolbar search-results__heading">
-        <div>
-          <h1 id="search-results-title">Sân bóng phù hợp</h1>
-          <p class="search-results__eyebrow" id="result-summary"></p>
-        </div>
-        <div class="toolbar__sort">
-          <label for="sort" class="visually-hidden">Sắp xếp</label>
-          <select class="select" id="sort">
-            <option value="recommended">Phù hợp nhất</option>
-            <option value="rating_desc">Đánh giá cao</option>
-            <option value="price_asc">Giá thấp đến cao</option>
-            <option value="price_desc">Giá cao đến thấp</option>
-          </select>
-        </div>
-      </header>
-
-      <div class="grid search-pitch-grid" id="results"></div>
-      <nav class="pagination" id="pagination" aria-label="Phân trang kết quả"></nav>
-    </section>
-      </div>
+        <div class="search-page__grid" id="results" aria-live="polite" aria-busy="true"></div>
+        <nav class="search-page__pagination" id="pagination" aria-label="Phân trang kết quả"></nav>
+      </section>
+    </div>
   </main>
 
   <site-footer></site-footer>
 
   <template id="tpl-card">
-    <article class="card search-pitch-card">
-      <button class="card__favorite" type="button" aria-pressed="false">
-        <span aria-hidden="true">♡</span>
-      </button>
-      <a class="card__link">
-        <img class="card__img" src="" alt="" loading="lazy">
+    <article class="card search-page__card">
+      <a class="card__link search-page__card-link" href="">
+        <img class="card__img" src="" alt="" width="640" height="400" loading="lazy">
         <div class="card__body">
-          <div class="card__heading">
-            <h2 class="card__title"></h2>
-            <span class="card__rating"></span>
+          <div class="search-page__card-heading">
+            <h3 class="card__title"></h3>
+            <span class="search-page__rating"></span>
           </div>
           <p class="card__meta"></p>
-          <p class="card__type"></p>
-          <p class="card__action"></p>
+          <p class="search-page__type"></p>
           <p class="card__price"></p>
+          <span class="search-page__card-action">Xem chi tiết</span>
         </div>
       </a>
       <span class="card__badge"></span>
@@ -126,15 +132,12 @@
 
   <template id="tpl-empty-state">
     <div class="empty">
-      <p class="empty__title"></p>
-      <p class="empty__hint"></p>
-      <button class="btn empty__action" type="button"></button>
+      <p class="empty__title">Không tìm thấy sân phù hợp</p>
+      <p class="empty__hint">Hãy thử thay đổi khu vực, loại sân hoặc thời gian dự kiến.</p>
+      <button class="btn empty__action" id="clear-search-button" type="button">Xóa bộ lọc</button>
     </div>
   </template>
 
   <script type="module" src="js/pages/search.js"></script>
 </body>
 </html>
-
-
-
