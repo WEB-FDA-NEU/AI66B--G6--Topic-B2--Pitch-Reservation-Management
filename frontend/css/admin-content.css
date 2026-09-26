@@ -13,14 +13,14 @@
   background: transparent;
   padding: 6px 16px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: #4b5563;
   cursor: pointer;
   transition: all 0.2s;
 }
 .admin-tab-pill.active {
-  background: #ffffff;
+  background: var(--c-surface);
   color: #111827;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
 }
@@ -58,8 +58,8 @@ body {
   text-align: left;
 }
 .admin-table th {
-  padding: 16px 24px;
-  font-size: 0.875rem;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--c-muted);
   border-bottom: 1px solid var(--c-border);
@@ -67,7 +67,7 @@ body {
   white-space: nowrap;
 }
 .admin-table td {
-  padding: 16px 24px;
+  padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--c-border);
   vertical-align: middle;
 }
@@ -78,11 +78,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: var(--sp-3) var(--sp-4);
   /* border-top removed */
 }
 .admin-pagination__info {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--c-muted);
 }
 .admin-pagination__controls {
@@ -146,7 +146,7 @@ body {
 
 .form-group label {
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--c-text);
 }
 
@@ -264,12 +264,12 @@ body {
 
 .admin-modal-info__label {
   color: var(--c-muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .admin-modal-info__value {
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .admin-modal-warning {
@@ -277,7 +277,7 @@ body {
   color: #c62828;
   padding: var(--sp-3);
   border-radius: var(--radius-s);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   margin-bottom: var(--sp-4);
   display: flex;
   gap: var(--sp-2);
@@ -307,12 +307,12 @@ body {
   font-weight: 600;
   color: #1e3a8a;
   margin-bottom: 4px;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .admin-modal-blue-box__text {
   color: #1e40af;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .admin-modal-gray-box {
@@ -330,7 +330,7 @@ body {
 }
 
 .admin-modal-gray-box__text {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--c-text);
 }
 
