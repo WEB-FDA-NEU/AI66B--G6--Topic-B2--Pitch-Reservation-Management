@@ -1,8 +1,7 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { register } from '../api.js';
-import { saveSession, returnAfterLogin } from '../auth.js';
-import { setFieldError, clearFieldErrors } from '../ui.js';
+import { AuthError, registerCustomer } from '../services/auth-service.js';
+import { clearFieldErrors, setFieldError } from '../ui.js';
 
 const form = document.getElementById('register-form');
 const displayName = document.getElementById('display-name');
@@ -88,23 +87,22 @@ form?.addEventListener('submit', async event => {
 
   setLoading(true);
   try {
-    const session = await register({
-      display_name: displayName.value.trim(),
+    await registerCustomer({
+      displayName: displayName.value.trim(),
       email: email.value.trim(),
-      password: form.password.value,
+      password: password.value,
       phone: phone?.value.trim() ?? '',
     });
-    saveSession(session);
     if (statusMessage) {
-      statusMessage.textContent = 'Tạo tài khoản thành công. Đang chuyển trang…';
+      statusMessage.textContent = 'Tạo tài khoản thành công. Đang chuyển tới trang đăng nhập…';
       statusMessage.hidden = false;
     }
-    window.setTimeout(returnAfterLogin, 180);
+    window.setTimeout(() => location.assign('login.html'), 180);
   } catch (error) {
-    if (error.status === 409) {
-      showFieldError(email, error.detail || 'Email này đã được đăng ký.');
+    if (error instanceof AuthError && error.code === 'EMAIL_EXISTS') {
+      showFieldError(email, error.message);
     } else if (errorMessage) {
-      errorMessage.textContent = error?.detail || 'Không thể tạo tài khoản lúc này. Vui lòng thử lại.';
+      errorMessage.textContent = error.message || 'Không thể tạo tài khoản lúc này. Vui lòng thử lại.';
       errorMessage.hidden = false;
     }
     setLoading(false);

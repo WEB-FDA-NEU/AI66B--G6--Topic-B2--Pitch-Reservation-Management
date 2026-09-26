@@ -1,4 +1,4 @@
-.register-page .register-page__skip-link {
+.register-page__skip-link {
   position: fixed;
   z-index: 100;
   top: var(--sp-3);
@@ -11,7 +11,7 @@
   transform: translateY(-180%);
 }
 
-.register-page .register-page__skip-link:focus { transform: translateY(0); }
+.register-page__skip-link:focus { transform: translateY(0); }
 
 .register-page {
   display: grid;
@@ -106,7 +106,6 @@
 }
 
 .register-page .register-terms input { flex: 0 0 auto; margin-top: .2rem; }
-.register-page .register-terms a,
 .register-page .register-card__login a { color: var(--c-primary); font-weight: 700; }
 .register-page .register-terms__error { margin-top: calc(var(--sp-4) * -1); }
 
@@ -146,5 +145,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .register-page .register-form__spinner { animation-duration: 1.8s; }
-  .register-page .register-page__skip-link { transition: none; }
+  .register-page__skip-link { transition: none; }
 }

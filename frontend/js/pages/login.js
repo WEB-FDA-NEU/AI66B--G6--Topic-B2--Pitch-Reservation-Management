@@ -1,8 +1,20 @@
 import '../components/site-header.js';
 import '../components/site-footer.js';
-import { login, ApiError } from '../api.js';
-import { logout, saveSession, returnAfterLogin } from '../auth.js';
+import {
+  AuthError,
+  getDemoCredentials,
+  getRoleLandingPage,
+  login,
+  logout,
+} from '../services/auth-service.js';
 import { clearFieldErrors, setFieldError } from '../ui.js';
+
+const APPROVED_RETURN_TARGETS = new Set([
+  'index.html',
+  'search.html',
+  'pitch-detail.html',
+]);
+const AVAILABLE_ROLE_LANDINGS = new Set(['index.html']);
 
 const form = document.getElementById('login-form');
 const identifier = document.getElementById('login-identifier');
@@ -14,11 +26,7 @@ const spinner = form?.querySelector('.login-form__spinner');
 const errorMessage = document.getElementById('login-error');
 const statusMessage = document.getElementById('login-status');
 const originalSubmitLabel = submitLabel?.textContent ?? 'Đăng nhập';
-const DEMO_ACCOUNTS = {
-  customer: { email: 'customer@pitchpoint.test', password: '123456' },
-  manager: { email: 'manager@pitchpoint.test', password: '123456' },
-  admin: { email: 'admin@pitchpoint.test', password: '123456' },
-};
+const demoAccounts = new Map();
 
 function setLoading(isLoading) {
   if (submitButton) submitButton.disabled = isLoading;
@@ -27,38 +35,59 @@ function setLoading(isLoading) {
   form?.setAttribute('aria-busy', String(isLoading));
 }
 
-function getSafeReturnTo() {
-  const value = new URLSearchParams(window.location.search).get('returnTo');
-  if (!value) return null;
-
-  try {
-    const destination = new URL(value, window.location.href);
-    if (destination.origin !== window.location.origin) return null;
-    if (destination.pathname.endsWith('/login.html') || destination.pathname.endsWith('/register.html')) return null;
-    return `${destination.pathname}${destination.search}${destination.hash}`;
-  } catch {
-    return null;
-  }
-}
-
 function showAuthenticationError(message) {
   if (!errorMessage) return;
   errorMessage.textContent = message;
   errorMessage.hidden = false;
 }
 
+function getSafeReturnTo() {
+  const value = new URLSearchParams(location.search).get('returnTo');
+  if (!value || value.includes('\\') || value.includes('..') || value.startsWith('//')) return null;
+
+  try {
+    const destination = new URL(value, location.href);
+    const filename = destination.pathname.split('/').pop();
+    if (destination.origin !== location.origin || !APPROVED_RETURN_TARGETS.has(filename)) return null;
+    return `${filename}${destination.search}${destination.hash}`;
+  } catch {
+    return null;
+  }
+}
+
+function getPostLoginDestination(user) {
+  const returnTo = getSafeReturnTo();
+  if (returnTo) return returnTo;
+
+  const roleLanding = getRoleLandingPage(user.role);
+  return AVAILABLE_ROLE_LANDINGS.has(roleLanding) ? roleLanding : 'index.html';
+}
+
+async function initializeDemoAccounts() {
+  try {
+    const credentials = await getDemoCredentials();
+    credentials.forEach(account => demoAccounts.set(account.role, account));
+  } catch {
+    document.querySelectorAll('[data-demo-role]').forEach(button => {
+      button.disabled = true;
+    });
+    showAuthenticationError('Không tải được tài khoản dùng thử. Vui lòng tải lại trang.');
+  }
+}
+
 document.querySelectorAll('[data-demo-role]').forEach(button => {
   button.addEventListener('click', () => {
-    const account = DEMO_ACCOUNTS[button.dataset.demoRole];
+    const account = demoAccounts.get(button.dataset.demoRole);
     if (!account || !identifier || !password) return;
     identifier.value = account.email;
     password.value = account.password;
-    identifier.focus();
+    password.focus();
   });
 });
 
 document.getElementById('guest-login')?.addEventListener('click', () => {
   logout();
+  location.replace('index.html');
 });
 
 passwordToggle?.addEventListener('click', () => {
@@ -100,21 +129,21 @@ form?.addEventListener('submit', async event => {
 
   setLoading(true);
   try {
-    const session = await login(identifier.value.trim(), password.value);
-    saveSession(session);
-    const returnTo = getSafeReturnTo();
-    if (returnTo) sessionStorage.setItem('app_return_to', returnTo);
+    const user = await login(identifier.value, password.value);
     if (statusMessage) {
       statusMessage.textContent = 'Đăng nhập thành công. Đang chuyển trang…';
       statusMessage.hidden = false;
     }
-    window.setTimeout(returnAfterLogin, 180);
+    const destination = getPostLoginDestination(user);
+    window.setTimeout(() => location.assign(destination), 180);
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) {
-      setFieldError(password, error.detail || 'Email/tên đăng nhập hoặc mật khẩu không đúng.');
+    if (error instanceof AuthError && error.code === 'INVALID_CREDENTIALS') {
+      setFieldError(password, error.message);
     } else {
-      showAuthenticationError(error?.detail || 'Không thể đăng nhập lúc này. Vui lòng thử lại.');
+      showAuthenticationError(error.message || 'Không thể đăng nhập lúc này. Vui lòng thử lại.');
     }
     setLoading(false);
   }
 });
+
+initializeDemoAccounts();

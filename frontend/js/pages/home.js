@@ -224,14 +224,12 @@ function renderFeaturedPitches(items) {
   elements.results.setAttribute('aria-busy', 'false');
 }
 
-function disableSharedNavigation() {
+function disableUnfinishedNavigation() {
   const header = document.querySelector('site-header');
   const footer = document.querySelector('site-footer');
 
   [
     header?.querySelector('[data-nav="search"]'),
-    header?.querySelector('a[href="login.html"]'),
-    header?.querySelector('a[href="register.html"]'),
     footer?.querySelector('a[href="search.html"]'),
   ].filter(Boolean).forEach(link => {
     link.removeAttribute('href');
@@ -304,6 +302,6 @@ function bindEvents() {
 
 renderCalendar();
 renderFeaturedPitches(FEATURED_PITCHES);
-disableSharedNavigation();
+disableUnfinishedNavigation();
 protectMobileControlsFromMessageBubble();
 bindEvents();

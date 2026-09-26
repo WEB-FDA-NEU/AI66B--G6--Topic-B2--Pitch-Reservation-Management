@@ -1,0 +1,32 @@
+[
+  {
+    "id": "U001",
+    "email": "customer@pitchpoint.test",
+    "password": "123456",
+    "displayName": "Demo Customer",
+    "phone": "0900000001",
+    "role": "customer",
+    "status": "active",
+    "isDemo": true
+  },
+  {
+    "id": "M001",
+    "email": "manager@pitchpoint.test",
+    "password": "123456",
+    "displayName": "Demo Manager",
+    "phone": "0900000002",
+    "role": "manager",
+    "status": "active",
+    "isDemo": true
+  },
+  {
+    "id": "A001",
+    "email": "admin@pitchpoint.test",
+    "password": "123456",
+    "displayName": "Demo Admin",
+    "phone": "0900000003",
+    "role": "admin",
+    "status": "active",
+    "isDemo": true
+  }
+]

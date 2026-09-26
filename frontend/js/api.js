@@ -64,26 +64,6 @@ export function getItem(id) {
   return request(`${API_BASE}/items/${id}`);
 }
 
-// ══════════ NGƯỜI 2 — tài khoản ══════════
-
-export function login(email, password) {
-  if (USE_MOCK) {
-    if (password === 'sai') return Promise.reject(new ApiError(401, 'Email hoặc mật khẩu không đúng.'));
-    return Promise.resolve({
-      access_token: 'mock-token', token_type: 'bearer',
-      user: { id: 1, display_name: 'Người dùng mẫu', role: 'user' },
-    });
-  }
-  return request(`${API_BASE}/auth/login`, { method: 'POST', body: { email, password } });
-}
-
-export function register(payload) {
-  if (USE_MOCK)
-    return Promise.resolve({ access_token: 'mock-token',
-                             user: { id: 2, display_name: payload.display_name, role: 'user' } });
-  return request(`${API_BASE}/auth/register`, { method: 'POST', body: payload });
-}
-
 // ══════════ NGƯỜI 3 — TODO: thêm vùng của em ở đây ══════════
 
 // ══════════ NGƯỜI 4 — TODO: thêm vùng của em ở đây ══════════

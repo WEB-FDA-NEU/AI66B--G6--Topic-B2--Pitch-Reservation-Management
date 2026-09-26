@@ -12,10 +12,10 @@
   <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
+  <a class="register-page__skip-link" href="#main-content">Bỏ qua điều hướng</a>
   <site-header></site-header>
 
   <main class="container register-page" id="main-content">
-    <a class="register-page__skip-link" href="#register-title">Bỏ qua điều hướng</a>
     <section class="register-card" aria-labelledby="register-title">
       <a class="register-card__brand" href="index.html" aria-label="Pitch Point — Trang chủ">
         <span class="register-card__brand-mark" aria-hidden="true">P</span>
@@ -40,7 +40,7 @@
 
         <div class="field">
           <label class="field__label" for="register-phone">Số điện thoại</label>
-          <input class="input" id="register-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="register-phone-hint register-phone-error">
+          <input class="input" id="register-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="register-phone-error">
           <p class="field__error" id="register-phone-error"></p>
         </div>
 
@@ -65,7 +65,7 @@
 
         <label class="register-terms" for="register-terms">
           <input id="register-terms" name="terms" type="checkbox" required aria-describedby="terms-error">
-          <span>Tôi đồng ý với <a href="index.html#booking-steps-title">điều khoản và chính sách</a> của Pitch Point.</span>
+          <span>Tôi đồng ý với điều khoản và chính sách của Pitch Point.</span>
         </label>
         <p class="field__error register-terms__error" id="terms-error"></p>
 

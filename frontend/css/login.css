@@ -1,4 +1,4 @@
-.login-page .login-page__skip-link {
+.login-page__skip-link {
   position: fixed;
   z-index: 100;
   top: var(--sp-3);
@@ -11,7 +11,7 @@
   transform: translateY(-180%);
 }
 
-.login-page .login-page__skip-link:focus { transform: translateY(0); }
+.login-page__skip-link:focus { transform: translateY(0); }
 
 .login-page {
   display: grid;
@@ -110,6 +110,7 @@
 }
 
 .login-page .login-demo h2 { margin-top: var(--sp-1); font-size: 1rem; }
+.login-page .login-demo__hint { margin-top: var(--sp-1); color: var(--c-muted); font-size: .8rem; }
 
 .login-page .login-demo__options {
   display: grid;
@@ -180,7 +181,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .login-page .login-form__spinner { animation-duration: 1.8s; }
-  .login-page .login-page__skip-link { transition: none; }
+  .login-page__skip-link { transition: none; }
 }
 
 @media (min-width: 48rem) {
