@@ -1,0 +1,24 @@
+.settings-page { padding-block:var(--sp-6) var(--sp-7); }
+.settings-page .settings-heading { max-width:46rem; margin-bottom:var(--sp-5); }
+.settings-page .settings-heading__eyebrow { color:var(--c-primary); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.settings-page .settings-heading h1 { margin-top:var(--sp-1); }
+.settings-page .settings-heading > p:last-child { color:var(--c-muted); margin-top:var(--sp-2); }
+.settings-page .settings-form { display:grid; gap:var(--sp-4); }
+.settings-page .settings-section { padding:var(--sp-5); border:1px solid var(--c-border); border-radius:var(--radius); background:var(--c-bg); box-shadow:0 8px 24px rgba(12,27,42,.05); }
+.settings-page .settings-section__heading { margin-bottom:var(--sp-4); }
+.settings-page .settings-section__heading h2 { font-size:1.1rem; }
+.settings-page .settings-section__heading p { color:var(--c-muted); font-size:.9rem; margin-top:var(--sp-1); }
+.settings-page .settings-toggle { display:flex; align-items:flex-start; gap:var(--sp-3); padding-block:var(--sp-3); border-top:1px solid var(--c-border); }
+.settings-page .settings-toggle:first-of-type { border-top:0; padding-top:0; }
+.settings-page .settings-toggle span { display:grid; gap:.2rem; }
+.settings-page .settings-toggle small { color:var(--c-muted); font-size:.85rem; }
+.settings-page .settings-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-4); }
+.settings-page .settings-grid .field + .field { margin-top:0; }
+.settings-page .settings-error, .settings-page .settings-status { padding:var(--sp-3); border-radius:var(--radius-s); font-size:.9rem; }
+.settings-page .settings-error { background:color-mix(in srgb,var(--c-danger) 9%,white); color:var(--c-danger); }
+.settings-page .settings-status { background:color-mix(in srgb,var(--c-success) 9%,white); color:var(--c-success); }
+.settings-page .settings-actions { display:flex; justify-content:flex-end; gap:var(--sp-2); }
+.settings-page .settings-spinner { width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:settings-spin .7s linear infinite; }
+@keyframes settings-spin { to { transform:rotate(360deg); } }
+@media (max-width:640px) { .settings-page .settings-grid { grid-template-columns:1fr; } .settings-page .settings-section { padding:var(--sp-4); } .settings-page .settings-actions { justify-content:stretch; } .settings-page .settings-actions .btn { flex:1; } }
+@media (prefers-reduced-motion:reduce) { .settings-page .settings-spinner { animation-duration:1.8s; } }
