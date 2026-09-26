@@ -1,0 +1,74 @@
+﻿/* CSS riêng cho S19 - Add Pitch */
+
+.add-pitch-page {
+  padding-bottom: var(--sp-8);
+  max-width: 800px;
+}
+
+.page-header {
+  margin-bottom: var(--sp-6);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  margin-bottom: var(--sp-1);
+}
+
+/* Khối Form */
+.pitch-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.form-section {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-section__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-border);
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.required {
+  color: var(--c-danger);
+  margin-left: 2px;
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--c-border);
+}
+
+@media (max-width: 600px) {
+  .form-actions {
+    flex-direction: column;
+  }
+  .form-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
