@@ -18,8 +18,8 @@
   <main class="admin-main">
     <header class="admin-header-hero">
       <div class="admin-header-hero__content">
-        <p class="admin-header-hero__eyebrow">ADMINISTRATION / S28</p>
-        <h1 class="admin-header-hero__title">Pitch Manager Management</h1>
+        <p class="admin-header-hero__eyebrow">QUẢN TRỊ / S28</p>
+        <h1 class="admin-header-hero__title">Quản lý Chủ sân</h1>
         <p class="admin-header-hero__desc">Review pitch manager accounts and manage suspensions.</p>
         
         <div class="admin-hero-search">
@@ -33,7 +33,7 @@
       <div class="admin-filters">
         <div class="admin-filters__group">
           <div class="filter-field">
-            <label for="filter-status">Status</label>
+            <label for="filter-status">Trạng thái</label>
             <select id="filter-status">
               <option value="all">All statuses</option>
               <option value="active">Active</option>
@@ -59,11 +59,11 @@
         <table class="admin-table" aria-label="Danh sÃ¡ch chá»§ sÃ¢n">
           <thead>
             <tr>
-              <th>Manager</th>
-              <th>Pitches</th>
+              <th>Chủ sân</th>
+              <th>Số sân</th>
               <th>Active bookings</th>
               <th>Balance</th>
-              <th>Status</th>
+              <th>Trạng thái</th>
               <th>Last activity</th>
               <th></th>
             </tr>
@@ -75,12 +75,12 @@
       </div>
 
             <div class="admin-pagination">
-        <div class="admin-pagination__info">Page 1 of 1</div>
+        <div class="admin-pagination__info">Trang 1 / 1</div>
         <div class="admin-pagination__controls">
-          <button class="admin-pagination__btn btn-prev" aria-label="Previous page" disabled>
+          <button class="admin-pagination__btn btn-prev" aria-label="Trang trước" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
-          <button class="admin-pagination__btn btn-next" aria-label="Next page" disabled>
+          <button class="admin-pagination__btn btn-next" aria-label="Trang sau" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
         </div>
@@ -92,7 +92,7 @@
   <!-- Modal Template for Action -->
           <!-- ACTION MODAL (Stateful) -->
     <dialog id="action-modal" class="admin-modal admin-modal--lg" aria-labelledby="modal-title">
-      <button class="admin-modal__close" id="modal-close" aria-label="Close" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
+      <button class="admin-modal__close" id="modal-close" aria-label="Đóng" style="position: absolute; top: 24px; right: 24px; background:none; border:none; cursor:pointer;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
 
@@ -241,13 +241,13 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 24px;">
-          <label for="admin-reason">Administrative reason / note <span class="required">*</span></label>
+          <label for="admin-reason">Lý do / ghi chú quản trị <span class="required">*</span></label>
           <textarea id="admin-reason" class="form-control" rows="3" placeholder="Provide a reason for this action..."></textarea>
         </div>
         
         <div class="admin-modal__actions" style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--c-border); padding-top: 24px;">
-          <button type="button" class="btn-admin btn-admin--outline" id="modal-action-cancel">Cancel</button>
-          <button type="button" class="btn-admin btn-admin--danger" id="modal-action-confirm" disabled>Confirm</button>
+          <button type="button" class="btn-admin btn-admin--outline" id="modal-action-cancel">Hủy</button>
+          <button type="button" class="btn-admin btn-admin--danger" id="modal-action-confirm" disabled>Xác nhận</button>
         </div>
       </div>
     </dialog>

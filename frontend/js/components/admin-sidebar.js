@@ -25,7 +25,7 @@ class AdminSidebar extends HTMLElement {
         </div>
 
         <div class="admin-sidebar__section">
-          <p class="admin-sidebar__title">WORKSPACE</p>
+          <p class="admin-sidebar__title">KHÔNG GIAN LÀM VIỆC</p>
           <nav aria-label="Admin Menu">
             <ul class="admin-menu">
               <li>
@@ -99,7 +99,7 @@ class AdminSidebar extends HTMLElement {
         link.setAttribute('href', '#');
         link.addEventListener('click', e => {
             e.preventDefault(); 
-            console.warn('Destination page is not yet integrated.');
+            console.warn('Trang đích chưa được tích hợp.');
         });
         link.style.opacity = '0.6';
         link.style.cursor = 'not-allowed';

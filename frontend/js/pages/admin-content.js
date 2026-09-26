@@ -339,7 +339,7 @@ function openPreview(item, type) {
     document.getElementById('preview-link').hidden = true;
     document.getElementById('preview-meta-label1').textContent = 'Audience';
     document.getElementById('preview-meta-value1').textContent = item.audience;
-    document.getElementById('preview-meta-label2').textContent = 'Published';
+    document.getElementById('preview-meta-label2').textContent = 'Phát hànhed';
     document.getElementById('preview-meta-value2').textContent = item.publishedDate;
   }
   
@@ -389,13 +389,13 @@ function deleteItem(item, type) {
 
 function toggleStatus(item, type) {
   const typeName = type === 'banner' ? 'banner' : 'announcement';
-  const isActivating = (item.status === 'Bản nháp' || item.status === 'Đã lên lịch' || item.status === 'Ngừng hoạt động' || item.status === 'Unpublished' || item.status === 'Đã hết hạn');
+  const isActivating = (item.status === 'Bản nháp' || item.status === 'Đã lên lịch' || item.status === 'Ngừng hoạt động' || item.status === 'Gỡ thông báoed' || item.status === 'Đã hết hạn');
   
   let actionName = '';
   if (type === 'banner') {
-    actionName = isActivating ? 'Activate' : 'Deactivate';
+    actionName = isActivating ? 'Kích hoạt' : 'Ngừng hoạt động';
   } else {
-    actionName = isActivating ? 'Publish' : 'Unpublish';
+    actionName = isActivating ? 'Phát hành' : 'Gỡ thông báo';
   }
 
   confirmTitle.textContent = `${actionName} ${typeName}`;
@@ -409,10 +409,10 @@ function toggleStatus(item, type) {
 
   currentConfirmCallback = () => {
     if (isActivating) {
-      item.status = type === 'banner' ? 'Hoạt động' : 'Published';
+      item.status = type === 'banner' ? 'Hoạt động' : 'Phát hànhed';
       item.statusClass = 'badge--success';
     } else {
-      item.status = type === 'banner' ? 'Ngừng hoạt động' : 'Unpublished';
+      item.status = type === 'banner' ? 'Ngừng hoạt động' : 'Gỡ thông báoed';
       item.statusClass = 'badge--neutral';
     }
     type === 'banner' ? renderBanners() : renderAnnouncements();

@@ -61,7 +61,7 @@ function updatePagination(totalPages) {
   if (!info || !btnPrev || !btnNext) return;
 
   if (totalPages === 0) {
-    info.textContent = `Page 0 of 0`;
+    info.textContent = `Trang 0 / 0`;
     btnPrev.disabled = true;
     btnNext.disabled = true;
     return;
