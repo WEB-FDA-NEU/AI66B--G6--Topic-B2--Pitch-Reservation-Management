@@ -1,0 +1,107 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chỉnh sửa sân bóng - Pitch Point">
+  <title>Chỉnh sửa sân bóng — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/add-pitch.css"> <!-- Tái sử dụng CSS của S19 -->
+</head>
+<body>
+  <site-header active="pitches"></site-header>
+
+  <main class="container add-pitch-page" id="main-content" hidden>
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="manager-dashboard.html">Bảng điều khiển</a></li>
+        <li><a href="manager-pitches.html">Sân của tôi</a></li>
+        <li aria-current="page">Chỉnh sửa sân</li>
+      </ol>
+    </nav>
+
+    <header class="page-header">
+      <h1>Cập nhật thông tin sân</h1>
+      <p class="text-muted">Thay đổi tên, giá hoặc quy định của sân bóng.</p>
+    </header>
+
+    <form id="edit-pitch-form" class="pitch-form" novalidate>
+      
+      <fieldset class="form-section">
+        <legend class="form-section__title">Thông tin cơ bản</legend>
+        
+        <div class="form-row">
+          <div class="field">
+            <label class="field__label" for="pitch-name">Tên cụm sân / Sân bóng <span class="required">*</span></label>
+            <input class="input" type="text" id="pitch-name" name="name" required>
+            <p class="field__error" id="err-name" aria-live="polite"></p>
+          </div>
+          
+          <div class="field">
+            <label class="field__label" for="pitch-type">Loại sân <span class="required">*</span></label>
+            <select class="input" id="pitch-type" name="type" required>
+              <option value="">-- Chọn loại sân --</option>
+              <option value="5">Sân 5 người</option>
+              <option value="7">Sân 7 người</option>
+              <option value="11">Sân 11 người</option>
+            </select>
+            <p class="field__error" id="err-type" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label class="field__label" for="pitch-price">Giá thuê trung bình (VND/Giờ) <span class="required">*</span></label>
+            <input class="input" type="number" id="pitch-price" name="price" min="10000" step="10000" required>
+            <p class="field__hint">Mức giá tham khảo chung.</p>
+            <p class="field__error" id="err-price" aria-live="polite"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend class="form-section__title">Vị trí & Hình ảnh</legend>
+        
+        <div class="field">
+          <label class="field__label" for="pitch-address">Địa chỉ chi tiết <span class="required">*</span></label>
+          <input class="input" type="text" id="pitch-address" name="address" required>
+          <p class="field__error" id="err-address" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="pitch-image">Cập nhật hình ảnh (Tùy chọn)</label>
+          <input class="input" type="file" id="pitch-image" name="image" accept="image/png, image/jpeg">
+          <p class="field__hint">Để trống nếu không muốn thay đổi ảnh hiện tại.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend class="form-section__title">Chi tiết & Quy định</legend>
+        
+        <div class="field">
+          <label class="field__label" for="pitch-desc">Mô tả tổng quan</label>
+          <textarea class="input" id="pitch-desc" name="description" rows="4"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="pitch-rules">Quy định của sân</label>
+          <textarea class="input" id="pitch-rules" name="rules" rows="3"></textarea>
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn--primary" id="btn-submit">Lưu thay đổi</button>
+        <a href="manager-pitches.html" class="btn btn--outline">Hủy bỏ</a>
+      </div>
+
+    </form>
+  </main>
+
+  <site-footer></site-footer>
+
+  <script type="module" src="js/pages/edit-pitch.js"></script>
+</body>
+</html>
