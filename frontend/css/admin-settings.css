@@ -270,7 +270,7 @@ input:checked + .toggle-slider:before {
 .admin-header-hero {
   background: linear-gradient(135deg, var(--c-primary-d) 0%, var(--c-primary) 100%);
   color: white;
-  padding: 40px 32px 64px;
+  padding: 40px 32px 120px;
 }
 .admin-header-hero__content {
   max-width: 1200px;
@@ -296,6 +296,7 @@ input:checked + .toggle-slider:before {
   max-width: 600px;
   line-height: 1.5;
 }
+
 
 
 
