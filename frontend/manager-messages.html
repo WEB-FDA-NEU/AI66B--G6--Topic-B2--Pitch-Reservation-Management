@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tin nhắn quản lý — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/manager-messages.css">
+</head>
+<body>
+  <site-header></site-header>
+  <main class="container manager-messages-page" id="main-content">
+    <header class="messages-heading"><div><p class="messages-eyebrow">Vận hành sân bóng</p><h1>Tin nhắn quản lý</h1><p>Trao đổi với khách hàng về sân và lịch đặt của họ.</p></div><span class="messages-role">Quản lý sân</span></header>
+    <div class="messages-layout" data-messages-app>
+      <aside class="messages-sidebar" aria-label="Danh sách cuộc trò chuyện"><div class="messages-sidebar__heading"><h2>Cuộc trò chuyện</h2><span class="messages-count" data-count>0</span></div><label class="messages-search"><span class="visually-hidden">Tìm cuộc trò chuyện</span><input class="input" type="search" data-search placeholder="Tìm theo tên, sân hoặc mã đặt sân"></label><div class="messages-list" data-list><p class="messages-state">Đang tải cuộc trò chuyện…</p></div></aside>
+      <section class="conversation-panel" aria-label="Cuộc trò chuyện đang chọn"><button class="conversation-back" type="button" data-back>← Danh sách cuộc trò chuyện</button><div class="conversation-empty" data-empty><span class="conversation-empty__icon" aria-hidden="true">✉</span><h2>Chọn một cuộc trò chuyện</h2><p>Chọn cuộc trò chuyện để xem thông tin khách hàng và lịch đặt.</p></div><div class="conversation-view" data-view hidden><header class="conversation-header"><span class="avatar" data-avatar aria-hidden="true"></span><div><h2 data-name></h2><p data-role></p></div><span class="conversation-status">Đang trao đổi</span></header><div class="conversation-context" data-context></div><div class="message-history" data-history aria-live="polite"></div><form class="message-composer" data-composer><label for="manager-message-content">Tin nhắn</label><div class="message-composer__row"><textarea id="manager-message-content" name="content" rows="2" maxlength="1000" placeholder="Viết tin nhắn…"></textarea><button class="btn btn--primary" type="submit">Gửi</button></div><p class="field__hint">Không thể gửi tin nhắn trống.</p></form></div><div class="conversation-unavailable" data-error hidden role="status"><h2>Không thể tải cuộc trò chuyện</h2><p>Vui lòng thử lại sau.</p><button class="btn" type="button" data-retry>Thử lại</button></div></section>
+    </div>
+  </main>
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/manager-messages.js"></script>
+</body>
+</html>
