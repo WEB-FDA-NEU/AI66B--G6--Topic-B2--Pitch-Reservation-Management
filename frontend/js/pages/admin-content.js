@@ -53,7 +53,7 @@ function resetContentForm() {
 
 async function openContent(contentId) {
   const content = await getContent(contentId);
-  if (!content) return;
+  if (!content) return false;
   selectedContent = content;
   document.querySelector('#content-id').value = content.id;
   document.querySelector('#content-type').value = content.contentType;
@@ -68,6 +68,7 @@ async function openContent(contentId) {
   document.querySelector('#delete-content').hidden = content.status !== 'draft';
   document.querySelector('#content-dialog-title').textContent = `Chỉnh sửa ${content.id}`;
   document.querySelector('#content-dialog').showModal();
+  return true;
 }
 
 async function handleSave(event) {
@@ -112,7 +113,7 @@ async function init() {
   document.querySelector('#delete-form').addEventListener('submit', handleDelete);
   await renderContents();
   const contentId = new URLSearchParams(location.search).get('contentId');
-  if (contentId) openContent(contentId);
+  if (contentId && !await openContent(contentId)) location.replace('404.html');
 }
 
 init();

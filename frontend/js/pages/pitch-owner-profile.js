@@ -30,7 +30,7 @@ async function init() {
   const ownerId = new URLSearchParams(location.search).get('ownerId');
   const owner = getOwnerProfile(ownerId);
   if (!owner) {
-    state.textContent = 'Không tìm thấy hồ sơ chủ sân phù hợp.';
+    location.replace('404.html');
     return;
   }
   document.title = `${owner.name} — Pitch Point`;

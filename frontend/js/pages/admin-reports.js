@@ -61,13 +61,14 @@ function renderReportDetail(report) {
 
 async function openReport(reportId) {
   const report = await getReport(reportId);
-  if (!report) return;
+  if (!report) return false;
   selectedReport = report;
   document.querySelector('#report-reason').value = '';
   document.querySelector('#report-confirmed').checked = false;
   document.querySelector('#report-feedback').textContent = '';
   renderReportDetail(report);
   document.querySelector('#report-dialog').showModal();
+  return true;
 }
 
 async function renderReports() {
@@ -122,7 +123,7 @@ async function init() {
   document.querySelector('#report-action-form').addEventListener('submit', handleReportAction);
   await renderReports();
   const reportId = new URLSearchParams(location.search).get('reportId');
-  if (reportId) openReport(reportId);
+  if (reportId && !await openReport(reportId)) location.replace('404.html');
 }
 
 init();

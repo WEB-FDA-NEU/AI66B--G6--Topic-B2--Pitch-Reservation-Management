@@ -17,16 +17,19 @@
 
   <nav class="container breadcrumb" aria-label="Đường dẫn">
     <ol>
-      <li><span>Tổng quan quản lý</span></li>
+      <li><a href="manager-dashboard.html">Tổng quan quản lý</a></li>
       <li aria-current="page">Quản lý đặt sân</li>
     </ol>
   </nav>
 
   <main class="container manager-bookings-page" id="main-content">
     <header class="manager-bookings-page__heading">
-      <p class="manager-bookings-page__eyebrow">Quản lý sân</p>
-      <h1>Đặt sân của khách hàng</h1>
-      <p id="managed-pitch-name">Dữ liệu chỉ hiển thị cho sân thuộc tài khoản quản lý hiện tại.</p>
+      <div>
+        <p class="manager-bookings-page__eyebrow">Quản lý sân</p>
+        <h1>Đặt sân của khách hàng</h1>
+        <p id="managed-pitch-name">Dữ liệu chỉ hiển thị cho sân thuộc tài khoản quản lý hiện tại.</p>
+      </div>
+      <a class="btn btn--secondary" href="manager-dashboard.html">← Về tổng quan quản lý</a>
     </header>
 
     <section class="manager-bookings-page__state empty" id="page-state" hidden aria-live="polite">
@@ -45,6 +48,12 @@
 
       <section class="manager-bookings-page__filters" aria-label="Bộ lọc đặt sân">
         <form id="filter-form">
+          <div class="field">
+            <label class="field__label" for="pitch-filter">Sân bóng</label>
+            <select class="select" id="pitch-filter" name="pitchId">
+              <option value="">Tất cả sân</option>
+            </select>
+          </div>
           <div class="field">
             <label class="field__label" for="q">Mã đặt sân hoặc khách hàng</label>
             <input class="input" id="q" name="q" type="search">
@@ -82,6 +91,7 @@
           <thead>
             <tr>
               <th scope="col">Mã</th>
+              <th scope="col">Sân</th>
               <th scope="col">Khách hàng</th>
               <th scope="col">Ngày và giờ</th>
               <th scope="col">Số tiền</th>
@@ -99,13 +109,14 @@
       </div>
     </div>
 
-    <aside class="manager-bookings-page__panel" id="detail-panel" hidden aria-labelledby="detail-panel-title">
+    <dialog class="manager-bookings-page__panel" id="detail-panel" aria-labelledby="detail-panel-title">
       <header>
         <h2 id="detail-panel-title">Chi tiết đặt sân</h2>
         <button class="btn" type="button" id="detail-panel-close" aria-label="Đóng chi tiết">Đóng</button>
       </header>
       <dl class="manager-bookings-page__details">
         <div><dt>Mã đặt sân</dt><dd id="panel-ref"></dd></div>
+        <div><dt>Sân bóng</dt><dd id="panel-pitch"></dd></div>
         <div><dt>Khách hàng</dt><dd id="panel-customer"></dd></div>
         <div><dt>Số điện thoại</dt><dd id="panel-phone"></dd></div>
         <div><dt>Ngày và giờ</dt><dd id="panel-datetime"></dd></div>
@@ -117,7 +128,7 @@
         <button class="btn btn--danger" type="button" id="manager-cancel-button" hidden>Huỷ và hoàn tiền</button>
         <button class="btn btn--primary" type="button" id="contact-customer-button" disabled>Liên hệ khách hàng</button>
       </div>
-    </aside>
+    </dialog>
   </main>
 
   <dialog id="manager-cancel-dialog" aria-labelledby="manager-cancel-title">
@@ -141,6 +152,7 @@
   <template id="tpl-manager-booking-row">
     <tr>
       <td class="manager-bookings-page__booking-id"></td>
+      <td class="manager-bookings-page__pitch-name"></td>
       <td class="manager-bookings-page__customer"></td>
       <td class="manager-bookings-page__datetime"></td>
       <td class="manager-bookings-page__amount"></td>

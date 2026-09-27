@@ -134,7 +134,19 @@
 
   <template id="tpl-review">
     <article class="pitch-detail-page__review">
-      <header><strong class="pitch-detail-page__review-author"></strong><span class="pitch-detail-page__review-rating"></span></header>
+      <header>
+        <div class="pitch-detail-page__reviewer">
+          <span class="pitch-detail-page__review-avatar" aria-hidden="true"></span>
+          <div>
+            <strong class="pitch-detail-page__review-author"></strong>
+            <span class="pitch-detail-page__review-verified">✓ Lượt đặt đã xác minh</span>
+          </div>
+        </div>
+        <div class="pitch-detail-page__review-score">
+          <span class="pitch-detail-page__review-rating"></span>
+          <strong class="pitch-detail-page__review-rating-value"></strong>
+        </div>
+      </header>
       <p class="pitch-detail-page__review-comment"></p>
       <time class="pitch-detail-page__review-date"></time>
     </article>

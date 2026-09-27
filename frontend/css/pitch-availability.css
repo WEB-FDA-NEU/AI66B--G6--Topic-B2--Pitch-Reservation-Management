@@ -1,1 +1,141 @@
-.pitch-availability-page{min-height:65vh;padding-block:var(--sp-5) var(--sp-7)}.pitch-availability-page>header{margin-bottom:var(--sp-5)}.pitch-availability-page>header p{color:var(--c-primary);font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.pitch-availability-page>header h1{font-size:clamp(2rem,5vw,3rem)}.pitch-availability-page>header span{color:var(--c-muted)}.pitch-availability-page form{max-width:800px;padding:clamp(1rem,4vw,2rem);border:1px solid var(--c-border);border-radius:var(--radius);background:var(--c-bg);box-shadow:var(--shadow)}.pitch-availability-page fieldset{padding:0;border:0}.pitch-availability-page legend{margin-bottom:var(--sp-3);font-weight:800}.pitch-availability-page .weekday-grid{display:grid;gap:var(--sp-2);grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.pitch-availability-page .weekday-grid label{padding:var(--sp-3);border:1px solid var(--c-border);border-radius:var(--radius-s);background:var(--c-surface)}.pitch-availability-page .time-grid{display:grid;gap:var(--sp-4);margin-top:var(--sp-5)}.pitch-availability-page .availability-note{margin-top:var(--sp-4);color:var(--c-muted)}.pitch-availability-page .form-feedback{margin-top:var(--sp-3);color:var(--c-primary);font-weight:700}.pitch-availability-page .form-actions{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-top:var(--sp-5)}.pitch-availability-page .slot-overrides{display:grid;gap:var(--sp-4);max-width:800px;margin-top:var(--sp-6)}.pitch-availability-page .slot-overrides>header p{margin-top:var(--sp-2);color:var(--c-muted)}.pitch-availability-page .override-grid{display:grid;gap:var(--sp-3)}.pitch-availability-page .override-list{display:grid;gap:var(--sp-2)}.pitch-availability-page .override-item{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-3);border:1px solid var(--c-border);border-radius:var(--radius-s)}.pitch-availability-page .override-item span{display:block;color:var(--c-muted);font-size:.875rem}.pitch-availability-page .slot-overrides .empty{padding:var(--sp-4)}@media(min-width:600px){.pitch-availability-page .time-grid{grid-template-columns:1fr 1fr}.pitch-availability-page .override-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.pitch-availability-page .form-actions{display:grid}.pitch-availability-page .override-item{align-items:flex-start;flex-direction:column}}
+.pitch-availability-page {
+  display: grid;
+  gap: var(--sp-5);
+  min-height: 65vh;
+  padding-block: var(--sp-6) var(--sp-8);
+}
+
+.pitch-availability-page > header {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(circle at 88% 18%, rgb(184 242 59 / 34%), transparent 17rem),
+    linear-gradient(135deg, #f7fbf8, var(--c-primary-soft));
+}
+
+.pitch-availability-page > header::after {
+  position: absolute;
+  right: -4rem;
+  bottom: -7rem;
+  width: 16rem;
+  height: 16rem;
+  border: 1px solid rgb(23 63 67 / 14%);
+  border-radius: 50%;
+  content: "";
+}
+
+.pitch-availability-page > header > * { position: relative; z-index: 1; }
+.pitch-availability-page > header p { color: var(--c-primary); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.pitch-availability-page > header h1 { margin-block: var(--sp-2); font-size: clamp(2rem, 5vw, 3.4rem); }
+.pitch-availability-page > header span { display: block; max-width: 48rem; color: var(--c-muted); }
+
+.pitch-availability-page > form,
+.pitch-availability-page .slot-overrides {
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-l);
+  background: var(--c-bg);
+  box-shadow: var(--shadow-xs);
+}
+
+.pitch-availability-page > form { border-top: 4px solid var(--c-primary); }
+.pitch-availability-page fieldset { padding: 0; border: 0; }
+.pitch-availability-page legend { margin-bottom: var(--sp-3); color: var(--c-primary-d); font-size: 1.05rem; font-weight: 800; }
+
+.pitch-availability-page .weekday-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--sp-2);
+}
+
+.pitch-availability-page .weekday-grid label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 3rem;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-surface);
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.pitch-availability-page .weekday-grid label:hover,
+.pitch-availability-page .weekday-grid label:has(input:checked) {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+.pitch-availability-page .time-grid { display: grid; gap: var(--sp-4); margin-top: var(--sp-5); }
+.pitch-availability-page .availability-note { margin-top: var(--sp-4); color: var(--c-muted); }
+.pitch-availability-page .form-feedback { margin-top: var(--sp-3); color: var(--c-primary); font-weight: 700; }
+.pitch-availability-page .form-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: flex-end; margin-top: var(--sp-5); }
+
+.pitch-availability-page .slot-overrides {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-4);
+}
+
+.pitch-availability-page .slot-overrides > header {
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.pitch-availability-page .slot-overrides > header p { margin-top: var(--sp-2); color: var(--c-muted); }
+.pitch-availability-page .slot-overrides form { padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-surface); }
+.pitch-availability-page .override-grid { display: grid; gap: var(--sp-3); }
+.pitch-availability-page .override-list { display: grid; gap: var(--sp-2); }
+
+.pitch-availability-page .override-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  background: var(--c-bg);
+}
+
+.pitch-availability-page .override-item span { display: block; color: var(--c-muted); font-size: .875rem; }
+.pitch-availability-page .slot-overrides .empty { padding: var(--sp-4); }
+
+body main.pitch-availability-page > header {
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  background:
+    radial-gradient(circle at 88% 18%, rgb(184 242 59 / 34%), transparent 17rem),
+    linear-gradient(135deg, #f7fbf8, var(--c-primary-soft));
+}
+
+body main.pitch-availability-page > header::after {
+  top: auto;
+  right: -4rem;
+  bottom: -7rem;
+  width: 16rem;
+  height: 16rem;
+}
+
+body main.pitch-availability-page > header h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+
+@media (min-width: 62rem) {
+  .pitch-availability-page { grid-template-columns: minmax(0, 1.05fr) minmax(22rem, .95fr); align-items: start; }
+  .pitch-availability-page > header { grid-column: 1 / -1; }
+}
+
+@media (min-width: 40rem) {
+  .pitch-availability-page .time-grid,
+  .pitch-availability-page .override-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 34rem) {
+  .pitch-availability-page { padding-top: var(--sp-4); }
+  .pitch-availability-page .form-actions { display: grid; }
+  .pitch-availability-page .override-item { align-items: flex-start; flex-direction: column; }
+}

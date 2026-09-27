@@ -63,6 +63,10 @@ async function init() {
   if (!user) return;
 
   const bookingDraftId = new URLSearchParams(location.search).get('bookingDraftId');
+  if (!bookingDraftId) {
+    location.replace('404.html');
+    return;
+  }
   const result = revalidateBookingDraft(user, bookingDraftId);
   if (!result.valid) {
     showState('Không thể xác nhận đặt sân', 'Phiên giữ chỗ không tồn tại, đã hết hạn hoặc không thuộc tài khoản hiện tại.');

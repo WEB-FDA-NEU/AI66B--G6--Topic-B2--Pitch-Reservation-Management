@@ -14,7 +14,7 @@ function formatDate(value) {
 
 function openActivity(activityId) {
   const activity = activities.find(item => item.id === activityId);
-  if (!activity) return;
+  if (!activity) return false;
   const detail = document.querySelector('#activity-detail');
   const fields = [['Mã sự kiện', activity.id], ['Thời điểm', formatDate(activity.createdAt)], ['Người thực hiện', `${activity.actorName} (${activity.actorId})`], ['Hành động', activity.actionType], ['Đối tượng', `${ENTITY_LABELS[activity.entityType] ?? activity.entityType} · ${activity.entityId}`], ['Kết quả', RESULT_LABELS[activity.result] ?? activity.result], ['Lý do', activity.reason]];
   detail.replaceChildren();
@@ -26,6 +26,7 @@ function openActivity(activityId) {
     detail.append(dt, dd);
   });
   document.querySelector('#activity-dialog').showModal();
+  return true;
 }
 
 async function renderActivities(extraFilters = {}) {
@@ -64,7 +65,7 @@ async function init() {
   const entityType = params.get('entityType');
   if (entityType && document.querySelector(`#activity-entity-type option[value="${CSS.escape(entityType)}"]`)) document.querySelector('#activity-entity-type').value = entityType;
   await renderActivities(extraFilters);
-  if (extraFilters.activityId) openActivity(extraFilters.activityId);
+  if (extraFilters.activityId && !openActivity(extraFilters.activityId)) location.replace('404.html');
 }
 
 init();

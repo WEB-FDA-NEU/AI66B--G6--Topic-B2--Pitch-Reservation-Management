@@ -116,7 +116,11 @@ async function init() {
   records = await listAdminFinancialRecords(admin, initialFilters);
   if (Object.values(initialFilters).some(Boolean)) {
     const target = records[0];
-    if (target) await openPanel(target);
+    if (!target) {
+      location.replace('404.html');
+      return;
+    }
+    await openPanel(target);
     document.querySelector('#finance-count').textContent = `${records.length} bản ghi theo tham chiếu`;
     const template = document.querySelector('#tpl-admin-transaction');
     document.querySelector('#finance-rows').replaceChildren(...records.map(record => {

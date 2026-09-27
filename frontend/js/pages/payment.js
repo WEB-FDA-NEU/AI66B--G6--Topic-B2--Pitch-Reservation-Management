@@ -5,7 +5,6 @@ import { FINANCE_RESULT_CODES, getPaymentContext, processSimulatedPayment } from
 import { formatVND } from '../render.js';
 
 const messages = {
-  [FINANCE_RESULT_CODES.INVALID_DRAFT]: ['Không tìm thấy lượt giữ chỗ', 'Mã giữ chỗ không hợp lệ hoặc không thuộc tài khoản hiện tại.'],
   [FINANCE_RESULT_CODES.HOLD_EXPIRED]: ['Lượt giữ chỗ đã hết hạn', 'Khung giờ đã được giải phóng. Hãy chọn lại lịch đặt sân.'],
   [FINANCE_RESULT_CODES.PITCH_UNAVAILABLE]: ['Sân không còn khả dụng', 'Trạng thái sân đã thay đổi trước khi thanh toán.'],
   [FINANCE_RESULT_CODES.SLOT_UNAVAILABLE]: ['Khung giờ không còn trống', 'Khung giờ đã được một lượt đặt khác xác nhận.'],
@@ -57,6 +56,10 @@ async function pay() {
     elements.balance.textContent = formatVND(result.balance);
     return;
   }
+  if (result.code === FINANCE_RESULT_CODES.INVALID_DRAFT) {
+    location.replace('404.html');
+    return;
+  }
   showState(result.code);
 }
 
@@ -67,6 +70,10 @@ async function init() {
   context = await getPaymentContext(currentUser, bookingDraftId);
   if (context.code === FINANCE_RESULT_CODES.ALREADY_PAID && context.bookingId) {
     location.replace(`booking-result.html?${new URLSearchParams({ bookingId: context.bookingId })}`);
+    return;
+  }
+  if (context.code === FINANCE_RESULT_CODES.INVALID_DRAFT) {
+    location.replace('404.html');
     return;
   }
   if (!context.ok) { showState(context.code); return; }

@@ -56,7 +56,11 @@ async function init() {
     pitchFilter.append(option);
   });
   const requestedPitchId = new URLSearchParams(location.search).get('pitchId');
-  if (pitches.some(pitch => String(pitch.id) === requestedPitchId)) pitchFilter.value = requestedPitchId;
+  if (requestedPitchId && !pitches.some(pitch => String(pitch.id) === requestedPitchId)) {
+    location.replace('404.html');
+    return;
+  }
+  if (requestedPitchId) pitchFilter.value = requestedPitchId;
   form.addEventListener('input', render);
   form.addEventListener('reset', () => requestAnimationFrame(render));
   document.querySelector('#main-content').hidden = false;

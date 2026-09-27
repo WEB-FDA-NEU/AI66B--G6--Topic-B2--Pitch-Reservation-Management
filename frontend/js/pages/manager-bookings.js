@@ -4,7 +4,6 @@ import { requireRole, ROLES } from '../services/access-control.js';
 import {
   BOOKING_STATUS_META,
   PAYMENT_STATUS_LABELS,
-  getManagerBooking,
   listManagerBookings,
   listManagerPitches,
   prepareBookingData,
@@ -18,6 +17,7 @@ const elements = {
   pageStateTitle: document.getElementById('page-state-title'),
   pageStateMessage: document.getElementById('page-state-message'),
   pitchName: document.getElementById('managed-pitch-name'),
+  pitchFilter: document.getElementById('pitch-filter'),
   total: document.getElementById('count-total'),
   upcoming: document.getElementById('count-upcoming'),
   confirmed: document.getElementById('count-confirmed'),
@@ -31,6 +31,7 @@ const elements = {
   panel: document.getElementById('detail-panel'),
   panelClose: document.getElementById('detail-panel-close'),
   panelRef: document.getElementById('panel-ref'),
+  panelPitch: document.getElementById('panel-pitch'),
   panelCustomer: document.getElementById('panel-customer'),
   panelPhone: document.getElementById('panel-phone'),
   panelDateTime: document.getElementById('panel-datetime'),
@@ -44,7 +45,8 @@ const elements = {
 };
 
 let currentUser = null;
-let currentPitch = null;
+let managerPitches = [];
+let selectedPitchId = '';
 let bookings = [];
 let selectedBooking = null;
 
@@ -95,6 +97,7 @@ function setBookingStatus(element, status) {
 function createRow(booking) {
   const node = elements.rowTemplate.content.cloneNode(true);
   node.querySelector('.manager-bookings-page__booking-id').textContent = booking.id;
+  node.querySelector('.manager-bookings-page__pitch-name').textContent = booking.pitch.name;
   node.querySelector('.manager-bookings-page__customer').textContent = booking.customer?.displayName ?? booking.customerId;
   node.querySelector('.manager-bookings-page__datetime').textContent = formatDateTime(booking.slotStart);
   node.querySelector('.manager-bookings-page__amount').textContent = formatVND(booking.amount);
@@ -124,6 +127,7 @@ function render() {
 function openPanel(booking) {
   selectedBooking = booking;
   elements.panelRef.textContent = booking.id;
+  elements.panelPitch.textContent = booking.pitch.name;
   elements.panelCustomer.textContent = booking.customer?.displayName ?? booking.customerId;
   elements.panelPhone.textContent = booking.customer?.phone ?? '—';
   elements.panelDateTime.textContent = formatDateTime(booking.slotStart);
@@ -131,13 +135,38 @@ function openPanel(booking) {
   elements.panelPayment.textContent = PAYMENT_STATUS_LABELS[booking.paymentStatus];
   elements.panelBooking.textContent = BOOKING_STATUS_META[booking.status].label;
   elements.cancelButton.hidden = booking.status !== 'Confirmed' || Date.parse(booking.slotStart) <= Date.now();
-  elements.panel.hidden = false;
+  if (!elements.panel.open) elements.panel.showModal();
   elements.panelClose.focus();
 }
 
 function closePanel() {
-  elements.panel.hidden = true;
+  if (elements.panel.open) elements.panel.close();
   selectedBooking = null;
+}
+
+function loadBookings() {
+  const selectedPitches = selectedPitchId
+    ? managerPitches.filter(pitch => String(pitch.id) === selectedPitchId)
+    : managerPitches;
+  bookings = selectedPitches.flatMap(pitch => (
+    listManagerBookings(currentUser, pitch.id).map(booking => ({ ...booking, pitch }))
+  ));
+  elements.pitchName.textContent = selectedPitches.length === 1
+    ? `${selectedPitches[0].name} · ${selectedPitches[0].location}`
+    : `Tất cả ${managerPitches.length} sân thuộc tài khoản quản lý`;
+  renderCounts();
+  render();
+}
+
+function renderPitchOptions() {
+  const options = managerPitches.map(pitch => {
+    const option = document.createElement('option');
+    option.value = String(pitch.id);
+    option.textContent = `${pitch.name} · ${pitch.location}`;
+    return option;
+  });
+  elements.pitchFilter.append(...options);
+  elements.pitchFilter.value = selectedPitchId;
 }
 
 async function init() {
@@ -147,20 +176,28 @@ async function init() {
 
   const params = new URLSearchParams(location.search);
   const pitchId = params.get('pitchId');
-  currentPitch = listManagerPitches(currentUser).find(pitch => String(pitch.id) === pitchId);
-  if (!currentPitch) {
-    showState('Không thể mở dữ liệu đặt sân', 'Thiếu mã sân hợp lệ hoặc sân không thuộc tài khoản quản lý hiện tại.');
+  managerPitches = listManagerPitches(currentUser);
+  if (!managerPitches.length) {
+    showState('Chưa có sân để quản lý', 'Hãy thêm sân trước khi theo dõi lượt đặt của khách hàng.');
     return;
   }
+  if (pitchId && !managerPitches.some(pitch => String(pitch.id) === pitchId)) {
+    location.replace('404.html');
+    return;
+  }
+  selectedPitchId = pitchId ?? '';
 
-  bookings = listManagerBookings(currentUser, currentPitch.id);
-  elements.pitchName.textContent = `${currentPitch.name} · ${currentPitch.location}`;
+  renderPitchOptions();
   elements.content.hidden = false;
-  renderCounts();
-  render();
+  loadBookings();
 
   elements.form.addEventListener('submit', event => event.preventDefault());
   elements.form.addEventListener('input', render);
+  elements.pitchFilter.addEventListener('change', () => {
+    selectedPitchId = elements.pitchFilter.value;
+    closePanel();
+    loadBookings();
+  });
   elements.panelClose.addEventListener('click', closePanel);
   elements.cancelButton.addEventListener('click', () => {
     elements.cancelFeedback.textContent = '';
@@ -177,19 +214,23 @@ async function init() {
       return;
     }
     elements.cancelDialog.close();
-    bookings = listManagerBookings(currentUser, currentPitch.id);
-    renderCounts();
-    render();
-    openPanel(bookings.find(booking => booking.id === result.booking.id));
+    const bookingId = result.booking.id;
+    loadBookings();
+    const refreshedBooking = bookings.find(booking => booking.id === bookingId);
+    if (refreshedBooking) openPanel(refreshedBooking);
   });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !elements.panel.hidden) closePanel();
+    if (event.key === 'Escape' && elements.panel.open) closePanel();
   });
 
   const bookingId = params.get('bookingId');
   if (bookingId) {
-    const booking = getManagerBooking(currentUser, currentPitch.id, bookingId);
-    if (booking) openPanel(booking);
+    const booking = bookings.find(item => item.id === bookingId);
+    if (!booking) {
+      location.replace('404.html');
+      return;
+    }
+    openPanel(booking);
   }
 }
 

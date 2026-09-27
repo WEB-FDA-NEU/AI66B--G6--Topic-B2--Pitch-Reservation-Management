@@ -37,7 +37,7 @@ async function render() {
 async function init() {
   customer = requireAuth();
   if (!customer) return;
-  if (customer.role !== 'customer' || !['active', 'suspended'].includes(customer.status)) { location.replace('403.html'); return; }
+  if (customer.role !== 'customer' || !['active', 'suspended'].includes(customer.status)) { location.replace('404.html'); return; }
   const balance = await getCustomerBalance(customer);
   document.querySelector('#current-balance').textContent = formatVND(balance?.amount ?? 0);
   form.addEventListener('input', render);

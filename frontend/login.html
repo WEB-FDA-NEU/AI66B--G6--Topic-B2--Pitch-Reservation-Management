@@ -16,6 +16,16 @@
   <site-header></site-header>
 
   <main class="container login-page" id="main-content">
+    <aside class="login-page__showcase" aria-label="Giới thiệu Pitch Point">
+      <p class="login-page__showcase-eyebrow">Pitch Point</p>
+      <h2>Đặt sân nhanh.<br>Vào trận đúng giờ.</h2>
+      <p>Quản lý lịch chơi, thanh toán mô phỏng và theo dõi mọi lượt đặt sân trong một nơi.</p>
+      <ul>
+        <li><span aria-hidden="true">✓</span> Sân và khung giờ rõ ràng</li>
+        <li><span aria-hidden="true">✓</span> Quy trình đặt sân liền mạch</li>
+        <li><span aria-hidden="true">✓</span> Không gian riêng cho từng vai trò</li>
+      </ul>
+    </aside>
     <section class="login-card" aria-labelledby="login-title">
       <a class="login-card__brand" href="index.html" aria-label="Pitch Point — Trang chủ">
         <span class="login-card__brand-mark" aria-hidden="true">P</span>
@@ -55,15 +65,15 @@
           <p class="login-demo__hint">Chỉ dùng để kiểm thử Milestone 2.</p>
         </div>
         <div class="login-demo__options">
-          <button class="login-demo__option" type="button" data-demo-role="customer">
+          <button class="login-demo__option" type="button" data-demo-role="customer" disabled>
             <span class="login-demo__role">Khách hàng</span>
             <span class="login-demo__email">customer@pitchpoint.test</span>
           </button>
-          <button class="login-demo__option" type="button" data-demo-role="manager">
+          <button class="login-demo__option" type="button" data-demo-role="manager" disabled>
             <span class="login-demo__role">Quản lý sân</span>
             <span class="login-demo__email">manager@pitchpoint.test</span>
           </button>
-          <button class="login-demo__option" type="button" data-demo-role="admin">
+          <button class="login-demo__option" type="button" data-demo-role="admin" disabled>
             <span class="login-demo__role">Quản trị viên</span>
             <span class="login-demo__email">admin@pitchpoint.test</span>
           </button>
@@ -77,6 +87,6 @@
   </main>
 
   <site-footer></site-footer>
-  <script type="module" src="js/pages/login.js?v=4"></script>
+  <script type="module" src="js/pages/login.js?v=7"></script>
 </body>
 </html>

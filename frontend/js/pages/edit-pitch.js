@@ -22,8 +22,10 @@ async function init() {
   await preparePitchCatalog();
   user = requireRole([ROLES.MANAGER]);
   if (!user) return;
-  pitch = getManagedPitch(user, new URLSearchParams(location.search).get('pitchId'));
-  if (!pitch) { location.replace('403.html'); return; }
+  const pitchId = new URLSearchParams(location.search).get('pitchId');
+  if (!pitchId) { location.replace('404.html'); return; }
+  pitch = getManagedPitch(user, pitchId);
+  if (!pitch) { location.replace('404.html'); return; }
   fillForm();
   form.addEventListener('submit', event => {
     event.preventDefault(); if (!form.reportValidity()) return;
@@ -37,4 +39,4 @@ async function init() {
   document.getElementById('main-content').hidden = false;
 }
 
-init().catch(() => { location.replace('403.html'); });
+init().catch(() => { location.replace('404.html'); });

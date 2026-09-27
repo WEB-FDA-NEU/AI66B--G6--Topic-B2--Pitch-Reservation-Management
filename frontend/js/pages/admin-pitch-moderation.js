@@ -62,9 +62,17 @@ async function init() {
     } catch (error) { feedback.textContent = error.message; }
   });
   renderList();
-  const initialId = Number(new URLSearchParams(location.search).get('pitchId'));
-  if (initialId) { const pitch = listPitchesForModeration(admin).find(item => item.id === initialId); if (pitch) selectPitch(pitch); }
+  const requestedPitchId = new URLSearchParams(location.search).get('pitchId');
+  if (requestedPitchId) {
+    const initialId = Number(requestedPitchId);
+    const pitch = listPitchesForModeration(admin).find(item => item.id === initialId);
+    if (!pitch) {
+      location.replace('404.html');
+      return;
+    }
+    selectPitch(pitch);
+  }
   document.getElementById('main-content').hidden = false;
 }
 
-init().catch(() => { location.replace('403.html'); });
+init().catch(() => { location.replace('404.html'); });

@@ -39,7 +39,7 @@ function setActions(user) {
 
 async function openUser(userId) {
   const user = await getAccount(userId, 'customer');
-  if (!user) return;
+  if (!user) return false;
   selectedUser = user;
   document.querySelector('#user-action-feedback').textContent = '';
   document.querySelector('#user-reason').value = '';
@@ -47,6 +47,7 @@ async function openUser(userId) {
   setDetails(user);
   setActions(user);
   document.querySelector('#user-dialog').showModal();
+  return true;
 }
 
 async function renderUsers() {
@@ -100,7 +101,7 @@ async function init() {
   document.querySelector('#user-action-form').addEventListener('submit', handleAction);
   await renderUsers();
   const userId = new URLSearchParams(location.search).get('userId');
-  if (userId) openUser(userId);
+  if (userId && !await openUser(userId)) location.replace('404.html');
 }
 
 init();

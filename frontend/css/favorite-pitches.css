@@ -1,7 +1,7 @@
 .favorite-pitches-shell .skip-link { position: fixed; z-index: 100; top: var(--sp-3); left: var(--sp-3); padding: .65rem 1rem; border-radius: var(--radius-s); background: var(--c-accent); color: var(--c-text); font-weight: 800; transform: translateY(-180%); }
 .favorite-pitches-shell .skip-link:focus { transform: translateY(0); }
 .favorite-pitches-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
-.favorite-pitches-page .favorite-heading { display: flex; gap: var(--sp-4); align-items: end; justify-content: space-between; margin-bottom: var(--sp-5); }
+.favorite-pitches-page .favorite-heading { position: relative; display: flex; overflow: hidden; gap: var(--sp-4); align-items: end; justify-content: space-between; margin-bottom: var(--sp-6); padding: clamp(1.5rem, 4vw, 2.75rem); border: 1px solid var(--c-border); border-radius: var(--radius-l); background: radial-gradient(circle at 90% 10%, rgb(184 242 59 / 18%), transparent 15rem), linear-gradient(135deg, var(--c-bg), var(--c-primary-soft)); box-shadow: var(--shadow-s); }
 .favorite-pitches-page .favorite-heading p { color: var(--c-primary); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .favorite-pitches-page .favorite-heading h1 { font-size: clamp(2rem, 5vw, 3rem); }
 .favorite-pitches-page .favorite-heading span { color: var(--c-muted); }

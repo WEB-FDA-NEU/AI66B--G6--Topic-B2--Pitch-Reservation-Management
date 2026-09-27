@@ -34,8 +34,12 @@ async function init() {
 
   const bookingId = new URLSearchParams(location.search).get('bookingId');
   const booking = getCustomerBooking(user, bookingId);
-  if (!booking || booking.status !== BOOKING_STATUSES.CONFIRMED || booking.paymentStatus !== 'Paid') {
-    showState('Không tìm thấy kết quả đã xác nhận', 'Mã đặt sân không hợp lệ hoặc lượt đặt chưa được thanh toán thành công.');
+  if (!booking) {
+    location.replace('404.html');
+    return;
+  }
+  if (booking.status !== BOOKING_STATUSES.CONFIRMED || booking.paymentStatus !== 'Paid') {
+    showState('Kết quả chưa sẵn sàng', 'Lượt đặt sân chưa được thanh toán và xác nhận thành công.');
     return;
   }
 

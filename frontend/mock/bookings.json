@@ -73,6 +73,30 @@
       }
     },
     {
+      "id": "BK-2026-0004",
+      "customerId": "U001",
+      "managerId": "M001",
+      "pitchId": 1,
+      "status": "Completed",
+      "paymentStatus": "Paid",
+      "amount": 420000,
+      "slotStart": "2026-09-21T18:00:00+07:00",
+      "slotEnd": "2026-09-21T19:00:00+07:00",
+      "createdAt": "2026-09-19T09:00:00+07:00",
+      "confirmedAt": "2026-09-19T09:03:00+07:00",
+      "completedAt": "2026-09-21T19:00:00+07:00",
+      "transactionId": "TX-2026-0004",
+      "rescheduleCount": 0,
+      "reviewId": null,
+      "snapshot": {
+        "pitchName": "Sân bóng Bách Khoa",
+        "pitchLocation": "Hai Bà Trưng, Hà Nội",
+        "pitchTypeLabel": "Sân 7 người",
+        "price": 420000,
+        "services": ["Đèn chiếu sáng", "Nước uống", "Phòng thay đồ"]
+      }
+    },
+    {
       "id": "BK-2026-0101",
       "customerId": "U101",
       "managerId": "M001",

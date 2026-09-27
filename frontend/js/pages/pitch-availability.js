@@ -38,9 +38,10 @@ async function init() {
   const user = requireRole([ROLES.MANAGER]);
   if (!user) return;
   const pitchId = new URLSearchParams(location.search).get('pitchId');
+  if (!pitchId) { location.replace('404.html'); return; }
   let availability;
   try { availability = getPitchAvailability(user, pitchId); }
-  catch { location.replace('403.html'); return; }
+  catch { location.replace('404.html'); return; }
   document.getElementById('pitch-name').textContent = availability.pitch.name;
   document.getElementById('open-time').value = availability.operatingHours.open;
   document.getElementById('close-time').value = availability.operatingHours.close;
@@ -77,4 +78,4 @@ async function init() {
   document.getElementById('main-content').hidden = false;
 }
 
-init().catch(() => { location.replace('403.html'); });
+init().catch(() => { location.replace('404.html'); });

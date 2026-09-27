@@ -54,6 +54,51 @@
 .booking-details-page__status.status-badge--completed { color: var(--c-primary); }
 .booking-details-page__status.status-badge--cancelled { color: var(--c-danger); }
 
+body main.booking-details-page { max-width: 960px; }
+
+body main.booking-details-page > .booking-details-page__heading {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-color: transparent;
+  background:
+    radial-gradient(circle at 90% 15%, rgb(184 242 59 / 24%), transparent 28%),
+    linear-gradient(135deg, var(--c-primary-d), var(--c-primary));
+  color: #fff;
+  box-shadow: var(--shadow-l);
+}
+
+body main.booking-details-page > .booking-details-page__heading::after {
+  top: auto;
+  right: -5rem;
+  bottom: -9rem;
+  width: 20rem;
+  height: 20rem;
+  border-color: rgb(255 255 255 / 18%);
+}
+
+body main.booking-details-page > .booking-details-page__heading h1 {
+  color: #fff;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+}
+
+.booking-details-page .booking-details-page__eyebrow { color: var(--c-accent); }
+.booking-details-page .booking-details-page__heading p:last-child { color: rgb(255 255 255 / 88%); }
+
+.booking-details-page .booking-details-page__panel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-top: 3px solid var(--c-primary);
+  border-radius: var(--radius-l);
+  background: var(--c-bg);
+  box-shadow: var(--shadow-xs);
+}
+
+.booking-details-page .booking-details-page__panel:nth-child(2) { border-top-color: var(--c-accent-d); }
+.booking-details-page .booking-details-page__panel:nth-child(3) { border-top-color: var(--c-warning); }
+.booking-details-page .booking-details-page__pitch img { box-shadow: var(--shadow-xs); }
+.booking-details-page .booking-details-page__status.status-badge--pending { background: var(--c-warning-soft); }
+.booking-details-page .booking-details-page__status.status-badge--confirmed { background: var(--c-success-soft); }
+.booking-details-page .booking-details-page__status.status-badge--completed { background: var(--c-primary-soft); }
+.booking-details-page .booking-details-page__status.status-badge--cancelled { background: var(--c-danger-soft); }
+
 .booking-details-page__pitch { display: grid; gap: var(--sp-4); margin-top: var(--sp-4); }
 .booking-details-page__pitch img { width: 100%; height: 160px; border-radius: var(--radius-s); object-fit: cover; }
 .booking-details-page__summary { display: grid; gap: var(--sp-3); }
@@ -72,12 +117,31 @@
 .booking-details-page__history { display: grid; gap: var(--sp-3); margin-top: var(--sp-3); padding-left: var(--sp-5); }
 .booking-details-page__history time { display: block; margin-top: var(--sp-1); color: var(--c-muted); font-size: .82rem; }
 .booking-details-page__actions { display: grid; gap: var(--sp-2); margin-top: var(--sp-4); }
+.booking-details-page__review-status { margin-top: var(--sp-3); color: var(--c-muted); }
 .booking-details-page__feedback { min-height: 1.5em; margin-top: var(--sp-3); color: var(--c-primary); }
-.booking-details-page__rating-field { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-block: var(--sp-4); }
-.booking-details-page__rating-field legend { width: 100%; margin-bottom: var(--sp-2); font-weight: 700; }
-.booking-details-page__rating-field label { padding: var(--sp-2); border: 1px solid var(--c-border); border-radius: var(--radius-s); }
-#cancel-dialog, #review-dialog { width: min(34rem, calc(100% - 2rem)); max-width: 34rem; }
-#cancel-dialog p, #review-dialog p { margin-top: var(--sp-3); }
+.booking-details-page__submitted-review { border-color: color-mix(in srgb, var(--c-primary) 30%, var(--c-border)); background: var(--c-surface); }
+.booking-details-page__review-verified { width: max-content; padding: .3rem .65rem; border-radius: 999px; background: #e6f6ec; color: var(--c-success); font-size: .78rem; font-weight: 800; }
+.booking-details-page__review-card { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); padding: var(--sp-4); border-radius: var(--radius-s); background: var(--c-bg); }
+.booking-details-page__review-meta { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; justify-content: space-between; }
+.booking-details-page__review-stars { color: var(--c-warning); font-size: 1.15rem; letter-spacing: .08em; }
+.booking-details-page__review-meta time { color: var(--c-muted); font-size: .85rem; }
+
+.booking-details-page ~ #cancel-dialog,
+.booking-details-page ~ #review-dialog { width: min(36rem, calc(100% - 2rem)); max-width: 36rem; max-height: calc(100vh - 2rem); margin: auto; overflow-y: auto; }
+.booking-details-page ~ #cancel-dialog p,
+.booking-details-page ~ #review-dialog p { margin-top: var(--sp-3); }
+.booking-details-page ~ #review-dialog .booking-details-page__dialog-hint { color: var(--c-muted); }
+.booking-details-page ~ #review-dialog .booking-details-page__label-wrap { display: flex; gap: var(--sp-3); align-items: baseline; justify-content: space-between; margin-top: var(--sp-4); }
+.booking-details-page ~ #review-dialog .booking-details-page__counter { color: var(--c-muted); font-size: .8rem; }
+.booking-details-page ~ #review-dialog .star-rating { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; gap: var(--sp-1); margin-top: var(--sp-2); }
+.booking-details-page ~ #review-dialog .star-rating input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.booking-details-page ~ #review-dialog .star-rating label { color: var(--c-border); font-size: 2.15rem; line-height: 1; cursor: pointer; transition: color .15s ease, transform .15s ease; }
+.booking-details-page ~ #review-dialog .star-rating label:hover,
+.booking-details-page ~ #review-dialog .star-rating label:hover ~ label,
+.booking-details-page ~ #review-dialog .star-rating input:checked ~ label { color: var(--c-warning); }
+.booking-details-page ~ #review-dialog .star-rating input:focus-visible + label { outline: 3px solid color-mix(in srgb, var(--c-primary) 35%, transparent); outline-offset: 3px; }
+.booking-details-page ~ #review-dialog .star-rating label:hover { transform: translateY(-2px); }
+.booking-details-page ~ #review-dialog .booking-details-page__rating-caption { min-height: 1.5em; color: var(--c-muted); font-size: .85rem; }
 
 @media (min-width: 640px) {
   .booking-details-page__panel-heading { flex-direction: row; align-items: center; justify-content: space-between; }
@@ -86,4 +150,17 @@
   .booking-details-page__summary div { flex-direction: row; justify-content: space-between; gap: var(--sp-4); }
   .booking-details-page__summary dd { text-align: right; }
   .booking-details-page__actions { display: flex; flex-wrap: wrap; }
+}
+
+@media (min-width: 800px) {
+  .booking-details-page__content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+
+  .booking-details-page__content > * { margin-top: 0; }
+  .booking-details-page__content > :first-child,
+  .booking-details-page__submitted-review,
+  .booking-details-page__content > :last-child { grid-column: 1 / -1; }
 }

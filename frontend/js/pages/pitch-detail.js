@@ -69,8 +69,12 @@ function renderReviews(pitchId) {
   elements.reviewEmpty.hidden = reviews.length > 0;
   elements.reviewList.replaceChildren(...reviews.map(review => {
     const node = elements.reviewTemplate.content.cloneNode(true);
+    node.querySelector('.pitch-detail-page__review-avatar').textContent = review.customerName.trim().charAt(0).toLocaleUpperCase('vi');
     node.querySelector('.pitch-detail-page__review-author').textContent = review.customerName;
-    node.querySelector('.pitch-detail-page__review-rating').textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
+    const rating = node.querySelector('.pitch-detail-page__review-rating');
+    rating.textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
+    rating.setAttribute('aria-label', `${review.rating} trên 5 sao`);
+    node.querySelector('.pitch-detail-page__review-rating-value').textContent = `${review.rating}.0`;
     node.querySelector('.pitch-detail-page__review-comment').textContent = review.comment;
     const time = node.querySelector('.pitch-detail-page__review-date');
     time.dateTime = review.createdAt;
@@ -136,7 +140,7 @@ function renderFavoriteControl() {
 async function init() {
   const pitchId = new URLSearchParams(location.search).get('pitchId');
   if (!pitchId) {
-    showState('Thiếu thông tin sân', 'Hãy chọn một sân từ danh sách tìm kiếm để xem chi tiết.');
+    location.replace('404.html');
     return;
   }
 
@@ -144,7 +148,7 @@ async function init() {
     await Promise.all([preparePitchCatalog(), prepareFavorites(), prepareReviews()]);
     const pitch = getPitchById(pitchId);
     if (!pitch) {
-      showState('Không tìm thấy sân', 'Mã sân không hợp lệ hoặc sân không còn tồn tại trong dữ liệu hiện tại.');
+      location.replace('404.html');
       return;
     }
     renderPitch(pitch);

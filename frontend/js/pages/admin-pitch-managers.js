@@ -27,7 +27,7 @@ function renderDetail(manager) {
 
 async function openManager(managerId) {
   const manager = await getAccount(managerId, 'manager');
-  if (!manager) return;
+  if (!manager) return false;
   selectedManager = manager;
   renderDetail(manager);
   document.querySelector('#manager-action').value = manager.status === 'suspended' ? 'restore' : 'warn';
@@ -35,6 +35,7 @@ async function openManager(managerId) {
   document.querySelector('#manager-confirmed').checked = false;
   document.querySelector('#manager-feedback').textContent = '';
   document.querySelector('#manager-dialog').showModal();
+  return true;
 }
 
 async function renderManagers() {
@@ -86,7 +87,7 @@ async function init() {
   document.querySelector('#manager-warning-form').addEventListener('submit', handleAction);
   await renderManagers();
   const managerId = new URLSearchParams(location.search).get('managerId');
-  if (managerId) openManager(managerId);
+  if (managerId && !await openManager(managerId)) location.replace('404.html');
 }
 
 init();

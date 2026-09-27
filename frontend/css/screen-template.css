@@ -14,16 +14,16 @@
 .skip-link:focus { transform: translateY(0); }
 
 .screen-page {
-  min-height: 65vh;
-  padding-block: var(--sp-6) var(--sp-7);
+  min-height: 68vh;
+  padding-block: var(--sp-7) var(--sp-8);
 }
 
 .screen-heading {
   display: flex;
   gap: var(--sp-5);
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--sp-6);
+  margin-bottom: var(--sp-7);
 }
 
 .screen-heading__eyebrow {
@@ -36,9 +36,9 @@
 }
 
 .screen-heading h1 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -.04em;
+  font-size: clamp(2.2rem, 5vw, 3.7rem);
+  line-height: 1.02;
+  letter-spacing: -.055em;
 }
 
 .screen-heading__description,
@@ -58,9 +58,9 @@
 .screen-panel {
   padding: clamp(1rem, 3vw, 2rem);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius);
-  background: var(--c-bg);
-  box-shadow: 0 10px 30px rgba(12, 27, 42, .06);
+  border-radius: var(--radius-l);
+  background: rgba(255, 255, 255, .94);
+  box-shadow: var(--shadow-s);
 }
 
 .screen-panel__heading {
@@ -80,8 +80,15 @@
   justify-content: space-between;
   padding: var(--sp-4);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius);
   background: var(--c-surface);
+  transition: border-color var(--transition), background-color var(--transition), transform var(--transition);
+}
+
+.screen-item:hover {
+  border-color: var(--c-border-strong);
+  background: var(--c-bg);
+  transform: translateY(-1px);
 }
 
 .screen-item__title { font-size: 1rem; }

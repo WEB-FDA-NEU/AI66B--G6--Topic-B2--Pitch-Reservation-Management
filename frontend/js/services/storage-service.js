@@ -107,7 +107,7 @@ async function initializeFromSeed(existing = null) {
     ...adminSeed,
     ...existing,
     version: 1,
-    seedRevision: 5,
+    seedRevision: 6,
     users: mergeUsers(baseUsers, adminSeed.users),
     session: existing?.session ?? null,
     reports: mergeRecordsById(existing?.reports ?? [], adminSeed.reports),
@@ -116,7 +116,7 @@ async function initializeFromSeed(existing = null) {
     settings: existing?.settings ?? adminSeed.settings,
     pitches: mergePitches(existing?.pitches ?? [], pitchSeed),
     bookingDrafts: existing?.bookingDrafts ?? bookingSeed.bookingDrafts,
-    bookings: existing?.bookings ?? bookingSeed.bookings,
+    bookings: mergeRecordsById(existing?.bookings ?? [], bookingSeed.bookings),
     favorites: existing?.favorites ?? pitchOperationsSeed.favorites,
     availability: existing?.availability ?? pitchOperationsSeed.availability,
     balances: mergeRecordsById(existing?.balances ?? [], financeSeed.balances),
@@ -152,7 +152,7 @@ export async function initializeState() {
     && Array.isArray(existing.balances)
     && Array.isArray(existing.transactions);
   const hasReviewCollections = existing && Array.isArray(existing.reviews);
-  if (existing?.seedRevision === 5 && hasAdminCollections && hasBookingCollections && hasPitchCatalog && hasPitchOperations && hasFinanceCollections && hasReviewCollections) return existing;
+  if (existing?.seedRevision === 6 && hasAdminCollections && hasBookingCollections && hasPitchCatalog && hasPitchOperations && hasFinanceCollections && hasReviewCollections) return existing;
 
   if (!initializationPromise) {
     initializationPromise = initializeFromSeed(existing).finally(() => {

@@ -51,4 +51,4 @@ async function init() {
   render();
 }
 
-init().catch(() => { location.replace('403.html'); });
+init().catch(() => { location.replace('404.html'); });

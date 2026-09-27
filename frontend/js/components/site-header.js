@@ -1,3 +1,4 @@
+import './form-validation.js';
 import { initializeState } from '../services/storage-service.js';
 import { getCurrentUser, logout } from '../services/auth-service.js';
 

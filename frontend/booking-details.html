@@ -65,13 +65,28 @@
         <ol class="booking-details-page__history" id="status-history"></ol>
       </section>
 
+      <section class="booking-details-page__panel booking-details-page__submitted-review" id="user-review-panel" hidden aria-labelledby="user-review-title">
+        <header class="booking-details-page__panel-heading">
+          <h2 id="user-review-title">Đánh giá của bạn</h2>
+          <span class="booking-details-page__review-verified">✓ Đã xác nhận hoàn tất</span>
+        </header>
+        <article class="booking-details-page__review-card" id="user-review-card">
+          <div class="booking-details-page__review-meta">
+            <span class="booking-details-page__review-stars" id="user-review-rating"></span>
+            <time id="user-review-date"></time>
+          </div>
+          <p id="user-review-comment"></p>
+        </article>
+      </section>
+
       <section class="booking-details-page__panel" aria-labelledby="actions-title">
         <h2 id="actions-title">Thao tác</h2>
         <div class="booking-details-page__actions">
           <button class="btn btn--danger" type="button" id="cancel-button" hidden>Huỷ đặt sân</button>
           <button class="btn btn--primary" type="button" id="reschedule-button" hidden>Đổi lịch đá</button>
-          <button class="btn" type="button" id="review-button" hidden>Viết đánh giá</button>
+          <button class="btn btn--primary" type="button" id="review-button" hidden>Viết đánh giá</button>
         </div>
+        <p class="booking-details-page__review-status" id="review-status"></p>
         <p class="booking-details-page__feedback" id="action-feedback" role="status"></p>
       </section>
     </div>
@@ -96,17 +111,29 @@
   <dialog id="review-dialog" aria-labelledby="review-dialog-title">
     <form id="review-form">
       <h2 id="review-dialog-title">Đánh giá sân bóng</h2>
-      <fieldset class="booking-details-page__rating-field">
-        <legend>Mức đánh giá</legend>
-        <label><input type="radio" name="rating" value="5" required> 5 sao</label>
-        <label><input type="radio" name="rating" value="4"> 4 sao</label>
-        <label><input type="radio" name="rating" value="3"> 3 sao</label>
-        <label><input type="radio" name="rating" value="2"> 2 sao</label>
-        <label><input type="radio" name="rating" value="1"> 1 sao</label>
-      </fieldset>
+      <p class="booking-details-page__dialog-hint">Chia sẻ trải nghiệm thực tế sau khi hoàn thành lượt đặt sân. Mỗi lượt đặt chỉ được đánh giá một lần.</p>
       <div class="field">
-        <label class="field__label" for="review-comment">Nhận xét</label>
-        <textarea class="textarea" id="review-comment" name="comment" rows="4" minlength="10" maxlength="500" required></textarea>
+        <span class="field__label">Mức đánh giá <span aria-hidden="true">*</span></span>
+        <div class="star-rating" role="radiogroup" aria-label="Mức đánh giá">
+          <input type="radio" id="star-5" name="rating" value="5" required>
+          <label for="star-5" title="5 sao — Rất hài lòng">★</label>
+          <input type="radio" id="star-4" name="rating" value="4">
+          <label for="star-4" title="4 sao — Hài lòng">★</label>
+          <input type="radio" id="star-3" name="rating" value="3">
+          <label for="star-3" title="3 sao — Bình thường">★</label>
+          <input type="radio" id="star-2" name="rating" value="2">
+          <label for="star-2" title="2 sao — Chưa tốt">★</label>
+          <input type="radio" id="star-1" name="rating" value="1">
+          <label for="star-1" title="1 sao — Rất thất vọng">★</label>
+        </div>
+        <p class="booking-details-page__rating-caption" id="rating-caption" aria-live="polite">Vui lòng chọn số sao</p>
+      </div>
+      <div class="field">
+        <div class="booking-details-page__label-wrap">
+          <label class="field__label" for="review-comment">Nhận xét chi tiết <span aria-hidden="true">*</span></label>
+          <span class="booking-details-page__counter" id="char-counter">0/500</span>
+        </div>
+        <textarea class="textarea" id="review-comment" name="comment" rows="4" minlength="10" maxlength="500" placeholder="Chất lượng mặt cỏ, ánh sáng, dịch vụ..." required></textarea>
       </div>
       <p id="review-feedback" role="status"></p>
       <div class="dialog__actions">

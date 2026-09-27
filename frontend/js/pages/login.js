@@ -51,8 +51,11 @@ const spinner = form?.querySelector('.login-form__spinner');
 const errorMessage = document.getElementById('login-error');
 const statusMessage = document.getElementById('login-status');
 const originalSubmitLabel = submitLabel?.textContent ?? 'Đăng nhập';
-const demoAccounts = new Map();
+const demoButtons = [...document.querySelectorAll('[data-demo-role]')];
 
+demoButtons.forEach(button => {
+  button.disabled = true;
+});
 function setLoading(isLoading) {
   if (submitButton) submitButton.disabled = isLoading;
   if (submitLabel) submitLabel.textContent = isLoading ? 'Đang đăng nhập…' : originalSubmitLabel;
@@ -91,24 +94,27 @@ function getPostLoginDestination(user) {
 async function initializeDemoAccounts() {
   try {
     const credentials = await getDemoCredentials();
-    credentials.forEach(account => demoAccounts.set(account.role, account));
+    demoButtons.forEach(button => {
+      const account = credentials.find(item => item.role === button.dataset.demoRole);
+      button.disabled = !account;
+      if (!account) return;
+
+      button.addEventListener('click', () => {
+        if (!identifier || !password) return;
+        identifier.value = account.email;
+        password.value = account.password;
+        password.focus();
+      });
+    });
   } catch {
-    document.querySelectorAll('[data-demo-role]').forEach(button => {
+    demoButtons.forEach(button => {
       button.disabled = true;
     });
     showAuthenticationError('Không tải được tài khoản dùng thử. Vui lòng tải lại trang.');
   }
 }
 
-document.querySelectorAll('[data-demo-role]').forEach(button => {
-  button.addEventListener('click', () => {
-    const account = demoAccounts.get(button.dataset.demoRole);
-    if (!account || !identifier || !password) return;
-    identifier.value = account.email;
-    password.value = account.password;
-    password.focus();
-  });
-});
+initializeDemoAccounts();
 
 document.getElementById('guest-login')?.addEventListener('click', () => {
   logout();
@@ -170,5 +176,3 @@ form?.addEventListener('submit', async event => {
     setLoading(false);
   }
 });
-
-initializeDemoAccounts();

@@ -1,1 +1,75 @@
-.edit-pitch-page{min-height:65vh;padding-block:var(--sp-5) var(--sp-7)}.edit-pitch-page>header{max-width:760px;margin-bottom:var(--sp-5)}.edit-pitch-page>header p{color:var(--c-primary);font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.edit-pitch-page>header h1{font-size:clamp(2rem,5vw,3rem)}.edit-pitch-page>header span{color:var(--c-muted)}.edit-pitch-page form{max-width:900px;padding:clamp(1rem,4vw,2rem);border:1px solid var(--c-border);border-radius:var(--radius);background:var(--c-bg);box-shadow:var(--shadow)}.edit-pitch-page .form-grid{display:grid;gap:var(--sp-4)}.edit-pitch-page textarea{min-height:120px;resize:vertical}.edit-pitch-page .form-actions{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-top:var(--sp-5)}.edit-pitch-page .form-feedback{margin-top:var(--sp-3);color:var(--c-primary);font-weight:700}@media(min-width:700px){.edit-pitch-page .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.edit-pitch-page .form-grid__wide{grid-column:1/-1}}@media(max-width:560px){.edit-pitch-page .form-actions{display:grid}}
+.edit-pitch-page {
+  display: grid;
+  gap: var(--sp-5);
+  min-height: 65vh;
+  padding-block: var(--sp-6) var(--sp-8);
+}
+
+.edit-pitch-page > header {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(circle at 88% 18%, rgb(184 242 59 / 34%), transparent 17rem),
+    linear-gradient(135deg, #f7fbf8, var(--c-primary-soft));
+}
+
+.edit-pitch-page > header::after {
+  position: absolute;
+  right: -4rem;
+  bottom: -7rem;
+  width: 16rem;
+  height: 16rem;
+  border: 1px solid rgb(23 63 67 / 14%);
+  border-radius: 50%;
+  content: "";
+}
+
+.edit-pitch-page > header > * { position: relative; z-index: 1; }
+.edit-pitch-page > header p { color: var(--c-primary); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.edit-pitch-page > header h1 { margin-block: var(--sp-2); font-size: clamp(2rem, 5vw, 3.4rem); }
+.edit-pitch-page > header span { display: block; max-width: 48rem; color: var(--c-muted); }
+
+.edit-pitch-page form {
+  width: min(100%, 62rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--c-border);
+  border-top: 4px solid var(--c-primary);
+  border-radius: var(--radius-l);
+  background: var(--c-bg);
+  box-shadow: var(--shadow);
+}
+
+.edit-pitch-page .form-grid { display: grid; gap: var(--sp-5); }
+.edit-pitch-page textarea { min-height: 9rem; resize: vertical; }
+.edit-pitch-page .form-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: flex-end; margin-top: var(--sp-6); }
+.edit-pitch-page .form-feedback { margin-top: var(--sp-3); color: var(--c-primary); font-weight: 700; }
+
+body main.edit-pitch-page > header {
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  background:
+    radial-gradient(circle at 88% 18%, rgb(184 242 59 / 34%), transparent 17rem),
+    linear-gradient(135deg, #f7fbf8, var(--c-primary-soft));
+}
+
+body main.edit-pitch-page > header::after {
+  top: auto;
+  right: -4rem;
+  bottom: -7rem;
+  width: 16rem;
+  height: 16rem;
+}
+
+body main.edit-pitch-page > header h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+
+@media (min-width: 44rem) {
+  .edit-pitch-page .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .edit-pitch-page .form-grid__wide { grid-column: 1 / -1; }
+}
+
+@media (max-width: 34rem) {
+  .edit-pitch-page { padding-top: var(--sp-4); }
+  .edit-pitch-page .form-actions { display: grid; }
+}

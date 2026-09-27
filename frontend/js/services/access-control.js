@@ -26,7 +26,7 @@ export function requireRole(allowedRoles, options = {}) {
 
   const statusAllowed = user.status === 'active' || (options.allowSuspended && user.status === 'suspended');
   if (!statusAllowed || !allowedRoles.includes(user.role)) {
-    location.replace('403.html');
+    location.replace('404.html');
     return null;
   }
 

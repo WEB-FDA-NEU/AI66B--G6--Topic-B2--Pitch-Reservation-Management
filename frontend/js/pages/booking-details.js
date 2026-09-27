@@ -15,9 +15,6 @@ import { createReview, getReviewEligibility, prepareReviews } from '../services/
 
 const elements = {
   content: document.getElementById('details-content'),
-  pageState: document.getElementById('page-state'),
-  pageStateTitle: document.getElementById('page-state-title'),
-  pageStateMessage: document.getElementById('page-state-message'),
   reference: document.getElementById('booking-reference'),
   bookingStatus: document.getElementById('booking-status'),
   pitchImage: document.getElementById('pitch-image'),
@@ -32,6 +29,11 @@ const elements = {
   cancelButton: document.getElementById('cancel-button'),
   rescheduleButton: document.getElementById('reschedule-button'),
   reviewButton: document.getElementById('review-button'),
+  reviewStatus: document.getElementById('review-status'),
+  userReviewPanel: document.getElementById('user-review-panel'),
+  userReviewRating: document.getElementById('user-review-rating'),
+  userReviewComment: document.getElementById('user-review-comment'),
+  userReviewDate: document.getElementById('user-review-date'),
   actionFeedback: document.getElementById('action-feedback'),
   cancelDialog: document.getElementById('cancel-dialog'),
   cancelForm: document.getElementById('cancel-form'),
@@ -39,17 +41,21 @@ const elements = {
   reviewDialog: document.getElementById('review-dialog'),
   reviewForm: document.getElementById('review-form'),
   reviewFeedback: document.getElementById('review-feedback'),
+  reviewComment: document.getElementById('review-comment'),
+  ratingCaption: document.getElementById('rating-caption'),
+  charCounter: document.getElementById('char-counter'),
 };
+
+const RATING_CAPTIONS = Object.freeze({
+  1: '1 sao · Rất thất vọng',
+  2: '2 sao · Chưa tốt',
+  3: '3 sao · Bình thường',
+  4: '4 sao · Hài lòng',
+  5: '5 sao · Rất hài lòng',
+});
 
 let currentUser;
 let currentBooking;
-
-function showState(title, message) {
-  elements.content.hidden = true;
-  elements.pageStateTitle.textContent = title;
-  elements.pageStateMessage.textContent = message;
-  elements.pageState.hidden = false;
-}
 
 function formatDate(value) {
   return new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long' }).format(new Date(value));
@@ -84,7 +90,36 @@ function renderHistory(booking) {
 function renderActions(user, booking) {
   elements.cancelButton.hidden = !canCustomerCancel(user, booking);
   elements.rescheduleButton.hidden = !canCustomerReschedule(user, booking);
-  elements.reviewButton.hidden = !getReviewEligibility(user, booking.id).eligible;
+  renderReviewState(user, booking);
+}
+
+function renderSubmittedReview(review) {
+  elements.userReviewPanel.hidden = !review;
+  if (!review) return;
+  elements.userReviewRating.textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
+  elements.userReviewRating.setAttribute('aria-label', `${review.rating} trên 5 sao`);
+  elements.userReviewComment.textContent = review.comment;
+  elements.userReviewDate.dateTime = review.createdAt;
+  elements.userReviewDate.textContent = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long' }).format(new Date(review.createdAt));
+}
+
+function renderReviewState(user, booking) {
+  const eligibility = getReviewEligibility(user, booking.id);
+  elements.reviewButton.hidden = !eligibility.eligible;
+  renderSubmittedReview(eligibility.review ?? null);
+  if (eligibility.eligible) {
+    elements.reviewStatus.textContent = 'Buổi chơi đã hoàn tất. Bạn có thể chia sẻ một đánh giá đã xác minh cho sân này.';
+  } else if (eligibility.reason === 'already-reviewed') {
+    elements.reviewStatus.textContent = 'Bạn đã hoàn thành đánh giá cho lượt đặt sân này.';
+  } else if (eligibility.reason === 'not-completed') {
+    elements.reviewStatus.textContent = booking.status === 'Cancelled'
+      ? 'Lượt đặt đã huỷ không đủ điều kiện đánh giá.'
+      : 'Đánh giá sẽ khả dụng sau khi buổi chơi được xác nhận hoàn tất.';
+  } else if (user.status !== 'active') {
+    elements.reviewStatus.textContent = 'Tài khoản hiện không đủ điều kiện gửi đánh giá mới.';
+  } else {
+    elements.reviewStatus.textContent = '';
+  }
 }
 
 function renderBooking(user, booking) {
@@ -116,10 +151,13 @@ async function init() {
   const bookingId = new URLSearchParams(location.search).get('bookingId');
   currentBooking = getCustomerBooking(currentUser, bookingId);
   if (!currentBooking) {
-    showState('Không tìm thấy lượt đặt sân', 'Mã đặt sân không hợp lệ hoặc không thuộc tài khoản hiện tại.');
+    location.replace('404.html');
     return;
   }
   renderBooking(currentUser, currentBooking);
+  if (location.hash === '#review' && getReviewEligibility(currentUser, currentBooking.id).eligible) {
+    openReviewDialog();
+  }
 }
 
 elements.cancelButton.addEventListener('click', () => {
@@ -136,10 +174,15 @@ elements.rescheduleButton.addEventListener('click', () => {
   location.assign(`booking-schedule.html?${params}`);
 });
 
-elements.reviewButton.addEventListener('click', () => {
+function openReviewDialog() {
+  elements.reviewForm.reset();
   elements.reviewFeedback.textContent = '';
+  elements.ratingCaption.textContent = 'Vui lòng chọn số sao';
+  elements.charCounter.textContent = '0/500';
   elements.reviewDialog.showModal();
-});
+}
+
+elements.reviewButton.addEventListener('click', openReviewDialog);
 
 elements.cancelForm.addEventListener('submit', async event => {
   event.preventDefault();
@@ -166,6 +209,16 @@ elements.reviewForm.addEventListener('submit', event => {
   } catch (error) {
     elements.reviewFeedback.textContent = error.message;
   }
+});
+
+elements.reviewForm.querySelectorAll('input[name="rating"]').forEach(input => {
+  input.addEventListener('change', () => {
+    elements.ratingCaption.textContent = RATING_CAPTIONS[input.value];
+  });
+});
+
+elements.reviewComment.addEventListener('input', () => {
+  elements.charCounter.textContent = `${elements.reviewComment.value.length}/500`;
 });
 
 document.querySelectorAll('[data-close-dialog]').forEach(button => {

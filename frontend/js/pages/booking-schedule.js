@@ -223,9 +223,17 @@ async function init() {
   state.user = user;
 
   const pitchId = resolveInput(user);
+  if (!pitchId) {
+    location.replace('404.html');
+    return;
+  }
   const pitch = getPitch(pitchId);
-  if (!pitch || pitch.status !== 'active') {
-    showPageState('Không thể mở lịch đặt sân', 'Sân không tồn tại, không hoạt động hoặc yêu cầu đổi lịch không hợp lệ.');
+  if (!pitch) {
+    location.replace('404.html');
+    return;
+  }
+  if (pitch.status !== 'active') {
+    showPageState('Không thể mở lịch đặt sân', 'Sân hiện không nhận lượt đặt mới.');
     return;
   }
 

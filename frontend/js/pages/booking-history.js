@@ -3,6 +3,7 @@ import '../components/site-footer.js';
 import { requireRole, ROLES } from '../services/access-control.js';
 import { BOOKING_STATUS_META, listCustomerBookings, prepareBookingData } from '../services/booking-service.js';
 import { formatVND } from '../render.js';
+import { getReviewEligibility, prepareReviews } from '../services/review-service.js';
 
 const elements = {
   content: document.getElementById('history-content'),
@@ -16,6 +17,7 @@ const elements = {
 
 let bookings = [];
 let activeStatus = 'all';
+let currentUser = null;
 
 function formatDateTime(value) {
   return new Intl.DateTimeFormat('vi-VN', {
@@ -67,6 +69,18 @@ function createBookingItem(booking) {
   const statusMeta = BOOKING_STATUS_META[booking.status];
   status.textContent = statusMeta.label;
   status.classList.add(statusMeta.className);
+  if (booking.status === 'Completed') {
+    const eligibility = getReviewEligibility(currentUser, booking.id);
+    const reviewAction = node.querySelector('.booking-history-page__review-action');
+    const reviewLink = node.querySelector('.booking-history-page__review-link');
+    const reviewed = node.querySelector('.booking-history-page__reviewed');
+    reviewAction.hidden = !eligibility.eligible && eligibility.reason !== 'already-reviewed';
+    reviewLink.hidden = !eligibility.eligible;
+    reviewed.hidden = eligibility.reason !== 'already-reviewed';
+    if (eligibility.eligible) {
+      reviewLink.href = `booking-details.html?${new URLSearchParams({ bookingId: booking.id })}#review`;
+    }
+  }
   return node;
 }
 
@@ -88,10 +102,10 @@ function selectStatus(button) {
 }
 
 async function init() {
-  await prepareBookingData();
-  const user = requireRole([ROLES.CUSTOMER], { allowSuspended: true });
-  if (!user) return;
-  bookings = listCustomerBookings(user);
+  await Promise.all([prepareBookingData(), prepareReviews()]);
+  currentUser = requireRole([ROLES.CUSTOMER], { allowSuspended: true });
+  if (!currentUser) return;
+  bookings = listCustomerBookings(currentUser);
   elements.content.hidden = false;
   elements.tabs.querySelectorAll('[data-status]').forEach(button => {
     button.addEventListener('click', () => selectStatus(button));

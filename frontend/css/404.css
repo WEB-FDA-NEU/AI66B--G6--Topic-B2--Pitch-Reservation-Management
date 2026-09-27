@@ -1,0 +1,119 @@
+.not-found-page {
+  display: grid;
+  min-height: min(820px, 78vh);
+  padding-block: var(--sp-6);
+  place-items: center;
+}
+
+.not-found-page__skip-link {
+  position: fixed;
+  z-index: 20;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-primary-d);
+  font-weight: 700;
+  transform: translateY(-180%);
+}
+
+.not-found-page__skip-link:focus {
+  transform: translateY(0);
+}
+
+.not-found-page__panel {
+  display: grid;
+  width: 100%;
+  max-width: var(--container);
+  overflow: hidden;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-primary-d);
+  box-shadow: var(--shadow);
+  color: var(--c-bg);
+}
+
+.not-found-page__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+  text-align: center;
+}
+
+.not-found-page h1 {
+  max-width: 100%;
+  margin: 0;
+  color: var(--c-bg);
+  font-size: clamp(2rem, 7vw, 3.75rem);
+  line-height: 1.1;
+}
+
+.not-found-page__message {
+  max-width: 72ch;
+  margin: var(--sp-4) 0 0;
+  color: var(--c-border);
+  line-height: 1.6;
+}
+
+.not-found-page__actions {
+  display: grid;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+}
+
+.not-found-page__actions .btn {
+  justify-content: center;
+}
+
+.not-found-page__actions .btn--secondary {
+  border-color: var(--c-border);
+  background: transparent;
+  color: var(--c-bg);
+}
+
+.not-found-page__actions .btn--secondary:hover {
+  background: var(--c-bg);
+  color: var(--c-primary-d);
+}
+
+.not-found-page__illustration {
+  width: min(100%, 597px);
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--c-surface);
+}
+
+.not-found-page__illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 520px) {
+  .not-found-page__actions {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .not-found-page {
+    padding-block: var(--sp-7);
+  }
+
+  .not-found-page__content {
+    padding: var(--sp-7) var(--sp-7) var(--sp-6);
+  }
+
+  .not-found-page__actions {
+    padding: var(--sp-6) var(--sp-7) var(--sp-7);
+  }
+}
+
+@media (min-width: 1366px) {
+  .not-found-page h1 {
+    white-space: nowrap;
+  }
+}

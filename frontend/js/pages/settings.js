@@ -30,7 +30,7 @@ async function init() {
   if (!currentUser) return;
   const content = ROLE_CONTENT[currentUser.role];
   if (!content) {
-    location.replace('403.html');
+    location.replace('404.html');
     return;
   }
   const settings = await getSettings(currentUser);

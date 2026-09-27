@@ -29,4 +29,4 @@ async function init() {
   document.getElementById('main-content').hidden = false;
 }
 
-init().catch(() => { location.replace('403.html'); });
+init().catch(() => { location.replace('404.html'); });
