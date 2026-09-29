@@ -1,0 +1,8 @@
+.system-page--403 { --system-accent:var(--c-accent); }
+.system-page { display:grid; min-height:62vh; place-items:center; padding-block:var(--sp-6); }
+.system-page .system-card { width:min(100%,42rem); padding:clamp(1.5rem,6vw,4rem); border:1px solid var(--c-border); border-radius:var(--radius); background:var(--c-bg); box-shadow:var(--shadow); text-align:center; }
+.system-page .system-code { color:var(--c-primary); font-size:clamp(4rem,14vw,8rem); font-weight:900; line-height:.9; letter-spacing:.04em; }
+.system-page .system-eyebrow { margin-top:var(--sp-5); color:var(--c-primary); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.system-page .system-card h1 { margin-top:var(--sp-2); font-size:clamp(1.6rem,5vw,2.4rem); }
+.system-page .system-description { max-width:34rem; margin:var(--sp-3) auto 0; color:var(--c-muted); line-height:1.55; }
+.system-page .system-actions { display:flex; justify-content:center; gap:var(--sp-2); flex-wrap:wrap; margin-top:var(--sp-5); }

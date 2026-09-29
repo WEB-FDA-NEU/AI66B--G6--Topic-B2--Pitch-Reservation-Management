@@ -1,47 +1,87 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Đăng ký — TÊN-SẢN-PHẨM</title>
-<link rel="stylesheet" href="css/reset.css">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tạo tài khoản Pitch Point để đặt sân bóng.">
+  <title>Đăng ký — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
-<main class="container page" style="max-width:400px">
-  <h1>Tạo tài khoản</h1>
-  <form id="register-form" class="stack" novalidate>
-    <div class="field">
-      <label class="field__label" for="display_name">Tên hiển thị</label>
-      <input class="input" id="display_name" name="display_name" required>
-      <p class="field__error"></p>
-    </div>
-    <div class="field">
-      <label class="field__label" for="email">Email</label>
-      <input class="input" id="email" name="email" type="email" required autocomplete="email">
-      <p class="field__error"></p>
-    </div>
-    <div class="field">
-      <label class="field__label" for="phone">Số điện thoại</label>
-      <input class="input" id="phone" name="phone" type="tel">
-      <p class="field__hint">Chỉ hiện cho người mua đã đăng nhập, khi họ bấm xem (BR-7).</p>
-    </div>
-    <div class="field">
-      <label class="field__label" for="password">Mật khẩu</label>
-      <input class="input" id="password" name="password" type="password" required minlength="8" autocomplete="new-password">
-      <p class="field__error"></p>
-    </div>
-    <div class="field">
-      <label class="field__label" for="confirm">Nhập lại mật khẩu</label>
-      <input class="input" id="confirm" name="confirm" type="password" required autocomplete="new-password">
-      <p class="field__error"></p>
-    </div>
-    <button class="btn btn--primary" type="submit">Đăng ký</button>
-    <p class="field__hint">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
-  </form>
-</main>
-<script type="module" src="js/pages/register.js"></script>
+  <site-header></site-header>
+
+  <main class="container register-page" id="main-content">
+    <a class="register-page__skip-link" href="#register-title">Bỏ qua điều hướng</a>
+    <section class="register-card" aria-labelledby="register-title">
+      <a class="register-card__brand" href="index.html" aria-label="Pitch Point — Trang chủ">
+        <span class="register-card__brand-mark" aria-hidden="true">P</span>
+        <span>Pitch Point</span>
+      </a>
+      <p class="register-card__eyebrow">Bắt đầu hành trình đặt sân</p>
+      <h1 id="register-title">Tạo tài khoản</h1>
+      <p class="register-card__intro">Đăng ký tài khoản</p>
+
+      <form id="register-form" class="register-form" novalidate>
+        <div class="field">
+          <label class="field__label" for="display-name">Tên khách hàng</label>
+          <input class="input" id="display-name" name="display_name" type="text" required minlength="2" maxlength="80" autocomplete="name" aria-describedby="display-name-error">
+          <p class="field__error" id="display-name-error"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="register-email">Email</label>
+          <input class="input" id="register-email" name="email" type="email" required autocomplete="email" aria-describedby="register-email-error">
+          <p class="field__error" id="register-email-error"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="register-phone">Số điện thoại</label>
+          <input class="input" id="register-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="register-phone-hint register-phone-error">
+          <p class="field__error" id="register-phone-error"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="register-password">Mật khẩu</label>
+          <div class="register-password">
+            <input class="input" id="register-password" name="password" type="password" required minlength="8" autocomplete="new-password" aria-describedby="password-hint password-error">
+            <button class="register-password__toggle" type="button" data-password-toggle="register-password" aria-controls="register-password" aria-pressed="false">Hiện</button>
+          </div>
+          <p class="field__hint" id="password-hint">Tối thiểu 8 ký tự.</p>
+          <p class="field__error" id="password-error"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="register-confirm">Nhập lại mật khẩu</label>
+          <div class="register-password">
+            <input class="input" id="register-confirm" name="confirm" type="password" required autocomplete="new-password" aria-describedby="confirm-error">
+            <button class="register-password__toggle" type="button" data-password-toggle="register-confirm" aria-controls="register-confirm" aria-pressed="false">Hiện</button>
+          </div>
+          <p class="field__error" id="confirm-error"></p>
+        </div>
+
+        <label class="register-terms" for="register-terms">
+          <input id="register-terms" name="terms" type="checkbox" required aria-describedby="terms-error">
+          <span>Tôi đồng ý với <a href="index.html#booking-steps-title">điều khoản và chính sách</a> của Pitch Point.</span>
+        </label>
+        <p class="field__error register-terms__error" id="terms-error"></p>
+
+        <p class="register-form__error" id="register-error" role="alert" hidden></p>
+        <p class="register-form__status" id="register-status" role="status" aria-live="polite" hidden></p>
+        <button class="btn btn--primary register-form__submit" type="submit">
+          <span data-submit-label>Đăng ký</span>
+          <span class="register-form__spinner" aria-hidden="true" hidden></span>
+        </button>
+      </form>
+
+      <p class="register-card__login">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+  <script type="module" src="js/pages/register.js"></script>
 </body>
 </html>

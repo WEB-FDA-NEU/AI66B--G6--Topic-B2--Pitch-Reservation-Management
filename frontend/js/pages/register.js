@@ -1,34 +1,112 @@
+import '../components/site-header.js';
+import '../components/site-footer.js';
 import { register } from '../api.js';
 import { saveSession, returnAfterLogin } from '../auth.js';
-import { setFieldError, clearFieldErrors, toast } from '../ui.js';
+import { setFieldError, clearFieldErrors } from '../ui.js';
 
 const form = document.getElementById('register-form');
+const displayName = document.getElementById('display-name');
+const email = document.getElementById('register-email');
+const phone = document.getElementById('register-phone');
+const password = document.getElementById('register-password');
+const confirmPassword = document.getElementById('register-confirm');
+const terms = document.getElementById('register-terms');
+const submitButton = form?.querySelector('[type="submit"]');
+const submitLabel = form?.querySelector('[data-submit-label]');
+const spinner = form?.querySelector('.register-form__spinner');
+const errorMessage = document.getElementById('register-error');
+const statusMessage = document.getElementById('register-status');
+const originalSubmitLabel = submitLabel?.textContent ?? 'Đăng ký';
 
-form.addEventListener('submit', async e => {
-  e.preventDefault();
+function setLoading(isLoading) {
+  if (submitButton) submitButton.disabled = isLoading;
+  if (submitLabel) submitLabel.textContent = isLoading ? 'Đang tạo tài khoản…' : originalSubmitLabel;
+  if (spinner) spinner.hidden = !isLoading;
+  form?.setAttribute('aria-busy', String(isLoading));
+}
+
+function showFieldError(input, message) {
+  if (input) setFieldError(input, message);
+}
+
+document.querySelectorAll('[data-password-toggle]').forEach(button => {
+  button.addEventListener('click', () => {
+    const input = document.getElementById(button.dataset.passwordToggle);
+    if (!input) return;
+    const reveal = input.type === 'password';
+    input.type = reveal ? 'text' : 'password';
+    button.textContent = reveal ? 'Ẩn' : 'Hiện';
+    button.setAttribute('aria-pressed', String(reveal));
+  });
+});
+
+form?.addEventListener('submit', async event => {
+  event.preventDefault();
   clearFieldErrors(form);
+  if (errorMessage) {
+    errorMessage.textContent = '';
+    errorMessage.hidden = true;
+  }
+  if (statusMessage) {
+    statusMessage.textContent = '';
+    statusMessage.hidden = true;
+  }
 
-  let ok = true;
-  if (form.display_name.value.trim().length < 2) { setFieldError(form.display_name, 'Tên tối thiểu 2 ký tự.'); ok = false; }
-  if (!form.email.validity.valid)                { setFieldError(form.email, 'Email không hợp lệ.'); ok = false; }
-  if (form.password.value.length < 8)            { setFieldError(form.password, 'Mật khẩu tối thiểu 8 ký tự.'); ok = false; }
-  if (form.password.value !== form.confirm.value){ setFieldError(form.confirm, 'Hai mật khẩu không khớp.'); ok = false; }
-  if (!ok) return;
+  let isValid = true;
+  if (!displayName?.value.trim() || displayName.value.trim().length < 2) {
+    showFieldError(displayName, 'Tên khách hàng cần có ít nhất 2 ký tự.');
+    isValid = false;
+  }
+  if (!email?.value.trim()) {
+    showFieldError(email, 'Vui lòng nhập email.');
+    isValid = false;
+  } else if (email.validity.typeMismatch) {
+    showFieldError(email, 'Vui lòng nhập đúng định dạng email.');
+    isValid = false;
+  }
+  if (!password?.value) {
+    showFieldError(password, 'Vui lòng nhập mật khẩu.');
+    isValid = false;
+  } else if (password.value.length < 8) {
+    showFieldError(password, 'Mật khẩu cần có ít nhất 8 ký tự.');
+    isValid = false;
+  }
+  if (!confirmPassword?.value) {
+    showFieldError(confirmPassword, 'Vui lòng nhập lại mật khẩu.');
+    isValid = false;
+  } else if (password?.value !== confirmPassword.value) {
+    showFieldError(confirmPassword, 'Hai mật khẩu không khớp.');
+    isValid = false;
+  }
+  if (!terms?.checked) {
+    const termsError = document.getElementById('terms-error');
+    if (termsError) termsError.textContent = 'Bạn cần đồng ý với điều khoản và chính sách.';
+    terms?.setAttribute('aria-invalid', 'true');
+    isValid = false;
+  }
+  if (!isValid) return;
 
-  const btn = form.querySelector('button[type=submit]');
-  btn.disabled = true;
+  setLoading(true);
   try {
     const session = await register({
-      display_name: form.display_name.value.trim(),
-      email: form.email.value.trim(),
+      display_name: displayName.value.trim(),
+      email: email.value.trim(),
       password: form.password.value,
-      phone: form.phone.value.trim(),
+      phone: phone?.value.trim() ?? '',
     });
-    saveSession(session);          // đăng ký xong đăng nhập luôn, không bắt qua Login
-    returnAfterLogin();
-  } catch (err) {
-    if (err.status === 409) setFieldError(form.email, err.detail);   // email trùng
-    else toast(err.detail ?? 'Đăng ký thất bại.', 'error');
-    btn.disabled = false;
+    saveSession(session);
+    if (statusMessage) {
+      statusMessage.textContent = 'Tạo tài khoản thành công. Đang chuyển trang…';
+      statusMessage.hidden = false;
+    }
+    window.setTimeout(returnAfterLogin, 180);
+  } catch (error) {
+    if (error.status === 409) {
+      showFieldError(email, error.detail || 'Email này đã được đăng ký.');
+    } else if (errorMessage) {
+      errorMessage.textContent = error?.detail || 'Không thể tạo tài khoản lúc này. Vui lòng thử lại.';
+      errorMessage.hidden = false;
+    }
+    setLoading(false);
   }
 });
