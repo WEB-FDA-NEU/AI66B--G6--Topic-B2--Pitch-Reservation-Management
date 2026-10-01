@@ -1,3 +1,4 @@
+﻿
 <!doctype html>
 <html lang="vi">
 <head>
@@ -9,19 +10,22 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/search.css">
 </head>
 <body>
   <site-header active="search"></site-header>
 
-  <nav class="container breadcrumb" aria-label="Đường dẫn">
-    <ol>
-      <li><a href="index.html">Trang chủ</a></li>
-      <li aria-current="page" id="crumb-current">Tìm sân</li>
-    </ol>
-  </nav>
+  <main class="container search-page" id="main-content">
+    <nav class="breadcrumb" aria-label="Đường dẫn">
+      <ol>
+        <li><a href="index.html">Trang chủ</a></li>
+        <li aria-current="page" id="crumb-current">Tìm sân</li>
+      </ol>
+    </nav>
 
-  <main class="container shop-layout" id="main-content">
-    <aside class="shop-sidebar" id="shop-sidebar" aria-label="Bộ lọc sân bóng">
+    <div class="search-layout">
+
+    <aside class="search-sidebar" id="search-sidebar" aria-label="Bộ lọc sân bóng">
       <form id="filter-form">
         <div class="filter-group">
           <h2 class="filter-group__title">Từ khóa</h2>
@@ -41,13 +45,15 @@
 
         <div class="filter-group">
           <h2 class="filter-group__title">Thời gian chơi</h2>
-          <div class="field">
-            <label class="field__label" for="date">Ngày</label>
-            <input class="input" id="date" name="date" type="date">
-          </div>
-          <div class="field">
-            <label class="field__label" for="time">Giờ bắt đầu</label>
-            <input class="input" id="time" name="time" type="time">
+          <div class="filter-datetime">
+            <div class="field">
+              <label class="field__label" for="date">Ngày</label>
+              <input class="input" id="date" name="date" type="date">
+            </div>
+            <div class="field">
+              <label class="field__label" for="time">Giờ bắt đầu</label>
+              <input class="input" id="time" name="time" type="time">
+            </div>
           </div>
         </div>
 
@@ -60,7 +66,7 @@
           </div>
         </div>
 
-        <div class="filter-group">
+        <div class="filter-actions">
           <button class="btn btn--primary" type="submit">Áp dụng</button>
           <button class="btn" type="reset">Xóa bộ lọc</button>
         </div>
@@ -69,16 +75,16 @@
       </form>
     </aside>
 
-    <section aria-labelledby="search-results-title">
-      <button class="btn filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="shop-sidebar">Bộ lọc</button>
+    <section aria-labelledby="search-results-title" class="search-results">
+      <button class="btn filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="search-sidebar">Bộ lọc</button>
 
-      <header class="toolbar">
+      <header class="toolbar search-results__heading">
         <div>
           <h1 id="search-results-title">Sân bóng phù hợp</h1>
-          <p class="toolbar__count" id="result-summary"></p>
+          <p class="search-results__eyebrow" id="result-summary"></p>
         </div>
         <div class="toolbar__sort">
-          <label for="sort">Sắp xếp</label>
+          <label for="sort" class="visually-hidden">Sắp xếp</label>
           <select class="select" id="sort">
             <option value="recommended">Phù hợp nhất</option>
             <option value="rating_desc">Đánh giá cao</option>
@@ -88,20 +94,29 @@
         </div>
       </header>
 
-      <div class="grid" id="results"></div>
+      <div class="grid search-pitch-grid" id="results"></div>
       <nav class="pagination" id="pagination" aria-label="Phân trang kết quả"></nav>
     </section>
+      </div>
   </main>
 
   <site-footer></site-footer>
 
   <template id="tpl-card">
-    <article class="card">
+    <article class="card search-pitch-card">
+      <button class="card__favorite" type="button" aria-pressed="false">
+        <span aria-hidden="true">♡</span>
+      </button>
       <a class="card__link">
         <img class="card__img" src="" alt="" loading="lazy">
         <div class="card__body">
-          <h2 class="card__title"></h2>
+          <div class="card__heading">
+            <h2 class="card__title"></h2>
+            <span class="card__rating"></span>
+          </div>
           <p class="card__meta"></p>
+          <p class="card__type"></p>
+          <p class="card__action"></p>
           <p class="card__price"></p>
         </div>
       </a>
@@ -120,3 +135,6 @@
   <script type="module" src="js/pages/search.js"></script>
 </body>
 </html>
+
+
+
