@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cài đặt chung — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/tokens.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <site-header></site-header>
+  <main class="container settings-page" id="main-content">
+    <header class="settings-heading"><p class="settings-heading__eyebrow">Trải nghiệm Pitch Point</p><h1>Cài đặt chung</h1><p>Điều chỉnh cách Pitch Point hiển thị thông tin và thông báo cho bạn.</p></header>
+    <form class="settings-form" data-settings-form novalidate>
+      <section class="settings-section" aria-labelledby="notification-title"><div class="settings-section__heading"><h2 id="notification-title">Thông báo</h2><p>Chọn các thông báo trong ứng dụng bạn muốn nhận.</p></div><label class="settings-toggle"><input type="checkbox" name="booking_notifications" checked><span><strong>Cập nhật đặt sân</strong><small>Nhận thông báo về trạng thái và thay đổi lịch đặt.</small></span></label><label class="settings-toggle"><input type="checkbox" name="message_notifications" checked><span><strong>Tin nhắn mới</strong><small>Nhận thông báo khi có tin nhắn mới trong cuộc trò chuyện.</small></span></label></section>
+      <section class="settings-section" aria-labelledby="display-title"><div class="settings-section__heading"><h2 id="display-title">Hiển thị</h2><p>Các lựa chọn giao diện được hỗ trợ trong prototype.</p></div><div class="settings-grid"><div class="field"><label class="field__label" for="settings-language">Ngôn ngữ</label><select class="select" id="settings-language" name="language"><option value="vi" selected>Tiếng Việt</option></select><p class="field__hint">Hiện chỉ hỗ trợ Tiếng Việt.</p></div><div class="field"><label class="field__label" for="settings-density">Mật độ hiển thị</label><select class="select" id="settings-density" name="density"><option value="comfortable" selected>Thoải mái</option><option value="compact">Gọn</option></select></div></div></section>
+      <section class="settings-section" aria-labelledby="privacy-title"><div class="settings-section__heading"><h2 id="privacy-title">Quyền riêng tư</h2><p>Kiểm soát cách thông tin liên hệ được hiển thị.</p></div><label class="settings-toggle"><input type="checkbox" name="show_phone" checked><span><strong>Hiển thị số điện thoại khi cần liên hệ</strong><small>Chỉ hiển thị trong ngữ cảnh được phép của tài khoản.</small></span></label></section>
+      <p class="settings-error" data-error role="alert" hidden></p><p class="settings-status" data-status role="status" aria-live="polite" hidden></p><div class="settings-actions"><button class="btn" type="button" data-reset>Đặt lại</button><button class="btn btn--primary" type="submit"><span data-submit-label>Lưu cài đặt</span><span class="settings-spinner" aria-hidden="true" hidden></span></button></div>
+    </form>
+  </main>
+  <site-footer></site-footer><script type="module" src="js/pages/settings.js"></script>
+</body>
+</html>
