@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quản lý các lượt đặt sân thuộc sân bóng của bạn trên Pitch Point.">
+  <title>Quản lý đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
+  <link rel="stylesheet" href="css/manager-bookings.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header active="manager"></site-header>
+
+  <!-- Điều hướng quản lý sân: CHƯA có thành phần dùng chung (site-manager-nav) được
+       duyệt, nên tạm thời viết cục bộ trong trang này. Các mục khác ngoài trang hiện
+       tại đều là màn hình "Planned", giữ ở trạng thái bất hoạt theo AGENTS.md §10.1. -->
+  <nav class="container manager-nav" aria-label="Điều hướng quản lý sân">
+    <button class="manager-nav__link" type="button" aria-disabled="true">Tổng quan</button>
+    <button class="manager-nav__link" type="button" aria-disabled="true">Sân của tôi</button>
+    <span class="manager-nav__link is-active" aria-current="page">Đặt sân</span>
+    <button class="manager-nav__link" type="button" aria-disabled="true">Doanh thu</button>
+    <button class="manager-nav__link" type="button" aria-disabled="true">Tin nhắn</button>
+  </nav>
+
+  <main class="container manager-bookings-page" id="main-content">
+    <header class="screen-heading">
+      <div>
+        <p class="screen-heading__eyebrow">Quản lý sân</p>
+        <h1>Đặt sân của khách hàng</h1>
+        <p class="screen-heading__description">Theo dõi các lượt đặt sân thuộc những sân bạn quản lý.</p>
+      </div>
+    </header>
+
+    
+
+    <div id="manager-content" hidden>
+      <section class="summary-counts" aria-label="Số liệu tổng quan đặt sân">
+        <article class="summary-card"><p class="summary-card__value" id="count-total">0</p><p class="summary-card__label">Tổng lượt đặt</p></article>
+        <article class="summary-card"><p class="summary-card__value" id="count-upcoming">0</p><p class="summary-card__label">Sắp tới</p></article>
+        <article class="summary-card"><p class="summary-card__value" id="count-confirmed">0</p><p class="summary-card__label">Đã xác nhận</p></article>
+        <article class="summary-card"><p class="summary-card__value" id="count-completed">0</p><p class="summary-card__label">Hoàn tất</p></article>
+        <article class="summary-card"><p class="summary-card__value" id="count-cancelled">0</p><p class="summary-card__label">Đã huỷ</p></article>
+      </section>
+
+      <section class="screen-panel manager-bookings__filters" aria-label="Bộ lọc đặt sân">
+        <form id="filter-form" class="manager-bookings__filter-form">
+          <div class="field">
+            <label class="field__label" for="q">Tìm theo khách hàng hoặc mã đặt sân</label>
+            <input class="input" id="q" name="q" type="search" placeholder="Ví dụ: BK-2026-0001, Nguyễn Văn A">
+          </div>
+          <div class="field">
+            <label class="field__label" for="pitch-filter">Sân</label>
+            <select class="select" id="pitch-filter" name="pitchId">
+              <option value="">Tất cả sân</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="status-filter">Trạng thái đặt sân</label>
+            <select class="select" id="status-filter" name="status">
+              <option value="">Tất cả trạng thái</option>
+              <option value="pending">Chờ xác nhận</option>
+              <option value="confirmed">Đã xác nhận</option>
+              <option value="completed">Hoàn tất</option>
+              <option value="cancelled">Đã huỷ</option>
+              <option value="rescheduled">Đã đổi lịch</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="payment-filter">Trạng thái thanh toán</label>
+            <select class="select" id="payment-filter" name="paymentStatus">
+              <option value="">Tất cả</option>
+              <option value="paid">Đã thanh toán</option>
+              <option value="pending">Chờ thanh toán</option>
+              <option value="failed">Thất bại</option>
+              <option value="refund_pending">Đang hoàn tiền</option>
+              <option value="refunded">Đã hoàn tiền</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="date-filter">Ngày chơi</label>
+            <input class="input" id="date-filter" name="date" type="date">
+          </div>
+        </form>
+      </section>
+
+      <p class="field__hint" id="result-summary" aria-live="polite"></p>
+
+      <div class="table-wrap">
+        <table class="manager-bookings-table" id="bookings-table" aria-busy="true">
+          <thead>
+            <tr>
+              <th scope="col">Mã đặt sân</th>
+              <th scope="col">Khách hàng</th>
+              <th scope="col">Sân</th>
+              <th scope="col">Ngày &amp; giờ</th>
+              <th scope="col">Số tiền</th>
+              <th scope="col">Thanh toán</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col"><span class="visually-hidden">Thao tác</span></th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="empty-state" hidden>
+        <p class="empty__title">Không có lượt đặt sân phù hợp</p>
+        <p class="empty__hint">Hãy thử đổi bộ lọc hoặc từ khoá tìm kiếm.</p>
+      </div>
+    </div>
+
+    <!-- Bảng chi tiết một lượt đặt sân, mở khi bấm "Xem" trên một dòng -->
+    <aside class="booking-detail-panel" id="detail-panel" hidden aria-labelledby="detail-panel-title">
+      <div class="booking-detail-panel__inner">
+        <header class="booking-detail-panel__header">
+          <h2 id="detail-panel-title">Chi tiết đặt sân</h2>
+          <button class="btn btn--icon" type="button" id="detail-panel-close" aria-label="Đóng chi tiết">✕</button>
+        </header>
+        <dl class="summary-list">
+          <div class="summary-list__row"><dt>Mã đặt sân</dt><dd id="panel-ref"></dd></div>
+          <div class="summary-list__row"><dt>Khách hàng</dt><dd id="panel-customer"></dd></div>
+          <div class="summary-list__row"><dt>Số điện thoại</dt><dd id="panel-phone"></dd></div>
+          <div class="summary-list__row"><dt>Sân</dt><dd id="panel-pitch"></dd></div>
+          <div class="summary-list__row"><dt>Ngày &amp; giờ</dt><dd id="panel-datetime"></dd></div>
+          <div class="summary-list__row"><dt>Số tiền</dt><dd id="panel-amount"></dd></div>
+          <div class="summary-list__row"><dt>Thanh toán</dt><dd><span class="status-badge" id="panel-payment-badge"></span></dd></div>
+          <div class="summary-list__row"><dt>Trạng thái</dt><dd><span class="status-badge" id="panel-status-badge"></span></dd></div>
+        </dl>
+        <p class="field__hint">Xem thông tin để nắm tình hình vận hành sân. Thay đổi thanh toán, hoàn tiền và lịch trống được xử lý ở các màn hình thuộc domain khác.</p>
+      </div>
+    </aside>
+  </main>
+
+  <site-footer></site-footer>
+
+  <template id="tpl-skeleton-row">
+    <tr class="skeleton-row"><td colspan="8"></td></tr>
+  </template>
+
+  <script type="module" src="js/pages/manager-bookings.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+.manager-bookings-page .skip-link:focus { transform: translateY(0); }
+
+/* ---- Điều hướng quản lý sân cục bộ (chưa có thành phần dùng chung) ---- */
+.manager-nav {
+  display: flex; gap: var(--sp-2); flex-wrap: wrap;
+  padding-block: var(--sp-3);
+  border-bottom: 1px solid var(--c-border);
+}
+.manager-nav__link {
+  padding: .5rem .9rem; border: 1px solid transparent; border-radius: var(--radius-s);
+  background: transparent; font: inherit; cursor: not-allowed; opacity: .55;
+}
+.manager-nav__link.is-active {
+  cursor: default; opacity: 1; font-weight: 800; color: var(--c-primary);
+  background: var(--c-surface); border-color: var(--c-border);
+}
+
+.manager-bookings-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); }
+.manager-bookings-page > * + * { margin-top: var(--sp-5); }
+
+/* ---- Số liệu tổng quan ---- */
+.manager-bookings-page .summary-counts {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-3);
+}
+.manager-bookings-page .summary-card {
+  padding: var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius);
+  background: var(--c-bg); text-align: center;
+}
+.manager-bookings-page .summary-card__value { font-size: 1.6rem; font-weight: 800; color: var(--c-primary); }
+.manager-bookings-page .summary-card__label { margin-top: var(--sp-1); color: var(--c-muted); font-size: .82rem; }
+
+/* ---- Bộ lọc ---- */
+.manager-bookings-page .manager-bookings__filter-form {
+  display: grid; grid-template-columns: minmax(0,1.4fr) repeat(3, minmax(0,1fr)) minmax(0,.8fr); gap: var(--sp-3);
+}
+
+/* ---- Bảng ---- */
+.manager-bookings-page .table-wrap { overflow-x: auto; border: 1px solid var(--c-border); border-radius: var(--radius); }
+.manager-bookings-page .manager-bookings-table { width: 100%; border-collapse: collapse; min-width: 780px; }
+.manager-bookings-page .manager-bookings-table th,
+.manager-bookings-page .manager-bookings-table td {
+  padding: var(--sp-3); text-align: left; border-bottom: 1px solid var(--c-border); font-size: .9rem;
+}
+.manager-bookings-page .manager-bookings-table thead th {
+  background: var(--c-surface); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--c-muted);
+}
+.manager-bookings-page .manager-bookings-table tbody tr:last-child td { border-bottom: none; }
+.manager-bookings-page .manager-bookings-table tbody tr:hover { background: color-mix(in srgb, var(--c-primary) 4%, white); }
+
+.manager-bookings-page .status-badge {
+  display: inline-flex; align-items: center; padding: .3rem .6rem;
+  border-radius: 999px; font-size: .76rem; font-weight: 800; white-space: nowrap;
+}
+.manager-bookings-page .status-badge--pending        { background: #fdf1da; color: var(--c-warning); }
+.manager-bookings-page .status-badge--confirmed       { background: #e6f6ec; color: var(--c-success); }
+.manager-bookings-page .status-badge--completed       { background: #e5eef5; color: var(--c-primary); }
+.manager-bookings-page .status-badge--cancelled       { background: #fbe9ea; color: var(--c-danger); }
+.manager-bookings-page .status-badge--rescheduled     { background: #f1ecfa; color: #5a3fae; }
+.manager-bookings-page .status-badge--payment-failed  { background: #fbe9ea; color: var(--c-danger); }
+.manager-bookings-page .status-badge--refund-pending  { background: #fdf1da; color: var(--c-warning); }
+.manager-bookings-page .status-badge--refunded        { background: #e5eef5; color: var(--c-primary); }
+
+.manager-bookings-page .skeleton-row td { padding: 0; }
+.manager-bookings-page .skeleton-row td::before {
+  content: ""; display: block; height: 44px; margin: var(--sp-2);
+  border-radius: var(--radius-s);
+  background: linear-gradient(90deg, var(--c-surface) 25%, var(--c-border) 37%, var(--c-surface) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+@keyframes shimmer { from { background-position: 100% 0 } to { background-position: 0 0 } }
+@media (prefers-reduced-motion: reduce) { .manager-bookings-page .skeleton-row td::before { animation: none } }
+
+/* ---- Bảng chi tiết trượt từ bên phải ---- */
+.manager-bookings-page .booking-detail-panel {
+  position: fixed; z-index: 70; top: 0; right: 0; height: 100%;
+  width: min(380px, 100vw);
+  background: var(--c-bg); border-left: 1px solid var(--c-border);
+  box-shadow: -20px 0 45px rgba(12,27,42,.14);
+  overflow-y: auto;
+}
+.manager-bookings-page .booking-detail-panel__inner { padding: var(--sp-5); }
+.manager-bookings-page .booking-detail-panel__header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-4);
+}
+.manager-bookings-page .summary-list { display: grid; gap: var(--sp-3); }
+.manager-bookings-page .summary-list__row {
+  display: flex; justify-content: space-between; gap: var(--sp-3);
+  padding-bottom: var(--sp-2); border-bottom: 1px dashed var(--c-border);
+}
+.manager-bookings-page .summary-list__row dt { color: var(--c-muted); }
+.manager-bookings-page .summary-list__row dd { font-weight: 700; text-align: right; }
+
+@media (max-width: 1080px) {
+  .manager-bookings-page .summary-counts { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .manager-bookings-page .manager-bookings__filter-form { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+@media (max-width: 640px) {
+  .manager-bookings-page .summary-counts { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .manager-bookings-page .manager-bookings__filter-form { grid-template-columns: 1fr; }
+  .manager-bookings-page .booking-detail-panel { width: 100vw; }
+}

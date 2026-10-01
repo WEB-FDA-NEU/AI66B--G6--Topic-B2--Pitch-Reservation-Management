@@ -1,0 +1,76 @@
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  padding: .65rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--c-accent);
+  color: var(--c-text);
+  font-weight: 800;
+  transform: translateY(-180%);
+}
+.booking-detail-page .skip-link:focus { transform: translateY(0); }
+
+.booking-detail-page { min-height: 65vh; padding-block: var(--sp-5) var(--sp-7); max-width: 760px; }
+.booking-detail-page > * + * { margin-top: var(--sp-5); }
+#detail-content > * + * { margin-top: var(--sp-5); }
+
+.booking-detail-page .detail-heading__ref { font-size: 1.6rem; }
+.booking-detail-page .screen-heading > div { display: grid; gap: var(--sp-2); }
+
+.booking-detail-page .status-badge {
+  display: inline-flex; align-items: center; width: max-content; padding: .3rem .65rem;
+  border-radius: 999px; font-size: .8rem; font-weight: 800;
+}
+.booking-detail-page .status-badge--pending        { background: #fdf1da; color: var(--c-warning); }
+.booking-detail-page .status-badge--confirmed       { background: #e6f6ec; color: var(--c-success); }
+.booking-detail-page .status-badge--completed       { background: #e5eef5; color: var(--c-primary); }
+.booking-detail-page .status-badge--cancelled       { background: #fbe9ea; color: var(--c-danger); }
+.booking-detail-page .status-badge--rescheduled     { background: #f1ecfa; color: #5a3fae; }
+.booking-detail-page .status-badge--payment-failed  { background: #fbe9ea; color: var(--c-danger); }
+.booking-detail-page .status-badge--refund-pending  { background: #fdf1da; color: var(--c-warning); }
+.booking-detail-page .status-badge--refunded        { background: #e5eef5; color: var(--c-primary); }
+
+.booking-detail-page .detail-pitch { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: var(--sp-4); }
+.booking-detail-page .detail-pitch__img { width: 160px; height: 110px; object-fit: cover; border-radius: var(--radius-s); background: var(--c-surface); }
+
+.booking-detail-page .summary-list { display: grid; gap: var(--sp-3); }
+.booking-detail-page .summary-list__row {
+  display: flex; justify-content: space-between; gap: var(--sp-4);
+  padding-bottom: var(--sp-2); border-bottom: 1px dashed var(--c-border);
+}
+.booking-detail-page .summary-list__row dt { color: var(--c-muted); }
+.booking-detail-page .summary-list__row dd { font-weight: 700; text-align: right; }
+
+.booking-detail-page .status-history { display: grid; gap: var(--sp-3); padding-left: 1.2rem; }
+.booking-detail-page .status-history li { position: relative; padding-left: var(--sp-2); }
+.booking-detail-page .status-history li::marker { color: var(--c-primary); }
+.booking-detail-page .status-history__time { display: block; color: var(--c-muted); font-size: .82rem; margin-top: .15rem; }
+
+.booking-detail-page .detail-actions { display: grid; gap: var(--sp-2); }
+.booking-detail-page .detail-actions .btn { width: max-content; }
+.booking-detail-page #review-button[aria-disabled="true"] { opacity: .6; cursor: not-allowed; }
+.booking-detail-page .field__hint { color: var(--c-muted); }
+
+.booking-detail-page .dialog__title { font-weight: 800; font-size: 1.1rem; }
+.booking-detail-page .dialog__message { margin-top: var(--sp-2); color: var(--c-muted); }
+.booking-detail-page dialog { max-width: 380px; }
+
+.booking-detail-page .skeleton-row {
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--c-surface) 25%, var(--c-border) 37%, var(--c-surface) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+.booking-detail-page .skeleton-row--detail { height: 220px; }
+@keyframes shimmer { from { background-position: 100% 0 } to { background-position: 0 0 } }
+@media (prefers-reduced-motion: reduce) { .booking-detail-page .skeleton-row { animation: none } }
+
+@media (max-width: 640px) {
+  .booking-detail-page .detail-pitch { grid-template-columns: 1fr; }
+  .booking-detail-page .detail-pitch__img { width: 100%; height: 150px; }
+  .booking-detail-page .summary-list__row { flex-direction: column; gap: var(--sp-1); }
+  .booking-detail-page .summary-list__row dd { text-align: left; }
+  .booking-detail-page .detail-actions .btn { width: 100%; }
+}

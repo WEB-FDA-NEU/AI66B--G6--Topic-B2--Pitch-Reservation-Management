@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Chi tiết một lượt đặt sân trên Pitch Point.">
+  <title>Chi tiết đặt sân — Pitch Point</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pp-popup.css">
+
+  <link rel="stylesheet" href="css/booking-detail.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
+  <site-header active="bookings"></site-header>
+
+  <nav class="container breadcrumb" aria-label="Đường dẫn">
+    <ol>
+      <li><a href="index.html">Trang chủ</a></li>
+      <li><a href="booking-history.html">Lịch sử đặt sân</a></li>
+      <li aria-current="page">Chi tiết đặt sân</li>
+    </ol>
+  </nav>
+
+  <main class="container booking-detail-page" id="main-content">
+    <h1 class="visually-hidden">Chi tiết đặt sân</h1>
+
+    
+
+    <!-- Đang tải -->
+    <section id="loading-state" aria-live="polite" hidden>
+      <div class="skeleton-row skeleton-row--detail"></div>
+    </section>
+
+    
+
+    <div id="detail-content" hidden>
+      <header class="screen-heading">
+        <div>
+          <p class="screen-heading__eyebrow">Đặt sân</p>
+          <h2 id="booking-ref" class="detail-heading__ref"></h2>
+          <span class="status-badge" id="booking-status-badge"></span>
+        </div>
+      </header>
+
+      <section class="screen-panel" aria-labelledby="pitch-info-title">
+        <header class="screen-panel__heading"><div><h2 id="pitch-info-title">Thông tin sân</h2></div></header>
+        <div class="detail-pitch">
+          <img class="detail-pitch__img" id="detail-pitch-img" src="" alt="" loading="lazy">
+          <dl class="summary-list">
+            <div class="summary-list__row"><dt>Sân bóng</dt><dd id="detail-pitch-name"></dd></div>
+            <div class="summary-list__row"><dt>Địa điểm</dt><dd id="detail-pitch-location"></dd></div>
+            <div class="summary-list__row"><dt>Ngày chơi</dt><dd id="detail-date"></dd></div>
+            <div class="summary-list__row"><dt>Khung giờ</dt><dd id="detail-time"></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="customer-info-title">
+        <header class="screen-panel__heading"><div><h2 id="customer-info-title">Thông tin khách hàng</h2></div></header>
+        <dl class="summary-list">
+          <div class="summary-list__row"><dt>Khách hàng</dt><dd id="detail-customer-name"></dd></div>
+          <div class="summary-list__row"><dt>Số điện thoại</dt><dd id="detail-customer-phone"></dd></div>
+        </dl>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="price-info-title">
+        <header class="screen-panel__heading"><div><h2 id="price-info-title">Thanh toán</h2></div></header>
+        <dl class="summary-list">
+          <div class="summary-list__row"><dt>Số tiền đặt sân</dt><dd id="detail-amount"></dd></div>
+          <div class="summary-list__row"><dt>Trạng thái thanh toán</dt><dd><span class="status-badge" id="detail-payment-badge"></span></dd></div>
+        </dl>
+        <p class="field__hint">Số tiền hoàn (nếu có) do bộ phận Thanh toán &amp; Tài chính xử lý.</p>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="status-history-title">
+        <header class="screen-panel__heading"><div><h2 id="status-history-title">Lịch sử trạng thái</h2></div></header>
+        <ol class="status-history" id="status-history"></ol>
+      </section>
+
+      <section class="screen-panel" aria-labelledby="actions-title">
+        <header class="screen-panel__heading"><div><h2 id="actions-title">Thao tác</h2></div></header>
+        <div class="detail-actions">
+          <button class="btn btn--danger" type="button" id="cancel-button" hidden>Huỷ đặt sân</button>
+          <p class="field__hint" id="cancel-ineligible-hint" hidden></p>
+
+          <a class="btn btn--primary" type="button" id="reschedule-link" hidden>Đổi lịch đá</a>
+          <p class="field__hint" id="reschedule-ineligible-hint" hidden></p>
+
+          <button class="btn" type="button" id="review-button" aria-disabled="true" hidden>Viết đánh giá</button>
+          <p class="field__hint" id="review-hint" hidden></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <site-footer></site-footer>
+
+  
+
+  <script type="module" src="js/pages/booking-detail.js"></script>
+</body>
+</html>
