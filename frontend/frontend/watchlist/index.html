@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Review the exact products and variants tracked in your PriceLens watchlist.">
+    <title>Tracked products — PriceLens</title>
+    <link rel="stylesheet" href="/src/styles/tokens.css">
+    <link rel="stylesheet" href="/src/styles/base.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+    <link rel="stylesheet" href="/src/styles/pages.css">
+  </head>
+  <body class="page watchlist-page">
+    <header id="site-header" class="header" data-active-route="watchlist" data-authenticated-shell="true"></header>
+
+    <main id="main-content" class="container page-main">
+      <div class="page-head">
+        <div>
+          <span class="eyebrow">Your watchlist</span>
+          <h1>Tracked products</h1>
+          <p id="watchlist-summary" aria-live="polite">Review the products and exact variants you are tracking.</p>
+          <p id="watchlist-action-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <section id="watchlist-state" class="state-region" aria-labelledby="watchlist-state-title" aria-live="polite">
+        <h2 id="watchlist-state-title" class="visually-hidden">Watchlist status</h2>
+        <div id="watchlist-loading" class="card card--solid state-panel">
+          <h3>Loading your watchlist</h3>
+          <p>Please wait while PriceLens retrieves your tracked products.</p>
+        </div>
+        <div id="watchlist-empty" class="card card--solid state-panel" hidden>
+          <h3>No tracked products yet</h3>
+          <p>Add a product URL to begin building your watchlist.</p>
+          <a class="btn btn--primary" href="/products/add">Add product</a>
+        </div>
+        <div id="watchlist-error" class="card card--solid state-panel state-panel--error" hidden>
+          <h3>We could not load your watchlist</h3>
+          <p id="watchlist-error-message"></p>
+          <button id="watchlist-retry" class="btn btn--light" type="button">Try again</button>
+        </div>
+        <div id="watchlist-data" hidden>
+          <div class="field watchlist-search">
+            <label for="watchlist-search">Search tracked products</label>
+            <input id="watchlist-search" class="input" type="search" autocomplete="off" placeholder="Product name">
+          </div>
+          <p id="watchlist-no-results" class="card card--solid state-panel" role="status" hidden></p>
+          <div id="watchlist-items" class="products-grid" aria-label="Tracked products"></div>
+        </div>
+      </section>
+
+      <template id="watchlist-item-template">
+        <article class="card card--solid product-card">
+          <div class="product-card__body">
+            <div class="badges product-card__badges">
+              <span class="badge" data-field="freshness"></span>
+              <span class="badge" data-field="tracking-status"></span>
+              <span class="badge badge--retailer" data-field="retailer"></span>
+            </div>
+            <span class="item-label" data-field="brand"></span>
+            <h3 data-field="name"></h3>
+            <p class="muted" data-field="variant"></p>
+            <div class="product-card__price">
+              <div>
+                <span class="money" data-field="price"></span>
+                <p class="muted small" data-field="updated"></p>
+                <p class="small product-card__alerts" data-field="alerts"></p>
+              </div>
+              <div class="product-card__actions">
+                <a class="text-link" data-field="detail-link" href="/watchlist">View</a>
+                <button class="text-link text-link--danger" data-field="remove" type="button">Remove</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </template>
+    </main>
+
+    <dialog id="remove-dialog" class="dialog" aria-labelledby="remove-title" aria-describedby="remove-message">
+      <div class="dialog__heading">
+        <h2 id="remove-title">Remove tracked product</h2>
+      </div>
+      <p id="remove-message"></p>
+      <p id="remove-status" class="status" role="status" aria-live="polite"></p>
+      <div class="dialog__actions">
+        <button id="remove-cancel" class="btn btn--light" type="button">Cancel</button>
+        <button id="remove-confirm" class="btn btn--danger" type="button">Remove product</button>
+      </div>
+    </dialog>
+
+    <footer id="site-footer" class="footer"></footer>
+    <script type="module" src="/src/pages/watchlist.js"></script>
+  </body>
+</html>
