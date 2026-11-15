@@ -240,7 +240,7 @@ Chạy ở thư mục gốc dự án, trong cửa sổ PowerShell mới. Ba bộ
 
 | Bộ | Lệnh | Thời gian | Kết quả đúng |
 |---|---|---|---|
-| API backend | `$env:TEST_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint_test"` rồi `python -m pytest -q` | ~30 giây | `81 passed` |
+| API backend | `$env:TEST_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint_test"` rồi `python -m pytest -q` | ~30 giây | `82 passed` |
 | Trình duyệt thật (cần Chrome) | `$env:E2E_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint_test"` rồi `python -m pytest -q tests/e2e` | ~5 phút | `29 passed` |
 | Crash | `$env:CRASH_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint_test"` rồi `python tests/crash/run_crash.py` | ~2–3 phút | `12/12 kịch bản đạt` |
 

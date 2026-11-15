@@ -7,7 +7,7 @@ from test_concurrency import at_once,ledger_consistent
 
 def make_hold(c,hour=18):
     r=c.post('/api/bookings/holds',json={'pitch_id':'pitch-1','local_date':day(2),'start_times':[f'{hour:02d}:00']},headers=H)
-    assert r.status_code==200,r.text
+    assert r.status_code==201,r.text
     return r.json()['booking']
 
 
@@ -39,7 +39,7 @@ def test_cancellation_flag_only_after_paid_customer_cancellations():
 def test_announcement_published_once_under_concurrent_updates():
     a,b=client_for('admin'),client_for('admin')
     r=a.post('/api/entities/ContentItem',json={'type':'announcement','status':'draft','title':'Thông báo kiểm thử','body':'Hệ thống cập nhật.'},headers=H)
-    assert r.status_code==200,r.text
+    assert r.status_code==201,r.text
     key=r.json()['id']
     results=at_once(lambda:a.patch('/api/entities/ContentItem/'+key,json={'status':'published'},headers=H),lambda:b.patch('/api/entities/ContentItem/'+key,json={'status':'published'},headers=H))
     assert all(r.status_code==200 for r in results)

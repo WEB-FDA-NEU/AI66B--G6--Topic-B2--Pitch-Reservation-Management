@@ -99,7 +99,7 @@ def cleanup_orphans(db, grace_seconds: int | None = None) -> tuple[int, int]:
     return count, freed
 
 
-@router.post('/api/uploads/images')
+@router.post('/api/uploads/images', status_code=201)
 def upload(request: Request, body: dict):
     def work(db, user):
         if not user:

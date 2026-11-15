@@ -33,8 +33,11 @@ def _bool(name: str, default: bool) -> bool:
     return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
 
 
-DEFAULT_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint"
-DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
+# Chuỗi kết nối chỉ đọc từ biến môi trường hoặc backend/.env, không viết trong code.
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+if not DATABASE_URL:
+    raise RuntimeError("Chưa cấu hình DATABASE_URL. Sao chép backend/.env.example thành backend/.env "
+                       "rồi sửa nếu cần (xem docs/SETUP.md).")
 FRONTEND_DIR = Path(os.environ.get("FRONTEND_DIR", str(PROJECT_DIR / "frontend"))).resolve()
 SEED_FILE = Path(os.environ.get("SEED_FILE", str(BACKEND_DIR / "seed.json"))).resolve()
 SERVE_FRONTEND = _bool("SERVE_FRONTEND", True)

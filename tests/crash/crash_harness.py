@@ -16,7 +16,6 @@ from sqlalchemy.engine import make_url
 
 HERE = Path(__file__).resolve().parent
 BACKEND = HERE.parents[1] / "backend"
-DEFAULT_DB = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint_test"
 PASSWORD = "123456"
 
 
@@ -25,7 +24,9 @@ class SetupError(RuntimeError):
 
 
 def database_url() -> str:
-    url = os.environ.get("CRASH_DATABASE_URL") or os.environ.get("TEST_DATABASE_URL") or DEFAULT_DB
+    url = os.environ.get("CRASH_DATABASE_URL") or os.environ.get("TEST_DATABASE_URL")
+    if not url:
+        raise SetupError("Đặt CRASH_DATABASE_URL tới một database PostgreSQL dùng để thử (tên có chữ 'test' hoặc 'crash').")
     parsed = make_url(url)
     name = parsed.database or ""
     if not parsed.drivername.startswith("postgresql"):
@@ -150,7 +151,7 @@ class Harness:
         slot = slot or self.free_slots(pitch, day)[0]
         status, data = self.call(email, "POST", "/api/bookings/holds",
                                  {"pitch_id": pitch, "local_date": day, "start_times": [slot], **extra})
-        assert status == 200, f"giữ chỗ {pitch} {day} {slot}: {status} {data}"
+        assert status == 201, f"giữ chỗ {pitch} {day} {slot}: {status} {data}"
         return data["booking"]["id"]
 
     def book(self, email, pitch, day, slot=None):
@@ -246,7 +247,7 @@ def register_before_commit(h: Harness):
     resp = h.crash_then_restart("before POST ^/api/auth/register$", None, "POST", "/api/auth/register", body)
     exists = h.one("select count(*) from users where email=%s", email)
     again = h.call(None, "POST", "/api/auth/register", body)
-    ok = resp[0] == "LỖI KẾT NỐI" and exists == 0 and again[0] == 200 and h.wallet(email) == 2_000_000
+    ok = resp[0] == "LỖI KẾT NỐI" and exists == 0 and again[0] == 201 and h.wallet(email) == 2_000_000
     return ok, (f"Người dùng thấy: {resp[0]}. Sau khi bật lại: tài khoản {'có' if exists else 'không'} tồn tại "
                 f"(đúng là không). Đăng ký lại: {again[0]}, ví {money(h.wallet(email))}.")
 
@@ -357,7 +358,10 @@ def reschedule_before_commit(h: Harness):
 
 
 def manager_cancel_before_commit(h: Harness):
-    email, manager = "binh@pitchpoint.test", "manager2@pitchpoint.test"
+    email, manager = "crash.manager-cancel@pitchpoint.test", "manager2@pitchpoint.test"
+    # Tài khoản riêng (ví đầy đủ), không phụ thuộc số dư của tài khoản demo
+    reg = h.call(None, "POST", "/api/auth/register", {"full_name": "Khách Thử Crash 3", "email": email, "password": PASSWORD})
+    assert reg[0] == 201, f"đăng ký: {reg}"
     bid = h.book(email, "pitch-5", day(5))
     w0, m0 = h.wallet(email), h.wallet(manager)
     resp = h.crash_then_restart("before POST ^/api/bookings/.+/cancellation$", manager, "POST",
@@ -437,7 +441,7 @@ def random_kills(h: Harness, rounds: int = 6, seed: int = 2026):
                 if pending:
                     h.call(email, "POST", f"/api/bookings/{pending}/cancellation", {}, timeout=8)
                 continue
-            if status != 200:
+            if status != 201:
                 with lock:
                     failed[0] += 1
                 time.sleep(0.2)

@@ -28,6 +28,7 @@ Requires Python 3.11+ and PostgreSQL 17. Step-by-step guide (in Vietnamese): **[
 ```powershell
 python -m pip install -r requirements.txt
 & "C:\Program Files\PostgreSQL\17\bin\psql.exe" -U postgres -h localhost -f backend/scripts/setup_postgres.sql
+Copy-Item backend/.env.example backend/.env    # database connection settings (not committed)
 cd backend
 python -m app.migrate
 python -m uvicorn app.main:app --port 8000

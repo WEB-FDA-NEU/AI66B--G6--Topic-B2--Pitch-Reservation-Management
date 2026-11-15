@@ -64,6 +64,14 @@ backend/
 
 ## 3. Đặc tả API
 
+Thành công:
+
+| Mã | Khi nào |
+|---|---|
+| 201 | Tạo bản ghi mới: `POST /api/auth/register`, `/api/bookings/holds`, `/api/pitches`, `/api/reviews`, `/api/conversations` (và `/messages`, `/warnings`), `/api/warnings/{id}/responses`, `/api/appeals`, `/api/uploads/images`, `POST /api/entities/<Bảng>`. Thân phản hồi là bản ghi vừa tạo |
+| 204 | Xóa: `DELETE /api/entities/<Bảng>/<id>`, không có thân phản hồi |
+| 200 | Các thao tác còn lại (đọc, đăng nhập/đăng xuất, thanh toán, hủy, đổi trạng thái, thao tác quản trị…) |
+
 Lỗi luôn trả JSON `{"error": "<câu tiếng Việt cho người dùng>"}` với mã:
 
 | Mã | Khi nào |

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response
 from sqlalchemy import Boolean, DateTime, Integer, func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -113,7 +113,7 @@ def get_record(request: Request, name: str, key: str):
     return run(request, lambda db, viewer: display(db, name, _get_visible(db, name, model, key, viewer), viewer))
 
 
-@router.post("/{name}")
+@router.post("/{name}", status_code=201)
 def create_record(request: Request, name: str, body: dict):
     model = _model(name)
     if name == "Pitch":
@@ -170,7 +170,7 @@ def update_record(request: Request, name: str, key: str, body: dict):
     return run(request, work)
 
 
-@router.delete("/{name}/{key}")
+@router.delete("/{name}/{key}", status_code=204)
 def delete_record(request: Request, name: str, key: str):
     model = _model(name)
 
@@ -180,5 +180,5 @@ def delete_record(request: Request, name: str, key: str):
         if name == "ContentItem":
             audit(db, viewer, "content_delete", "Nội dung", row.id, "", row.title or "Nội dung")
         db.delete(row)
-        return {"ok": True}
-    return run(request, work)
+    run(request, work)
+    return Response(status_code=204)

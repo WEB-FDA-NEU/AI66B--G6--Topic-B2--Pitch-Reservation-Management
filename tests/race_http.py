@@ -26,7 +26,7 @@ def together(calls):
 
 
 def checked(r):
-    assert r.status_code == 200, (r.status_code, r.text)
+    assert r.status_code in (200, 201), (r.status_code, r.text)
     return r.json()
 
 
@@ -61,7 +61,7 @@ def main():
         request_id = 'race-' + prefix
         body = {'request_id':request_id, 'pitch':{'name':'Sân kiểm thử '+prefix,'address':'Địa chỉ kiểm thử','base_price_vnd':50000,'open_time':'06:00','close_time':'22:00'}}
         results = together([lambda:manager.post('/api/pitches', json=body),lambda:manager2.post('/api/pitches',json=body)])
-        assert all(r.status_code in (200,409) for r in results)
+        assert all(r.status_code in (201,409) for r in results)
         with engine.connect() as conn:
             ids = conn.execute(text('SELECT id FROM pitches WHERE creation_request_id=:r'), {'r':request_id}).scalars().all()
         assert len(ids)==1
@@ -84,9 +84,9 @@ def main():
             return checked(c.get('/api/entities/Wallet'))['items'][0]['balance_vnd']
         for _ in range(args.rounds):
             results=together([lambda c=c:hold(c,18) for c in customers])
-            assert [r.status_code for r in results].count(200)==1
-            assert all(r.status_code in (200,409) for r in results)
-            winner=next(i for i,r in enumerate(results) if r.status_code==200)
+            assert [r.status_code for r in results].count(201)==1
+            assert all(r.status_code in (201,409) for r in results)
+            winner=next(i for i,r in enumerate(results) if r.status_code==201)
             b=results[winner].json()['booking']; c=customers[winner]
             before=balance(c)
             results=together([lambda:pay(c,b),lambda:pay(c,b)])

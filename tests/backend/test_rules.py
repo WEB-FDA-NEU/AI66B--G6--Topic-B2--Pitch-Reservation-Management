@@ -32,7 +32,7 @@ def test_login_wrong_password_and_me():
 def test_register_gives_initial_balance_and_rejects_duplicate():
     c = client_for()
     body = {"email": "new@pitchpoint.test", "password": "abcdef", "full_name": "Người mới"}
-    assert c.post("/api/auth/register", json=body, headers=H).status_code == 200
+    assert c.post("/api/auth/register", json=body, headers=H).status_code == 201
     assert c.post("/api/auth/register", json=body, headers=H).status_code == 409
     assert c.post("/api/auth/register", json={**body, "email": "x@y.z", "password": "123"}, headers=H).status_code == 400
     c2 = client_for()
@@ -47,7 +47,7 @@ def test_csrf_header_required(customer):
 # ---------------------------------------------------------------- giữ chỗ / thanh toán
 def test_hold_pay_flow(customer):
     r = hold(customer)
-    assert r.status_code == 200, r.text
+    assert r.status_code == 201, r.text
     b = r.json()["booking"]
     assert b["status"] == "pending" and b["amount_vnd"] == 500_000 and b["code"].startswith("PP-")
     r = pay(customer, b["id"])
@@ -59,7 +59,7 @@ def test_hold_pay_flow(customer):
 
 
 def test_one_pending_hold_per_customer(customer):
-    assert hold(customer).status_code == 200
+    assert hold(customer).status_code == 201
     r = hold(customer, pitch="pitch-2", starts=("07:00",))
     assert r.status_code == 409 and "đang giữ chỗ" in r.json()["error"]
 
@@ -68,7 +68,7 @@ def test_slots_must_be_contiguous_and_within_7_days(customer):
     assert hold(customer, starts=("08:00", "10:00")).status_code == 409
     r = hold(customer, date=day(8))
     assert r.status_code == 400 and "7 ngày" in r.json()["error"]
-    assert hold(customer, date=day(7), starts=("08:00",)).status_code == 200
+    assert hold(customer, date=day(7), starts=("08:00",)).status_code == 201
 
 
 def test_base_price_change_updates_weekly_schedule(manager, customer):
@@ -96,7 +96,7 @@ def test_release_hold(customer):
     b = hold(customer).json()["booking"]
     r = customer.post(f"/api/bookings/{b['id']}/cancellation", json={}, headers=H)
     assert r.json()["booking"]["cancel_type"] == "hold_released"
-    assert hold(customer).status_code == 200
+    assert hold(customer).status_code == 201
 
 
 def test_two_customers_same_slot_concurrently():
@@ -114,7 +114,7 @@ def test_two_customers_same_slot_concurrently():
     threads = [threading.Thread(target=go, args=(c,)) for c in (c1, c2)]
     [t.start() for t in threads]
     [t.join() for t in threads]
-    assert sorted(results) == [200, 409]
+    assert sorted(results) == [201, 409]
 
 
 # ---------------------------------------------------------------- hủy / đổi lịch / đánh giá
@@ -162,7 +162,7 @@ def test_review_after_completion_once(customer):
     assert customer.post("/api/reviews", json=body, headers=H).status_code == 400
     set_clock_offset(timedelta(days=2))
     assert customer.get(f"/api/entities/Booking/{b['id']}").json()["status"] == "completed"
-    assert customer.post("/api/reviews", json=body, headers=H).status_code == 200
+    assert customer.post("/api/reviews", json=body, headers=H).status_code == 201
     assert customer.post("/api/reviews", json=body, headers=H).status_code == 409
 
 
@@ -241,7 +241,7 @@ def test_suspend_customer(customer, admin):
     assert hold(customer, date=day(3)).status_code == 403
     assert customer.post(f"/api/bookings/{b['id']}/cancellation", json={}, headers=H).status_code == 403
     assert customer.post("/api/appeals", json={"body": "ngắn"}, headers=H).status_code == 400
-    assert customer.post("/api/appeals", json={"body": "Tôi không vi phạm, xin xem lại."}, headers=H).status_code == 200
+    assert customer.post("/api/appeals", json={"body": "Tôi không vi phạm, xin xem lại."}, headers=H).status_code == 201
     assert customer.post("/api/appeals", json={"body": "Tôi không vi phạm, xin xem lại."}, headers=H).status_code == 409
     admin.post("/api/admin/actions", json={"action": "restore_user", "user_id": "user-customer"}, headers=H)
     appeal = customer.get("/api/entities/Report").json()["items"][0]
@@ -273,7 +273,7 @@ def test_admin_cannot_change_admin(admin, customer):
 
 def test_report_rules(customer):
     body = {"target_type": "pitch", "target_id": "pitch-1", "reason": "Sai giá", "details": "..."}
-    assert customer.post("/api/entities/Report", json=body, headers=H).status_code == 200
+    assert customer.post("/api/entities/Report", json=body, headers=H).status_code == 201
     assert customer.post("/api/entities/Report", json=body, headers=H).status_code == 409
     me = {"target_type": "user", "target_id": "user-customer", "reason": "x"}
     assert customer.post("/api/entities/Report", json=me, headers=H).status_code == 400
@@ -282,12 +282,12 @@ def test_report_rules(customer):
 def test_messages_and_notifications(customer, manager):
     r = customer.post("/api/conversations", json={"pitch_id": "pitch-1", "body": "Chào anh"}, headers=H)
     conv = r.json()["conversation_id"]
-    assert manager.post(f"/api/conversations/{conv}/messages", json={"body": "Chào bạn"}, headers=H).status_code == 200
+    assert manager.post(f"/api/conversations/{conv}/messages", json={"body": "Chào bạn"}, headers=H).status_code == 201
     n = customer.get("/api/entities/Notification").json()["items"]
     assert n and n[0]["link"].startswith("messages.html?conversationId=")
     assert customer.patch(f"/api/entities/Notification/{n[0]['id']}", json={"read": True, "title": "x"}, headers=H).json()["title"] != "x"
     w = manager.post(f"/api/conversations/{conv}/warnings", json={"reason": "Nói tục"}, headers=H).json()["warning"]
-    assert customer.post(f"/api/warnings/{w['id']}/responses", json={"body": "Xin lỗi"}, headers=H).status_code == 200
+    assert customer.post(f"/api/warnings/{w['id']}/responses", json={"body": "Xin lỗi"}, headers=H).status_code == 201
 
 
 # ---------------------------------------------------------------- dữ liệu demo và gợi ý ngày trống
@@ -328,7 +328,7 @@ def test_demo_seed_is_consistent():
 def test_search_suggests_next_free_slot(customer, manager):
     r = manager.post("/api/entities/AvailabilityOverride", json={"pitch_id": "pitch-1", "local_date": day(1), "start_time": "00:00",
                                                                  "end_time": "23:59", "status": "blocked"}, headers=H)
-    assert r.status_code == 200
+    assert r.status_code == 201
     res = customer.get(f"/api/search/pitches?date={day(1)}").json()["results"]
     p1 = next(p for p in res if p["id"] == "pitch-1")
     assert p1["available_count"] == 0 and p1["next_slot"]["local_date"] == day(2)

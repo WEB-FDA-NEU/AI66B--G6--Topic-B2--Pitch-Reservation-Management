@@ -95,7 +95,7 @@ def test_admin_resets_password_and_user_must_change_it():
     assert blocked.status_code == 403 and "mật khẩu tạm" in blocked.json()["error"]
     assert c.post("/api/auth/password", json={"current_password": temp, "new_password": "dung-moi-1"}, headers=H).status_code == 200
     assert c.get("/api/auth/me").json()["must_change_password"] is False
-    assert hold(c).status_code == 200
+    assert hold(c).status_code == 201
     reqs = [x for x in admin.get("/api/entities/Report").json()["items"] if x["target_type"] == "password_reset"]
     assert reqs[0]["status"] == "resolved"
     log = admin.get("/api/entities/AuditEvent").json()["items"]
@@ -127,7 +127,7 @@ def test_admin_changes_settings_and_rules_follow():
     assert r.status_code == 400 and "3 ngày" in r.json()["error"]
     anon = client_for()
     assert anon.post("/api/auth/register", json={"email": "n1@pitchpoint.test", "password": "1234567"}, headers=H).status_code == 400
-    assert anon.post("/api/auth/register", json={"email": "n1@pitchpoint.test", "password": "12345678"}, headers=H).status_code == 200
+    assert anon.post("/api/auth/register", json={"email": "n1@pitchpoint.test", "password": "12345678"}, headers=H).status_code == 201
     n1 = client_for()
     n1.post("/api/auth/login", json={"email": "n1@pitchpoint.test", "password": "12345678"}, headers=H)
     assert n1.get("/api/entities/Wallet").json()["items"][0]["balance_vnd"] == 500000
@@ -142,13 +142,13 @@ def test_admin_changes_settings_and_rules_follow():
 def test_support_messages_between_users_and_admin():
     cust, mgr, admin = client_for("customer"), client_for("manager"), client_for("admin")
     r = cust.post("/api/conversations", json={"to_admin": True, "body": "Cho em hỏi về hoàn tiền"}, headers=H)
-    assert r.status_code == 200
+    assert r.status_code == 201
     cid = r.json()["conversation_id"]
     assert cust.post("/api/conversations", json={"to_admin": True, "body": "Em gửi thêm"}, headers=H).json()["conversation_id"] == cid
     conv = admin.get(f"/api/entities/Conversation/{cid}").json()
     assert conv["kind"] == "support" and conv["customer_id"] == "user-customer"
     assert any(t.startswith("Tin nhắn mới từ") for t in titles(admin))
-    assert admin.post(f"/api/conversations/{cid}/messages", json={"body": "Chào bạn, mình hỗ trợ nhé"}, headers=H).status_code == 200
+    assert admin.post(f"/api/conversations/{cid}/messages", json={"body": "Chào bạn, mình hỗ trợ nhé"}, headers=H).status_code == 201
     assert "Tin nhắn mới từ Quản trị viên Pitch Point" in titles(cust)
     msgs = cust.get(f"/api/entities/Message?where={{\"conversation_id\":\"{cid}\"}}").json()["items"]
     assert [m["sender_role"] for m in msgs].count("admin") == 1
@@ -158,7 +158,7 @@ def test_support_messages_between_users_and_admin():
     assert mgr.post(f"/api/conversations/{cid}/messages", json={"body": "x"}, headers=H).status_code == 403
     assert mgr.post(f"/api/conversations/{mcid}/warnings", json={"reason": "x"}, headers=H).status_code == 403
     r = admin.post("/api/conversations", json={"user_id": "user-dung", "body": "Chào Dũng"}, headers=H)
-    assert r.status_code == 200
+    assert r.status_code == 201
     dung = client_for("dung@pitchpoint.test")
     assert dung.get(f"/api/entities/Conversation/{r.json()['conversation_id']}").status_code == 200
     assert admin.post("/api/conversations", json={"user_id": "user-admin", "body": "x"}, headers=H).status_code == 404

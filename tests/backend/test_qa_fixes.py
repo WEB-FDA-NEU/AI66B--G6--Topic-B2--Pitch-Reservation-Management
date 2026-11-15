@@ -42,17 +42,17 @@ def test_report_target_must_exist():
     assert r.status_code == 404
     ok = c.post("/api/entities/Report", json={"target_type": "pitch", "target_id": "pitch-2", "target_name": "Tên giả",
                                               "reason": "Sai giá"}, headers=H)
-    assert ok.status_code == 200 and ok.json()["target_name"] != "Tên giả"
+    assert ok.status_code == 201 and ok.json()["target_name"] != "Tên giả"
 
 
 def test_manager_cannot_block_hours_that_customers_hold_or_booked():
     m, c = client_for("manager"), client_for("customer")
     hold = c.post("/api/bookings/holds", json={"pitch_id": "pitch-1", "local_date": day(2), "start_times": ["18:00"]}, headers=H)
-    assert hold.status_code == 200, hold.text
+    assert hold.status_code == 201, hold.text
     block = {"pitch_id": "pitch-1", "local_date": day(2), "status": "blocked", "reason": "Bảo trì"}
     r = m.post("/api/entities/AvailabilityOverride", json={**block, "start_time": "17:00", "end_time": "19:00"}, headers=H)
     assert r.status_code == 409 and hold.json()["booking"]["code"] in r.json()["error"]
-    assert m.post("/api/entities/AvailabilityOverride", json={**block, "start_time": "06:00", "end_time": "08:00"}, headers=H).status_code == 200
+    assert m.post("/api/entities/AvailabilityOverride", json={**block, "start_time": "06:00", "end_time": "08:00"}, headers=H).status_code == 201
     assert c.post(f"/api/bookings/{hold.json()['booking']['id']}/payment", headers=H).status_code == 200
     r = m.post("/api/entities/AvailabilityOverride", json={**block, "start_time": "18:00", "end_time": "19:00"}, headers=H)
     assert r.status_code == 409
