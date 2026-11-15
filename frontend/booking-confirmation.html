@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Kiểm tra thông tin đơn trong thời gian giữ chỗ." />
+    <title>Xác nhận đặt sân — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/booking-confirmation.css" />
+  </head>
+  <body data-page="booking-confirmation">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container stack" id="main">
+      <h1>Xác nhận đặt sân</h1>
+      <div id="booking" class="surface stack"></div>
+      <p id="countdown"></p>
+      <p>Kiểm tra thông tin và thanh toán đơn đang giữ chỗ.</p>
+      <label>
+        <input type="checkbox" id="consent" />
+        Tôi đồng ý với điều khoản và chính sách hủy.
+      </label>
+      <button id="pay" class="button">Thanh toán</button>
+      <p id="error" role="alert"></p>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/booking-confirmation.js"></script>
+  </body>
+</html>

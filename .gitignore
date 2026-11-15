@@ -1,10 +1,10 @@
-__pycache__/
-*.py[cod]
-.venv/
-venv/
 .env
 *.db
-.DS_Store
-.vscode/
+*.db-shm
+*.db-wal
+__pycache__/
+.pytest_cache/
 uploads/
-AGENTS.md
+node_modules/
+.venv/
+venv/

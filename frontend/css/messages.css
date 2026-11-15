@@ -1,0 +1,188 @@
+
+/* ---- Messages ---- */
+:where(body[data-page="messages"]) .conv-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--item-border);
+  background: var(--card);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+:where(body[data-page="messages"]) .message-thread {
+  max-height: 24rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: var(--space-3);
+  background: var(--muted);
+  border-radius: var(--radius-lg);
+}
+
+:where(body[data-page="messages"]) .message-bubble {
+  max-width: 82%;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  border: 1px solid var(--border);
+  align-self: flex-start;
+}
+
+:where(body[data-page="messages"]) .message-bubble--mine {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  align-self: flex-end;
+}
+
+:where(body[data-page="messages"]) .conv-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+:where(body[data-page="messages"]) .conv-item-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.125rem;
+}
+
+:where(body[data-page="messages"]) .conv-item-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:where(body[data-page="messages"]) .conv-item-body > .row-between {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+:where(body[data-page="messages"]) .conv-item-body > .row-between > .muted { flex-shrink: 0; }
+
+:where(body[data-page="messages"]) .conv-item-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+:where(body[data-page="messages"]) .messages-back-btn {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  :where(body[data-page="messages"]) .messages-back-btn {
+      display: inline-flex;
+    }
+}
+
+:where(body[data-page="messages"]) .thread-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+:where(body[data-page="messages"]) .thread-header-who {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+:where(body[data-page="messages"]) .thread-header-who .avatar-circle { flex-shrink: 0; }
+:where(body[data-page="messages"]) .thread-header-name { min-width: 0; display: grid; gap: 0.15rem; }
+:where(body[data-page="messages"]) .thread-header-name > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+:where(body[data-page="messages"]) .thread-header-actions { flex-shrink: 0; gap: 0.5rem; }
+:where(body[data-page="messages"]) .messages-back-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  flex-shrink: 0;
+  margin-left: -0.25rem;
+}
+
+@media (max-width: 1023px) {
+  :where(body[data-page="messages"]) .thread-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+  :where(body[data-page="messages"]) .thread-header-actions:empty { display: none; }
+  :where(body[data-page="messages"]) .thread-header > .thread-header-actions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  :where(body[data-page="messages"]) .thread-header .messages-back-btn { margin-right: auto; }
+  :where(body[data-page="messages"]) .thread-header-who .avatar-circle { order: 3; }
+  :where(body[data-page="messages"]) .thread-header-name { order: 2; text-align: right; justify-items: end; }
+  :where(body[data-page="messages"]) .thread-view-pitch { display: none; }
+  :where(body[data-page="messages"]) .thread-header-actions:not(:has(> :not(.thread-view-pitch))) { display: none; }
+  :where(body[data-page="messages"]) .thread-header-actions .button { border-radius: 999px; }
+}
+
+:where(body[data-page="messages"]) .thread-pitch-link { color: var(--brand-text); font-weight: 600; }
+:where(body[data-page="messages"]) .thread-pitch-link:hover { color: var(--foreground); }
+:where(body[data-page="messages"]) .thread-person-link { color: inherit; }
+:where(body[data-page="messages"]) .thread-person-link:hover { color: var(--brand-text); }
+:where(body[data-page="messages"]) .messages-thread-pane:focus:not(:focus-visible),
+:where(body[data-page="messages"]) .messages-thread-pane[tabindex="-1"]:focus { outline: none; }
+
+/* Tab nhóm hội thoại của admin */
+:where(body[data-page="messages"]) .conv-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-lg, 0.75rem);
+  background: var(--muted);
+}
+:where(body[data-page="messages"]) .conv-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.5rem;
+  border: 0;
+  border-radius: calc(var(--radius-lg, 0.75rem) - 0.2rem);
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  cursor: pointer;
+}
+:where(body[data-page="messages"]) .conv-tab.is-active {
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+:where(body[data-page="messages"]) .conv-tab-label { font-size: 0.875rem; font-weight: 700; }
+:where(body[data-page="messages"]) .message-meta { display: flex; flex-wrap: wrap; gap: 0.15rem 0.6rem; }
+:where(body[data-page="messages"]) .related-booking-link {
+  display: inline-grid;
+  gap: 0.1rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--item-border);
+  border-radius: var(--radius-lg, 0.75rem);
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+:where(body[data-page="messages"]) .related-booking-link > span { color: var(--muted-foreground); }
+:where(body[data-page="messages"]) .related-booking-link:hover { border-color: var(--primary); }

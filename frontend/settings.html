@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tùy chỉnh giao diện sáng/tối." />
+    <title>Chế độ hiển thị — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/settings.css" />
+  </head>
+  <body data-page="settings">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container">
+      <h1>Chế độ hiển thị</h1>
+      <p>Chọn giao diện sáng, tối hoặc theo thiết bị.</p>
+      <form id="theme-form" class="surface stack">
+        <label>
+          <input type="radio" name="theme" value="light" />
+          Sáng
+        </label>
+        <label>
+          <input type="radio" name="theme" value="dark" />
+          Tối
+        </label>
+        <label>
+          <input type="radio" name="theme" value="system" />
+          Theo hệ thống
+        </label>
+      </form>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/settings.js"></script>
+  </body>
+</html>

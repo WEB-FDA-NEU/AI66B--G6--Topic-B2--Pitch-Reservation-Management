@@ -1,0 +1,6 @@
+/* ---- Trang 403 ---- */
+.pitch-scene-badge--danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}

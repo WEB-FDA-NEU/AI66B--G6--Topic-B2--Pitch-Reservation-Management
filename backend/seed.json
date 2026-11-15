@@ -1,0 +1,391 @@
+{
+  "User": [
+    {
+      "id": "user-customer",
+      "email": "customer@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Khách hàng demo",
+      "app_role": "customer",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.100Z"
+    },
+    {
+      "id": "user-manager",
+      "email": "manager@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Chủ sân demo",
+      "app_role": "manager",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.101Z"
+    },
+    {
+      "id": "user-admin",
+      "email": "admin@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Quản trị viên demo",
+      "app_role": "admin",
+      "role": "admin",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.101Z"
+    },
+    {
+      "id": "user-manager-2",
+      "email": "manager2@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Nguyễn Văn Hùng",
+      "phone": "0903111222",
+      "app_role": "manager",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-manager-3",
+      "email": "manager3@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Phạm Thị Lan",
+      "phone": "0903333444",
+      "app_role": "manager",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-manager-4",
+      "email": "manager4@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Đỗ Quang Minh",
+      "phone": "0903555666",
+      "app_role": "manager",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-dung",
+      "email": "dung@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Hoàng Tiến Dũng",
+      "phone": "0987100200",
+      "app_role": "customer",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-giang",
+      "email": "giang@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Vũ Thu Giang",
+      "phone": "0987300400",
+      "app_role": "customer",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-hai",
+      "email": "hai@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Ngô Đức Hải",
+      "phone": "0987500600",
+      "app_role": "customer",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "user-khanh",
+      "email": "khanh@pitchpoint.test",
+      "password": "123456",
+      "full_name": "Bùi Ngọc Khánh",
+      "phone": "0987700800",
+      "app_role": "customer",
+      "role": "user",
+      "status": "active",
+      "created_date": "2026-10-31T12:09:03.102Z"
+    }
+  ],
+  "Pitch": [
+    {
+      "id": "pitch-1",
+      "name": "Sân bóng Cầu Giấy",
+      "district": "Cầu Giấy",
+      "city": "Hà Nội",
+      "address": "Cầu Giấy, Hà Nội",
+      "type": "5v5",
+      "base_price_vnd": 250000,
+      "description": "Sân cỏ nhân tạo với đèn chiếu sáng và khu vực nghỉ.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe",
+        "Phòng thay đồ"
+      ],
+      "manager_id": "user-manager",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.101Z"
+    },
+    {
+      "id": "pitch-2",
+      "name": "Sân bóng Mỹ Đình",
+      "district": "Nam Từ Liêm",
+      "city": "Hà Nội",
+      "address": "Mỹ Đình, Hà Nội",
+      "type": "7v7",
+      "base_price_vnd": 400000,
+      "description": "Sân bóng rộng rãi phù hợp các trận đấu phong trào.",
+      "facilities": [
+        "Bãi đỗ xe",
+        "Nước uống"
+      ],
+      "manager_id": "user-manager",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.101Z"
+    },
+    {
+      "id": "pitch-3",
+      "name": "Sân bóng Thanh Xuân",
+      "district": "Thanh Xuân",
+      "city": "Hà Nội",
+      "address": "Thanh Xuân, Hà Nội",
+      "type": "5v5",
+      "base_price_vnd": 220000,
+      "description": "Sân bóng dành cho các đội và nhóm bạn.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Nước uống"
+      ],
+      "manager_id": "user-manager",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.101Z"
+    },
+    {
+      "id": "pitch-4",
+      "name": "Sân bóng Hoàng Mai",
+      "district": "Hoàng Mai",
+      "city": "Hà Nội",
+      "address": "Số 15 Tam Trinh",
+      "type": "5v5",
+      "base_price_vnd": 200000,
+      "description": "Sân 5 người cỏ mới thay, giá mềm cho nhóm bạn.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe máy",
+        "Nước uống"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-2",
+      "manager_name": "Nguyễn Văn Hùng",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-5",
+      "name": "Sân bóng Long Biên",
+      "district": "Long Biên",
+      "city": "Hà Nội",
+      "address": "Số 88 Nguyễn Văn Cừ",
+      "type": "7v7",
+      "base_price_vnd": 350000,
+      "description": "Sân 7 người rộng, có khán đài nhỏ cho đội cổ vũ.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe",
+        "Phòng thay đồ",
+        "Căng tin"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-2",
+      "manager_name": "Nguyễn Văn Hùng",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-6",
+      "name": "Sân vận động mini Hà Đông",
+      "district": "Hà Đông",
+      "city": "Hà Nội",
+      "address": "Số 3 Quang Trung",
+      "type": "11v11",
+      "base_price_vnd": 900000,
+      "description": "Sân 11 người tiêu chuẩn cho giải phong trào và đội công ty.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe ô tô",
+        "Phòng thay đồ",
+        "Tủ đồ"
+      ],
+      "open_time": "07:00",
+      "close_time": "21:00",
+      "manager_id": "user-manager-2",
+      "manager_name": "Nguyễn Văn Hùng",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-7",
+      "name": "Sân bóng Tây Hồ",
+      "district": "Tây Hồ",
+      "city": "Hà Nội",
+      "address": "Số 21 Xuân Diệu",
+      "type": "5v5",
+      "base_price_vnd": 280000,
+      "description": "Sân gần hồ, thoáng mát, phù hợp đá buổi sáng sớm.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Nước uống",
+        "Wifi"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-3",
+      "manager_name": "Phạm Thị Lan",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-8",
+      "name": "Sân bóng Ba Đình",
+      "district": "Ba Đình",
+      "city": "Hà Nội",
+      "address": "Số 40 Đội Cấn",
+      "type": "7v7",
+      "base_price_vnd": 380000,
+      "description": "Sân trung tâm, dễ tìm, có người trông xe.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe",
+        "Phòng thay đồ"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-3",
+      "manager_name": "Phạm Thị Lan",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-9",
+      "name": "Sân bóng Đống Đa",
+      "district": "Đống Đa",
+      "city": "Hà Nội",
+      "address": "Số 112 Tây Sơn",
+      "type": "5v5",
+      "base_price_vnd": 230000,
+      "description": "Sân nhỏ gọn gần các trường đại học.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Nước uống"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-4",
+      "manager_name": "Đỗ Quang Minh",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    },
+    {
+      "id": "pitch-10",
+      "name": "Sân bóng Hai Bà Trưng",
+      "district": "Hai Bà Trưng",
+      "city": "Hà Nội",
+      "address": "Số 9 Minh Khai",
+      "type": "7v7",
+      "base_price_vnd": 360000,
+      "description": "Sân 7 người có cho thuê giày và áo bib.",
+      "facilities": [
+        "Đèn chiếu sáng",
+        "Bãi đỗ xe",
+        "Phòng thay đồ",
+        "Cho thuê giày"
+      ],
+      "open_time": "06:00",
+      "close_time": "22:00",
+      "manager_id": "user-manager-4",
+      "manager_name": "Đỗ Quang Minh",
+      "status": "active",
+      "images": [],
+      "created_date": "2026-10-31T12:09:03.102Z"
+    }
+  ],
+  "Wallet": [
+    {
+      "id": "wallet-user-customer",
+      "user_id": "user-customer",
+      "balance_vnd": 2000000
+    },
+    {
+      "id": "wallet-user-manager",
+      "user_id": "user-manager",
+      "balance_vnd": 0
+    },
+    {
+      "id": "wallet-user-admin",
+      "user_id": "user-admin",
+      "balance_vnd": 0
+    },
+    {
+      "id": "wallet-user-manager-2",
+      "user_id": "user-manager-2",
+      "balance_vnd": 0
+    },
+    {
+      "id": "wallet-user-manager-3",
+      "user_id": "user-manager-3",
+      "balance_vnd": 0
+    },
+    {
+      "id": "wallet-user-manager-4",
+      "user_id": "user-manager-4",
+      "balance_vnd": 0
+    },
+    {
+      "id": "wallet-user-dung",
+      "user_id": "user-dung",
+      "balance_vnd": 2000000
+    },
+    {
+      "id": "wallet-user-giang",
+      "user_id": "user-giang",
+      "balance_vnd": 2000000
+    },
+    {
+      "id": "wallet-user-hai",
+      "user_id": "user-hai",
+      "balance_vnd": 2000000
+    },
+    {
+      "id": "wallet-user-khanh",
+      "user_id": "user-khanh",
+      "balance_vnd": 2000000
+    }
+  ],
+  "Booking": [],
+  "Payment": [],
+  "Refund": [],
+  "Favorite": [],
+  "Review": [],
+  "PitchSchedule": [],
+  "AvailabilityOverride": [],
+  "Conversation": [],
+  "Message": [],
+  "Notification": [],
+  "Report": [],
+  "AuditEvent": [],
+  "ContentItem": [],
+  "SystemSetting": [],
+  "session": null
+}

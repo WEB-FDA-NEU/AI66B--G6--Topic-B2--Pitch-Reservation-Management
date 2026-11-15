@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tin nhắn giữa khách hàng, chủ sân và quản trị viên." />
+    <title>Tin nhắn — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/messages.css" />
+  </head>
+  <body data-page="messages">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container stack" id="main">
+      <h1>Tin nhắn</h1>
+      <div id="conversations" class="stack"></div>
+      <section id="thread" class="surface stack" hidden>
+        <h2>Hội thoại</h2>
+        <div id="messages" class="stack"></div>
+        <form id="message-form">
+          <label>
+            Nội dung
+            <textarea name="body" maxlength="2000" required></textarea>
+          </label>
+          <button class="button">Gửi</button>
+        </form>
+      </section>
+      <p id="error" role="alert"></p>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/messages.js"></script>
+  </body>
+</html>
