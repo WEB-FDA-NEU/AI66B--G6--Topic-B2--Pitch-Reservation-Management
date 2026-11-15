@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Chọn ngày và khung giờ để giữ chỗ sân." />
+    <title>Đặt sân — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/booking-schedule.css" />
+  </head>
+  <body data-page="booking-schedule">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container stack" id="main">
+      <h1>Chọn giờ đặt sân</h1>
+      <p>Chọn các khung giờ còn trống liền kề.</p>
+      <label>
+        Ngày
+        <input id="date" type="date" />
+      </label>
+      <div id="slots" class="grid"></div>
+      <p id="selection"></p>
+      <button id="book" class="button" disabled>Giữ chỗ</button>
+      <p id="error" role="alert"></p>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/booking-schedule.js"></script>
+  </body>
+</html>

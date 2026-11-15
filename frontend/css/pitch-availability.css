@@ -1,0 +1,64 @@
+/* ===== Lịch hoạt động & giá theo tuần ===== */
+.schedule-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.schedule-footer { display: flex; justify-content: flex-end; }
+
+.schedule-table .sched-price-field { display: flex; align-items: center; gap: 0.5rem; }
+.schedule-table .sched-price-field input { min-width: 0; flex: 1 1 auto; }
+.schedule-table .sched-price-unit { flex-shrink: 0; font-size: 0.8125rem; color: var(--muted-foreground); }
+.schedule-table tr.is-closed .sched-day { color: var(--muted-foreground); }
+
+/* Điện thoại: mỗi ngày một thẻ; ngày đóng cửa chỉ còn dòng đầu */
+@media (max-width: 639px) {
+  .table-scroll:has(> .schedule-table) { border: 0; background: none; overflow: visible; }
+  body[data-page] .data-table.schedule-table tbody { display: grid; gap: 0.75rem; }
+  body[data-page] .data-table.schedule-table tr,
+  body[data-page] .data-table.schedule-table tr:last-child {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "day status"
+      "start end"
+      "price price";
+    gap: 0.75rem;
+    padding: 0.875rem 1rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 1rem);
+    background: var(--card);
+  }
+  body[data-page] .data-table.schedule-table tr:hover { background: var(--card); }
+  body[data-page] .data-table.schedule-table td {
+    display: block;
+    padding: 0;
+    text-align: left;
+    border: 0;
+    min-width: 0;
+  }
+  body[data-page] .data-table.schedule-table td::before { content: none; }
+  body[data-page] .data-table.schedule-table td > input { max-width: none; }
+
+  body[data-page] .data-table.schedule-table .sched-day { grid-area: day; align-self: center; font-size: 1.0625rem; }
+  body[data-page] .data-table.schedule-table .sched-status { grid-area: status; display: flex; justify-content: flex-end; align-self: center; }
+  body[data-page] .data-table.schedule-table .sched-start { grid-area: start; }
+  body[data-page] .data-table.schedule-table .sched-end { grid-area: end; }
+  body[data-page] .data-table.schedule-table .sched-price { grid-area: price; }
+  body[data-page] .data-table.schedule-table .sched-start::before,
+  body[data-page] .data-table.schedule-table .sched-end::before,
+  body[data-page] .data-table.schedule-table .sched-price::before {
+    content: attr(data-short);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+  body[data-page] .data-table.schedule-table select,
+  body[data-page] .data-table.schedule-table input[type="number"] { width: 100%; }
+
+  body[data-page] .data-table.schedule-table tr.is-closed { grid-template-areas: "day status"; padding-bottom: 0.875rem; }
+  body[data-page] .data-table.schedule-table tr.is-closed .sched-start,
+  body[data-page] .data-table.schedule-table tr.is-closed .sched-end,
+  body[data-page] .data-table.schedule-table tr.is-closed .sched-price { display: none; }
+
+  .schedule-tools .button { width: 100%; justify-content: center; }
+  .schedule-footer .button { width: 100%; justify-content: center; }
+}

@@ -1,0 +1,6 @@
+
+:where(body[data-page="notifications"]) .notif-card--focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  scroll-margin-top: 6rem;
+}

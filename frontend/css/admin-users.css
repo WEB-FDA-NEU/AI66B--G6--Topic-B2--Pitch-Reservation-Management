@@ -1,0 +1,11 @@
+
+:where(body[data-page="admin-users"]) .temp-password {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  color: var(--foreground);
+  user-select: all;
+}

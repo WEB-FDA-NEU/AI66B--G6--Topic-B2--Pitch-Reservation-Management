@@ -1,0 +1,21 @@
+/* ===== Bộ lọc doanh thu: 2 ô chọn + nút tải CSV ===== */
+.revenue-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 18rem) 1fr;
+  align-items: end;
+  gap: 1rem;
+}
+.revenue-filters .field-group { margin: 0; min-width: 0; }
+.revenue-filters select { width: 100%; }
+.revenue-filters .revenue-export { justify-self: end; gap: 0.5rem; min-height: 2.75rem; }
+
+/* Tablet: 2 ô chọn cạnh nhau, nút xuống dòng */
+@media (max-width: 899px) {
+  .revenue-filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .revenue-filters .revenue-export { grid-column: 1 / -1; justify-self: stretch; justify-content: center; }
+}
+
+/* Điện thoại: mỗi ô một dòng, rộng hết khung */
+@media (max-width: 639px) {
+  .revenue-filters { grid-template-columns: minmax(0, 1fr); gap: 0.875rem; }
+}

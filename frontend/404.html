@@ -1,21 +1,29 @@
 <!doctype html>
 <html lang="vi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Không tìm thấy trang — TÊN-SẢN-PHẨM</title>
-<link rel="stylesheet" href="css/reset.css">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
-</head>
-<body>
-<main class="container page">
-  <div class="empty">
-    <p class="empty__title">Không tìm thấy trang này</p>
-    <p class="empty__hint">Có thể mục đã được gỡ, hoặc đường dẫn bị sai.</p>
-    <a class="btn btn--primary empty__action" href="index.html">Về trang chủ</a>
-  </div>
-</main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Không tìm thấy trang." />
+    <title>Không tìm thấy trang — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pitch-scene.css" />
+    <link rel="stylesheet" href="css/404.css" />
+  </head>
+  <body data-page="404">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container">
+      <section class="surface">
+        <h1>Không tìm thấy trang</h1>
+        <p>Hãy quay lại trang chủ hoặc tìm sân để tiếp tục.</p>
+        <a class="button" href="index.html">Về trang chủ</a>
+      </section>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/error.js"></script>
+  </body>
 </html>

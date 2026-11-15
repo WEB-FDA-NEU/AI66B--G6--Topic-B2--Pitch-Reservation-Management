@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Thông tin tài khoản, cảnh cáo và khiếu nại." />
+    <title>Cài đặt tài khoản — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/account-settings.css" />
+  </head>
+  <body data-page="account-settings">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main class="container stack" id="main">
+      <h1>Cài đặt tài khoản</h1>
+      <form id="account-form" class="surface stack">
+        <label>
+          Họ tên
+          <input name="full_name" required />
+        </label>
+        <label>
+          Số điện thoại
+          <input name="phone" type="tel" />
+        </label>
+        <button class="button">Lưu thay đổi</button>
+      </form>
+      <section>
+        <h2>Cảnh cáo</h2>
+        <div id="warnings" class="stack"></div>
+      </section>
+      <p id="error" role="alert"></p>
+    </main>
+    <site-footer></site-footer>
+    <script type="module" src="js/pages/account-settings.js"></script>
+  </body>
+</html>

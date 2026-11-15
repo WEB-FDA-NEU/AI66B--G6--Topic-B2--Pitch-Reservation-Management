@@ -1,186 +1,224 @@
-import { MOCK_PITCHES, formatPitchPrice } from '../data/pitches.js';
-import '../components/site-header.js';
-import '../components/site-footer.js';
+import { api } from '../services/api-client.js';
+import { BOOKING_ADVANCE_DAYS } from '../core/config.js';
+import { el, formatVnd, formatDate, todayLocal, addDays, normalizeText, PITCH_TYPE_LABEL, createPager } from '../core/render.js';
+import { buildPitchCard, fetchReviewSummaries } from '../components/pitch-card.js';
+import { createSearchFormElement, normalizeLocationQuery } from '../components/search-form.js';
+import { $, params, say, validBookingDate, bootCustomerPage } from '../features/customer-kit.js';
 
-const PAGE_SIZE = 6;
-const favoriteIds = new Set();
+async function renderSearchPage() {
+  const main = $('#main');
+  if (!main) return;
+  main.className = 'container stack-lg page-flow';
 
-const elements = {
-  grid: document.getElementById('results'),
-  form: document.getElementById('filter-form'),
-  sort: document.getElementById('sort'),
-  summary: document.getElementById('result-summary'),
-  pagination: document.getElementById('pagination'),
-  sidebar: document.getElementById('search-sidebar'),
-  toggle: document.getElementById('filter-toggle'),
-};
-
-function readFilters() {
-  const params = new URLSearchParams(location.search);
-  return {
-    q: params.get('q') ?? '',
-    pitchType: params.get('pitchType') ?? '',
-    date: params.get('date') ?? '',
-    time: params.get('time') ?? '',
-    min_price: params.get('min_price') ?? '',
-    max_price: params.get('max_price') ?? '',
-    sort: params.get('sort') ?? 'recommended',
-    page: Math.max(1, Number(params.get('page') ?? 1)),
+  const initial = {
+    location: params.get('location') || '',
+    date: validBookingDate(params.get('date')) ? params.get('date') : todayLocal(),
+    time: params.get('time') || '',
+    q: params.get('q') || '',
+    pitchType: params.get('pitchType') || '',
+    maxPrice: params.get('maxPrice') || '',
+    facility: params.get('facility') || '',
+    sort: params.get('sort') || 'recommended'
   };
-}
 
-function syncControls(filters) {
-  elements.form.elements.q.value = filters.q;
-  elements.form.elements.date.value = filters.date;
-  elements.form.elements.time.value = filters.time;
-  elements.form.elements.min_price.value = filters.min_price;
-  elements.form.elements.max_price.value = filters.max_price;
-  elements.sort.value = filters.sort;
-  const typeControl = [...elements.form.elements.pitchType]
-    .find(input => input.value === filters.pitchType);
-  if (typeControl) typeControl.checked = true;
-}
+  if (params.has('date') && !validBookingDate(params.get('date'))) {
+    const url = new URL(location.href); url.searchParams.set('date', initial.date); history.replaceState(null, '', url);
+  }
 
-function writeFilters(patch = {}) {
-  const next = { ...readFilters(), ...patch };
-  if (!Object.hasOwn(patch, 'page')) next.page = 1;
-  const params = new URLSearchParams();
-  Object.entries(next).forEach(([key, value]) => {
-    if (value !== '' && value != null && !(key === 'page' && value === 1)) {
-      params.set(key, String(value));
+  const header = el('header', null, { class: 'page-header' }, [
+    el('p', 'Tìm kiếm', { class: 'eyebrow' }),
+    el('h1', 'Kết quả sân bóng'),
+    el('p', 'Chọn ngày để xem sân còn giờ trống. Giá có thể khác nhau tùy ngày.', { class: 'muted' })
+  ]);
+
+  const searchForm = createSearchFormElement(initial, { advanced: true });
+  const activeChipsRow = el('div', null, { class: 'active-filters-bar', hidden: true, 'aria-label': 'Các bộ lọc đang áp dụng' });
+  const statusRow = el('div', null, { class: 'row-between' });
+  const countEl = el('p', 'Đang tìm sân...', { id: 'count', class: 'font-bold' });
+  statusRow.append(countEl);
+
+  const resultsGrid = el('div', null, { id: 'results', class: 'grid-3' });
+  const errEl = el('p', '', { id: 'error', role: 'alert' });
+
+  let autoAdvance = !validBookingDate(params.get('date')) && !params.get('time');
+  const autoNotice = el('div', '', { class: 'alert alert--info text-sm', role: 'status', hidden: true });
+
+  let searchRequest = 0;
+  const pager = createPager({ pageSize: 12, noun: 'sân', onChange: () => executeSearch(), scrollTarget: () => statusRow });
+
+  async function executeSearch() {
+    const request = ++searchRequest;
+    countEl.textContent = 'Đang tìm sân…';
+    const fd = new FormData(searchForm);
+    const state = Object.fromEntries(fd.entries());
+    const dateVal = state.date || todayLocal();
+    const timeVal = state.time || '';
+    const pitchType = state.pitchType || '';
+    const maxPrice = Number(state.maxPrice || 0);
+    const facility = state.facility || '';
+    const sortBy = state.sort || 'recommended';
+    const rawQ = (state.q || '').trim();
+    const rawLoc = (state.location || '').trim();
+
+    let res, reviewMap;
+    try {
+      [res, reviewMap] = await Promise.all([
+        api.functions.invoke('searchPitches', {
+          date: dateVal,
+          time: timeVal || undefined,
+          pitchType: pitchType || undefined
+        }),
+        fetchReviewSummaries()
+      ]);
+      if (request !== searchRequest) return;
+      if (res.data?.error) throw new Error(res.data.error);
+    } catch (error) {
+      if (request !== searchRequest) return;
+      countEl.textContent = 'Chưa tải được kết quả.';
+      resultsGrid.replaceChildren();
+      say(error.message || 'Không tìm được sân. Vui lòng thử lại.');
+      return;
     }
-  });
-  history.pushState({}, '', params.size ? `?${params}` : location.pathname);
-  renderResults();
-}
+    say('');
+    let items = res.data?.results || [];
+    if (rawQ) {
+      const qNorm = normalizeText(rawQ);
+      items = items.filter(p => normalizeText(`${p.name} ${p.address} ${p.district} ${p.city}`).includes(qNorm));
+    }
+    if (rawLoc) {
+      const locNorm = normalizeLocationQuery(rawLoc);
+      const terms = locNorm.split(/\s+/).filter(Boolean);
+      items = items.filter(p => {
+        const location = normalizeLocationQuery(`${p.district} ${p.city} ${p.address} ${p.name}`);
+        return terms.every(term => location.includes(term));
+      });
+    }
+    if (maxPrice > 0) {
+      items = items.filter(p => Number(p.price_on_date ?? p.base_price_vnd) <= maxPrice);
+    }
+    if (facility) {
+      const facNorm = normalizeText(facility);
+      items = items.filter(p => Array.isArray(p.facilities) && p.facilities.some(f => normalizeText(f === 'Bãi gửi xe' ? 'Bãi đỗ xe' : f).includes(facNorm)));
+    }
+    const beforeDateFilter = items;
+    if (dateVal) {
+      items = items.filter(p => (p.available_count ?? 1) > 0);
+    }
 
-function getFilteredPitches(filters) {
-  const query = filters.q.trim().toLocaleLowerCase('vi');
-  let items = MOCK_PITCHES.filter(pitch => {
-    const matchesText = !query
-      || pitch.name.toLocaleLowerCase('vi').includes(query)
-      || pitch.location.toLocaleLowerCase('vi').includes(query);
-    const matchesType = !filters.pitchType || pitch.type === filters.pitchType;
-    const matchesMin = !filters.min_price || pitch.price >= Number(filters.min_price);
-    const matchesMax = !filters.max_price || pitch.price <= Number(filters.max_price);
-    return matchesText && matchesType && matchesMin && matchesMax;
-  });
+    if (autoAdvance) {
+      autoAdvance = false;
+      const nearest = beforeDateFilter.map(p => p.next_slot?.local_date).filter(Boolean).sort()[0];
+      if (!items.length && nearest && nearest > dateVal) {
+        searchForm.elements.date.value = nearest;
+        searchForm.elements.date.dispatchEvent(new Event('change'));
+        const url = new URL(location.href);
+        url.searchParams.set('date', nearest);
+        history.replaceState(null, '', url);
+        autoNotice.textContent = `Hôm nay đã hết khung giờ trống nên hệ thống tự động chuyển sang ngày gần nhất còn sân (${formatDate(nearest)}).`;
+        autoNotice.hidden = false;
+        return executeSearch();
+      }
+    }
 
-  if (filters.sort === 'rating_desc') items = [...items].sort((a, b) => b.rating - a.rating);
-  if (filters.sort === 'price_asc') items = [...items].sort((a, b) => a.price - b.price);
-  if (filters.sort === 'price_desc') items = [...items].sort((a, b) => b.price - a.price);
-  if (filters.sort === 'recommended') {
-    items = [...items].sort((a, b) => Number(b.featured) - Number(a.featured) || b.rating - a.rating);
+    if (sortBy === 'price-asc') {
+      items.sort((a, b) => Number(a.price_on_date ?? a.base_price_vnd) - Number(b.price_on_date ?? b.base_price_vnd));
+    } else if (sortBy === 'price-desc') {
+      items.sort((a, b) => Number(b.price_on_date ?? b.base_price_vnd) - Number(a.price_on_date ?? a.base_price_vnd));
+    } else if (sortBy === 'rating-desc') {
+      items.sort((a, b) => (reviewMap[b.id]?.avg || 0) - (reviewMap[a.id]?.avg || 0));
+    } else {
+      items.sort((a, b) => (b.available_count || 0) - (a.available_count || 0));
+    }
+
+    const activeDefs = [];
+    if (rawLoc) activeDefs.push(['Khu vực', rawLoc, () => { searchForm.elements.location.value = ''; }]);
+    if (timeVal) activeDefs.push(['Giờ', timeVal, () => { searchForm.elements.time.value = ''; }]);
+    if (rawQ) activeDefs.push(['Tên sân', rawQ, () => { searchForm.elements.q.value = ''; }]);
+    if (pitchType) activeDefs.push(['Loại sân', PITCH_TYPE_LABEL[pitchType] || pitchType, () => { searchForm.elements.pitchType.value = ''; }]);
+    if (maxPrice > 0) activeDefs.push(['Tối đa', formatVnd(maxPrice), () => { searchForm.elements.maxPrice.value = ''; }]);
+    if (facility) activeDefs.push(['Tiện ích', facility, () => { searchForm.elements.facility.value = ''; }]);
+    if (sortBy && sortBy !== 'recommended') {
+      const sortNames = { 'price-asc': 'Giá tăng dần', 'price-desc': 'Giá giảm dần', 'rating-desc': 'Đánh giá cao' };
+      activeDefs.push(['Sắp xếp', sortNames[sortBy] || sortBy, () => { searchForm.elements.sort.value = 'recommended'; }]);
+    }
+    activeChipsRow.replaceChildren();
+    if (activeDefs.length) {
+      activeChipsRow.hidden = false;
+      activeChipsRow.append(el('span', 'Đang lọc:', { class: 'text-xs font-bold muted' }));
+      for (const [kLabel, vLabel, clearFn] of activeDefs) {
+        const chipBtn = el('button', null, {
+          type: 'button',
+          class: 'active-filter-chip',
+          'aria-label': `Bỏ lọc ${kLabel}: ${vLabel}`
+        }, [
+          el('span', `${kLabel}: `, { class: 'muted' }),
+          el('strong', vLabel),
+          el('span', '×', { class: 'active-filter-chip-close', 'aria-hidden': 'true' })
+        ]);
+        chipBtn.addEventListener('click', () => {
+          clearFn();
+          searchForm.dispatchEvent(new Event('reset-filters'));
+          searchForm.dispatchEvent(new Event('submit', { cancelable: true }));
+          searchForm.querySelector('input, select, button')?.focus({ preventScroll: true });
+        });
+        activeChipsRow.append(chipBtn);
+      }
+    } else {
+      activeChipsRow.hidden = true;
+    }
+
+    countEl.textContent = `Tìm thấy ${items.length} sân phù hợp cho ngày ${formatDate(dateVal)}${timeVal ? ` lúc ${timeVal}` : ''}`;
+    resultsGrid.replaceChildren();
+    const pageRows = pager.slice(items, location.search);
+    pager.el.hidden = !items.length;
+
+    if (!items.length) {
+      const pitchFilters = activeDefs.some(([key]) => !['Giờ', 'Sắp xếp'].includes(key));
+      const nextDayUrl = new URL(location.href);
+      nextDayUrl.searchParams.set('date', addDays(dateVal, 1));
+      const nextDayHref = `search.html${nextDayUrl.search}`;
+      const emptyBox = el('div', null, { class: 'empty', utility: 'u-grid-column-1-over-n1' }, [
+        el('h2', 'Không tìm thấy sân phù hợp'),
+        el('p', pitchFilters
+          ? 'Không có sân nào khớp với bộ lọc hiện tại. Hãy bỏ bớt bộ lọc (tên sân, khu vực, loại sân, giá hoặc tiện ích) rồi thử lại.'
+          : activeDefs.length ? 'Hãy thử chọn ngày khác hoặc đổi khung giờ.' : 'Ngày đã chọn không còn sân trống. Hãy thử chọn một ngày khác.'),
+        !pitchFilters && dateVal < addDays(todayLocal(), BOOKING_ADVANCE_DAYS) ? el('a', 'Xem ngày tiếp theo', { href: nextDayHref, class: 'button secondary sm' }) : null,
+        activeDefs.length ? el('button', 'Xóa toàn bộ bộ lọc', {
+          type: 'button',
+          class: 'button secondary sm',
+          utility: 'u-margin-top-0p5rem'
+        }) : null
+      ]);
+      emptyBox.querySelector('button')?.addEventListener('click', () => {
+        location.href = 'search.html';
+      });
+      resultsGrid.append(emptyBox);
+      return;
+    }
+
+    for (const p of pageRows) {
+      resultsGrid.append(buildPitchCard(p, reviewMap[p.id], { dateParam: dateVal }));
+    }
   }
-  return items;
-}
 
-function createPitchCard(pitch) {
-  const node = document.getElementById('tpl-card').content.cloneNode(true);
-  const link = node.querySelector('.card__link');
-  const image = node.querySelector('.card__img');
-  const favoriteButton = node.querySelector('.card__favorite');
-  const rating = node.querySelector('.card__rating');
-
-  link.href = `pitch_detail.html?id=${pitch.id}`;
-  image.src = pitch.image;
-  image.alt = `Hình ảnh ${pitch.name}`;
-  node.querySelector('.card__title').textContent = pitch.name;
-  node.querySelector('.card__meta').textContent = pitch.location;
-  node.querySelector('.card__type').textContent = pitch.typeLabel;
-  node.querySelector('.card__price').textContent = formatPitchPrice(pitch.price);
-  node.querySelector('.card__badge').textContent = pitch.badge;
-  rating.textContent = `★ ${pitch.rating.toFixed(1)}`;
-  rating.setAttribute('aria-label', `${pitch.rating.toFixed(1)} trên 5 sao`);
-  favoriteButton.setAttribute('aria-label', `Thêm ${pitch.name} vào danh sách yêu thích`);
-  favoriteButton.addEventListener('click', () => toggleFavorite(pitch, favoriteButton));
-  return node;
-}
-
-function toggleFavorite(pitch, button) {
-  const active = !favoriteIds.has(pitch.id);
-  if (active) favoriteIds.add(pitch.id);
-  else favoriteIds.delete(pitch.id);
-  button.classList.toggle('is-active', active);
-  button.setAttribute('aria-pressed', String(active));
-  button.setAttribute('aria-label', active
-    ? `Bỏ ${pitch.name} khỏi danh sách yêu thích`
-    : `Thêm ${pitch.name} vào danh sách yêu thích`);
-  button.querySelector('[aria-hidden="true"]').textContent = active ? '♥' : '♡';
-}
-
-function renderPagination(total, currentPage) {
-  const pageCount = Math.ceil(total / PAGE_SIZE);
-  elements.pagination.replaceChildren();
-  if (pageCount <= 1) return;
-
-  const createButton = (label, page, options = {}) => {
-    const button = document.createElement('button');
-    button.className = `btn${options.active ? ' is-active' : ''}`;
-    button.type = 'button';
-    button.textContent = label;
-    button.disabled = options.disabled ?? false;
-    if (options.active) button.setAttribute('aria-current', 'page');
-    if (!button.disabled) button.addEventListener('click', () => writeFilters({ page }));
-    return button;
-  };
-
-  elements.pagination.append(createButton('‹ Trước', currentPage - 1, { disabled: currentPage === 1 }));
-  for (let page = 1; page <= pageCount; page += 1) {
-    elements.pagination.append(createButton(String(page), page, { active: page === currentPage }));
-  }
-  elements.pagination.append(createButton('Sau ›', currentPage + 1, { disabled: currentPage === pageCount }));
-}
-
-function renderResults() {
-  const filters = readFilters();
-  syncControls(filters);
-  const filtered = getFilteredPitches(filters);
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const page = Math.min(filters.page, pageCount);
-  const start = (page - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + PAGE_SIZE);
-
-  if (pageItems.length === 0) {
-    const emptyState = document.getElementById('tpl-empty-state').content.cloneNode(true);
-    elements.grid.replaceChildren(emptyState);
-    elements.summary.textContent = 'Không tìm thấy sân phù hợp.';
-    elements.pagination.replaceChildren();
-    return;
-  }
-
-  elements.grid.replaceChildren(...pageItems.map(createPitchCard));
-  const schedule = filters.date && filters.time ? ` · ${filters.date} lúc ${filters.time}` : '';
-  elements.summary.textContent = `${filtered.length} sân phù hợp${schedule}`;
-  renderPagination(filtered.length, page);
-}
-
-elements.form.addEventListener('submit', event => {
-  event.preventDefault();
-  const data = new FormData(elements.form);
-  writeFilters({
-    q: data.get('q') ?? '',
-    pitchType: data.get('pitchType') ?? '',
-    date: data.get('date') ?? '',
-    time: data.get('time') ?? '',
-    min_price: data.get('min_price') ?? '',
-    max_price: data.get('max_price') ?? '',
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    autoNotice.hidden = true;
+    const fd = new FormData(searchForm);
+    const nextParams = new URLSearchParams();
+    for (const [k, v] of fd.entries()) {
+      if (String(v).trim()) nextParams.set(k, String(v).trim());
+    }
+    const nextUrl = new URL('search.html', location.href);
+    nextUrl.search = nextParams.toString();
+    if (nextUrl.href !== location.href) history.pushState(null, '', nextUrl);
+    executeSearch().catch(err => { countEl.textContent = 'Chưa tải được kết quả.'; say(err.message); });
   });
-  elements.sidebar.classList.remove('is-open');
-  elements.toggle.setAttribute('aria-expanded', 'false');
-});
 
-elements.form.addEventListener('reset', event => {
-  event.preventDefault();
-  history.pushState({}, '', location.pathname);
-  renderResults();
-});
+  window.addEventListener('popstate', () => location.reload());
 
-elements.sort.addEventListener('change', () => writeFilters({ sort: elements.sort.value }));
-elements.toggle.addEventListener('click', () => {
-  const open = elements.sidebar.classList.toggle('is-open');
-  elements.toggle.setAttribute('aria-expanded', String(open));
-});
-window.addEventListener('popstate', renderResults);
+  main.replaceChildren(header, searchForm, activeChipsRow, autoNotice, statusRow, resultsGrid, pager.el, errEl);
+  await executeSearch();
+}
 
-renderResults();
+bootCustomerPage(user => renderSearchPage(user));

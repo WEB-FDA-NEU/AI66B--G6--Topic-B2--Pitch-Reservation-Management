@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Thêm sân mới." />
+    <title>Thêm sân — Pitch Point</title>
+    <script src="js/core/page-bootstrap.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/add-pitch.css" />
+  </head>
+  <body data-page="add-pitch">
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <site-header></site-header>
+    <main id="main" class="container stack">
+      <header class="page-header"><h1>Thêm sân mới</h1></header>
+      <nav id="management-nav" aria-label="Điều hướng quản lý"></nav>
+      <p id="status" role="status" aria-live="polite"></p>
+      <section id="content" class="stack" aria-label="Nội dung"></section>
+    </main>
+    <site-footer></site-footer>
+    <dialog id="action-dialog">
+      <form method="dialog" class="stack">
+        <h2 data-dialog-title></h2>
+        <p data-dialog-description></p>
+        <label for="action-reason">Nội dung hoặc lý do</label>
+        <textarea id="action-reason" maxlength="1000"></textarea>
+        <p data-dialog-error role="alert"></p>
+        <div>
+          <button type="button" data-close>Đóng</button>
+          <button type="button" data-confirm>Xác nhận</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="js/pages/add-pitch.js"></script>
+  </body>
+</html>

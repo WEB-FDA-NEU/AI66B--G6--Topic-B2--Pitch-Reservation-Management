@@ -1,0 +1,4 @@
+:where(body[data-page="screen-template"]) #screen-list:empty::after {
+  content: "Chưa có dữ liệu.";
+  color: var(--muted-foreground);
+}
