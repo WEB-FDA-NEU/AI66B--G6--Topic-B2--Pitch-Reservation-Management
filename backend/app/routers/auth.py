@@ -92,7 +92,7 @@ async def token(request: Request):
     return result
 
 
-@router.post("/register")
+@router.post("/register", status_code=201)
 def register(request: Request, body: dict):
     email = str(body.get("email") or "").strip()
     password = str(body.get("password") or "")

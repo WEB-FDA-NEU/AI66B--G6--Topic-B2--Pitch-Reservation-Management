@@ -42,7 +42,7 @@ def test_manager_suspension_preserves_finances_and_restoration():
     assert admin.post('/api/admin/actions',json={'action':'restore_user','user_id':'user-manager'},headers=H).status_code==200
     results=customer.get('/api/search/pitches').json()['results']
     assert any(p['id']=='pitch-1' for p in results)
-    assert hold(customer,start_times=['19:00']).status_code==200
+    assert hold(customer,start_times=['19:00']).status_code==201
     ledger_consistent()
 
 

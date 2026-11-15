@@ -18,7 +18,7 @@ def test_upload_image_permissions_validation_and_public_read(tmp_path, monkeypat
         assert client.post('/api/uploads/images',json={'image':picture()},headers=H).status_code==expected
     assert manager.post('/api/uploads/images',json={'image':'data:image/png;base64,YmFk'},headers=H).status_code==400
     result=manager.post('/api/uploads/images',json={'image':picture()},headers=H)
-    assert result.status_code==200
+    assert result.status_code==201
     url=result.json()['url']
     assert anon.get(url).status_code==200
     assert anon.get(url).headers['content-type']=='image/png'
@@ -31,7 +31,7 @@ def test_new_pitch_stores_file_url(tmp_path,monkeypatch):
     monkeypatch.setattr(uploads,'UPLOAD_DIR',tmp_path)
     c=client_for('manager')
     response=c.post('/api/pitches',json={'request_id':'image-test','pitch':{'name':'Sân ảnh','address':'1 Hà Nội','base_price_vnd':50000,'open_time':'06:00','close_time':'22:00','images':[picture()]}},headers=H)
-    assert response.status_code==200,response.text
+    assert response.status_code==201,response.text
     images=c.get('/api/entities/Pitch').json()['items']
     assert next(p for p in images if p['name']=='Sân ảnh')['images'][0].startswith('/uploads/')
 

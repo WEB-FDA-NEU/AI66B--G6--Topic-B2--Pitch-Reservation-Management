@@ -50,7 +50,7 @@ def test_bearer_token_works_like_the_cookie_and_logout_revokes_it():
     assert me.status_code == 200 and me.json()["email"] == "customer@pitchpoint.test"
     assert c.get("/api/entities/Booking", headers=auth).json()["total"] >= 0
     hold = c.post("/api/bookings/holds", headers=auth, json={"pitch_id": "pitch-1", "local_date": day(2), "start_times": ["18:00"]})
-    assert hold.status_code == 200, hold.text
+    assert hold.status_code == 201, hold.text
     assert c.get("/api/auth/me", headers={"Authorization": "Bearer sai-token"}).status_code == 401
     assert c.post("/api/auth/logout", headers=auth).status_code == 200
     assert c.get("/api/auth/me", headers=auth).status_code == 401
@@ -68,7 +68,7 @@ def test_cookie_session_still_needs_csrf_header():
     c = client_for("customer")
     body = {"pitch_id": "pitch-1", "local_date": day(2), "start_times": ["19:00"]}
     assert c.post("/api/bookings/holds", json=body).status_code == 403
-    assert c.post("/api/bookings/holds", json=body, headers=H).status_code == 200
+    assert c.post("/api/bookings/holds", json=body, headers=H).status_code == 201
 
 
 def test_docs_shortcut_and_authorize_button():
@@ -77,3 +77,20 @@ def test_docs_shortcut_and_authorize_button():
     assert r.status_code in (302, 307) and r.headers["location"] == "/api/docs"
     schemes = c.get("/api/openapi.json").json()["components"]["securitySchemes"]
     assert schemes["OAuth2PasswordBearer"]["flows"]["password"]["tokenUrl"] == "/api/auth/token"
+
+
+def test_rest_status_codes_created_and_no_content():
+    anon = client_for()
+    r = anon.post("/api/auth/register", json={"email": "rest@pitchpoint.test", "password": "123456"}, headers=H)
+    assert r.status_code == 201 and "password_hash" not in r.json()
+    assert anon.post("/api/auth/register", json={"email": "rest@pitchpoint.test", "password": "123456"},
+                     headers=H).status_code == 409
+    c = client_for("rest@pitchpoint.test")
+    fav = c.post("/api/entities/Favorite", json={"pitch_id": "pitch-1"}, headers=H)
+    assert fav.status_code == 201
+    gone = c.delete(f"/api/entities/Favorite/{fav.json()['id']}", headers=H)
+    assert gone.status_code == 204 and gone.content == b""
+    assert c.get(f"/api/entities/Favorite/{fav.json()['id']}").status_code == 404
+    hold = c.post("/api/bookings/holds", json={"pitch_id": "pitch-1", "local_date": day(2), "start_times": ["18:00"]}, headers=H)
+    assert hold.status_code == 201
+    assert c.post(f"/api/bookings/{hold.json()['booking']['id']}/payment", json={}, headers=H).status_code == 200

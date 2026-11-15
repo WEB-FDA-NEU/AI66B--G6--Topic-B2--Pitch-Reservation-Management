@@ -332,7 +332,7 @@ def cancel_booking(db: Session, u: User | None, p: dict) -> dict:
         flag_cancellation_pattern(db, b.customer_id)
     if u.app_role == "admin":
         audit(db, u, "cancel_booking", "Đơn đặt sân", b.id, b.cancel_reason,
-              f"{b.code} · {b.pitch_name} · {b.customer_name or 'Khách hàng'}")
+              f"Đơn {b.code} tại {b.pitch_name} ({b.customer_name or 'Khách hàng'})")
     if not was_hold:
         why = f" Lý do: {sentence(b.cancel_reason)}" if b.cancel_reason else ""
         where = f"{pitch_label(b.pitch_name, True)} lúc {booking_when(b)}"

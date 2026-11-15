@@ -108,7 +108,7 @@ def display(db: Session, name: str, row: Any, viewer: User | None) -> dict:
             r = db.get(Report, row.entity_id)
             if r and not row.target_name:
                 target = r.target_name or report_target_name(db, r.target_type, r.target_id)
-                d["target_name"] = f"{target} · {r.reason or 'báo cáo'}" if target else (r.reason or "Báo cáo")
+                d["target_name"] = f"{target} ({r.reason or 'báo cáo'})" if target else (r.reason or "Báo cáo")
     return d
 
 

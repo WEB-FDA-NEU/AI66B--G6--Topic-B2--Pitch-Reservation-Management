@@ -10,7 +10,7 @@ Hướng dẫn này dành cho người mới, viết cho **Windows 10/11**. Làm
 | **PostgreSQL 17** | Cơ sở dữ liệu | https://www.postgresql.org/download/windows/ (bấm "Download the installer") | Giữ mọi lựa chọn mặc định (cổng `5432`). Khi được hỏi mật khẩu cho tài khoản `postgres`, **đặt một mật khẩu và ghi nhớ** |
 | **Git** (nếu lấy code từ GitHub) | Tải mã nguồn | https://git-scm.com/downloads | Bấm Next đến hết |
 
-Google Chrome chỉ cần khi chạy test trình duyệt (Bước 6).
+Google Chrome chỉ cần khi chạy test trình duyệt (Bước 7).
 
 Kiểm tra đã cài đúng: mở **PowerShell** (bấm phím Windows, gõ `powershell`, Enter) và chạy:
 
@@ -49,7 +49,17 @@ Chạy lệnh dưới đây, **nhập mật khẩu `postgres` đã đặt ở B�
 
 Kết quả thành công là các dòng `DO`, `CREATE DATABASE`. Lệnh tạo tài khoản `pitchpoint` (mật khẩu `pitchpoint`) cùng hai database: `pitchpoint` (dữ liệu chạy thật) và `pitchpoint_test` (dùng cho test). Chạy lại lệnh này cũng không sao.
 
-## Bước 4. Chạy hệ thống
+## Bước 4. Tạo file cấu hình `.env` (chỉ làm một lần)
+
+Chuỗi kết nối database không viết trong code; hệ thống đọc từ file `backend/.env`. Tạo file này từ file mẫu:
+
+```powershell
+Copy-Item backend/.env.example backend/.env
+```
+
+File mẫu đã có sẵn `DATABASE_URL` trỏ tới database `pitchpoint` tạo ở Bước 3, nên không cần sửa gì. File `.env` không được đưa lên GitHub. Nếu thiếu file này, server báo *"Chưa cấu hình DATABASE_URL…"* khi khởi động.
+
+## Bước 5. Chạy hệ thống
 
 ```powershell
 cd backend
@@ -65,7 +75,7 @@ Mở trình duyệt vào **http://localhost:8000/**. Tài liệu API tự sinh n
 
 Muốn tắt hệ thống: bấm `Ctrl + C` trong cửa sổ PowerShell.
 
-## Bước 5. Đăng nhập thử
+## Bước 6. Đăng nhập thử
 
 Mật khẩu của mọi tài khoản mẫu là `123456`. Trang đăng nhập có sẵn nút điền nhanh cho 3 tài khoản đầu:
 
@@ -77,7 +87,7 @@ Mật khẩu của mọi tài khoản mẫu là `123456`. Trang đăng nhập c�
 
 Danh sách đầy đủ: [ACCOUNTS.md](ACCOUNTS.md). Tiền trong ví là tiền thử nghiệm.
 
-## Bước 6. Chạy test (tùy chọn)
+## Bước 7. Chạy test (tùy chọn)
 
 Mở một cửa sổ PowerShell mới, vào thư mục gốc dự án. Các bộ test chạy riêng, đừng chạy gộp `pytest tests`. Hướng dẫn kiểm thử bằng tay (10 bài, gồm cả crash): [TEST_GUIDE.md](TEST_GUIDE.md).
 
@@ -88,7 +98,7 @@ $env:TEST_DATABASE_URL = "postgresql+psycopg://pitchpoint:pitchpoint@localhost:5
 python -m pytest -q tests/backend
 ```
 
-Kết quả đúng là `81 passed`. Test xóa sạch database `pitchpoint_test` mỗi lần chạy, không đụng tới database `pitchpoint` đang dùng.
+Kết quả đúng là `82 passed`. Test xóa sạch database `pitchpoint_test` mỗi lần chạy, không đụng tới database `pitchpoint` đang dùng.
 
 **Test trình duyệt thật** (khoảng 5 phút, cần cài Google Chrome, cửa sổ Chrome chạy ẩn):
 
@@ -132,11 +142,11 @@ Lệnh này **xóa toàn bộ dữ liệu** và nạp lại dữ liệu mẫu (m
 
 ## Cấu hình tùy chọn
 
-Mặc định không cần cấu hình gì. Muốn đổi, copy `backend/.env.example` thành `backend/.env` rồi bỏ dấu `#` ở dòng cần đổi.
+Các biến nằm trong `backend/.env` (tạo ở Bước 4). Muốn đổi biến tùy chọn, bỏ dấu `#` ở dòng tương ứng.
 
 | Biến | Mặc định | Ý nghĩa |
 |---|---|---|
-| `DATABASE_URL` | `postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint` | Địa chỉ database. Chạy thử không có PostgreSQL: `sqlite:///./pitchpoint.db` (chỉ một người dùng) |
+| `DATABASE_URL` | **bắt buộc** (file mẫu: `postgresql+psycopg://pitchpoint:pitchpoint@localhost:5432/pitchpoint`) | Địa chỉ database. Chạy thử không có PostgreSQL: `sqlite:///./pitchpoint.db` (chỉ một người dùng) |
 | `TEST_DATABASE_URL` | trống | Database cho pytest. Để trống thì test dùng file SQLite tạm |
 | `INITIAL_BALANCE_VND` | `2000000` | Số dư thử nghiệm tặng tài khoản mới |
 | `SEED_DEMO` | `true` | Sinh thêm dữ liệu demo (đơn, đánh giá, tin nhắn) theo ngày hiện tại |
@@ -146,6 +156,7 @@ Mặc định không cần cấu hình gì. Muốn đổi, copy `backend/.env.ex
 
 | Thông báo / hiện tượng | Cách xử lý |
 |---|---|
+| `RuntimeError: Chưa cấu hình DATABASE_URL…` | Chưa tạo `backend/.env`. Làm Bước 4: `Copy-Item backend/.env.example backend/.env` |
 | `python` hoặc `pip` "is not recognized" | Cài lại Python và tích "Add python.exe to PATH"; đóng và mở lại PowerShell. Luôn gõ `python -m pip ...` thay vì `pip ...` |
 | `psql.exe` không tìm thấy | Kiểm tra thư mục `C:\Program Files\PostgreSQL\17\bin`. Nếu cài bản khác 17, đổi số `17` trong đường dẫn |
 | `password authentication failed for user "postgres"` | Gõ sai mật khẩu `postgres` ở Bước 3. Nếu quên, cài lại PostgreSQL |

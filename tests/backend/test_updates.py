@@ -22,7 +22,7 @@ def test_updates_returns_only_new_rows_the_viewer_may_see():
 
     set_clock_offset(timedelta(seconds=10))
     r = cust.post("/api/conversations", json={"pitch_id": "pitch-1", "body": "Tối nay còn sân không?"}, headers=H)
-    assert r.status_code == 200, r.text
+    assert r.status_code == 201, r.text
     cid = r.json()["conversation_id"]
 
     got = updates(mgr, since=cursor, conversations=1, conversation_id=cid)

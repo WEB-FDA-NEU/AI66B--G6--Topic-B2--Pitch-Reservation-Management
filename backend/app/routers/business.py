@@ -30,7 +30,7 @@ def call(request: Request, name: str, payload: dict) -> dict:
 
 
 # ---- đặt sân
-@router.post("/bookings/holds")
+@router.post("/bookings/holds", status_code=201)
 def create_hold(request: Request, body: dict):
     return call(request, "createHold", body)
 
@@ -50,7 +50,7 @@ def cancel_booking(request: Request, booking_id: str, body: dict | None = None):
     return call(request, "cancelBooking", {**(body or {}), "booking_id": booking_id})
 
 
-@router.post("/reviews")
+@router.post("/reviews", status_code=201)
 def submit_review(request: Request, body: dict):
     return call(request, "submitReview", body)
 
@@ -71,7 +71,7 @@ def next_available(request: Request, pitch_id: str):
     return call(request, "nextAvailableDate", {"pitch_id": pitch_id})
 
 
-@router.post("/pitches")
+@router.post("/pitches", status_code=201)
 def create_pitch(request: Request, body: dict):
     return call(request, "createPitchWithSchedule", body)
 
@@ -82,27 +82,27 @@ def set_pitch_status(request: Request, pitch_id: str, body: dict):
 
 
 # ---- tin nhắn, cảnh cáo
-@router.post("/conversations")
+@router.post("/conversations", status_code=201)
 def start_message(request: Request, body: dict):
     return call(request, "startMessage", body)
 
 
-@router.post("/conversations/{conversation_id}/messages")
+@router.post("/conversations/{conversation_id}/messages", status_code=201)
 def send_message(request: Request, conversation_id: str, body: dict):
     return call(request, "sendMessage", {**body, "conversation_id": conversation_id})
 
 
-@router.post("/conversations/{conversation_id}/warnings")
+@router.post("/conversations/{conversation_id}/warnings", status_code=201)
 def warn_customer(request: Request, conversation_id: str, body: dict):
     return call(request, "warnCustomer", {**body, "conversation_id": conversation_id})
 
 
-@router.post("/warnings/{warning_id}/responses")
+@router.post("/warnings/{warning_id}/responses", status_code=201)
 def respond_warning(request: Request, warning_id: str, body: dict):
     return call(request, "respondWarning", {**body, "warning_id": warning_id})
 
 
-@router.post("/appeals")
+@router.post("/appeals", status_code=201)
 def submit_appeal(request: Request, body: dict):
     return call(request, "submitAppeal", body)
 

@@ -50,7 +50,7 @@ def test_many_customers_same_slot():
         anon.post("/api/auth/register", json={"email": f"race{i}@pitchpoint.test", "password": "123456"}, headers=H)
         clients.append(client_for(f"race{i}@pitchpoint.test"))
     codes = [r.status_code for r in at_once(*[lambda c=c: hold(c) for c in clients])]
-    assert codes.count(200) == 1 and codes.count(409) == len(clients) - 1, codes
+    assert codes.count(201) == 1 and codes.count(409) == len(clients) - 1, codes
     with dbmod.session_scope() as db:
         assert db.scalar(select(func.count()).select_from(Booking).where(Booking.status == "pending")) == 1
 
@@ -58,7 +58,7 @@ def test_many_customers_same_slot():
 def test_overlapping_multi_slot_holds():
     a, b = client_for("dung@pitchpoint.test"), client_for("giang@pitchpoint.test")
     r1, r2 = at_once(lambda: hold(a, starts=("17:00", "18:00")), lambda: hold(b, starts=("18:00", "19:00")))
-    assert sorted([r1.status_code, r2.status_code]) == [200, 409]
+    assert sorted([r1.status_code, r2.status_code]) == [201, 409]
 
 
 def test_double_pay_charges_once():
@@ -118,6 +118,6 @@ def test_double_submit_create_pitch():
                                                   "open_time": "07:00", "close_time": "21:00"}}
     r1, r2 = at_once(lambda: m1.post("/api/pitches", json=body, headers=H),
                      lambda: m2.post("/api/pitches", json=body, headers=H))
-    assert r1.status_code in (200, 409) and r2.status_code in (200, 409) and 200 in (r1.status_code, r2.status_code)
+    assert r1.status_code in (201, 409) and r2.status_code in (201, 409) and 201 in (r1.status_code, r2.status_code)
     with dbmod.session_scope() as db:
         assert db.scalar(select(func.count()).select_from(Pitch).where(Pitch.name == "Sân Mới")) == 1
